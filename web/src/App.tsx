@@ -64,12 +64,24 @@ export default function App() {
     setText(ex.text); setAge(ex.audience.age); setGender(ex.audience.gender); setLocation(ex.audience.location || ''); setResult(null)
   }
 
-  function applySwap(ref: Ref, swap: Swap) {
+  function applySwaps(pairs: [Ref, Swap][]) {
     if (!result) return
-    const line = lineBounds(checkedText, ref)
-    const newLine = swap.line ?? (checkedText.slice(line[0], line[1]).replace(ref.surface, swap.name))
-    const next = checkedText.slice(0, line[0]) + newLine + checkedText.slice(line[1])
+    let next = checkedText
+    // apply from the end of the text backwards so earlier offsets stay valid; one swap per line
+    const seen = new Set<number>()
+    for (const [ref, swap] of [...pairs].sort((a, b) => b[0].start - a[0].start)) {
+      const line = lineBounds(checkedText, ref)
+      if (seen.has(line[0])) continue
+      seen.add(line[0])
+      const newLine = swap.line ?? checkedText.slice(line[0], line[1]).replace(ref.surface, swap.name)
+      next = next.slice(0, line[0]) + newLine + next.slice(line[1])
+    }
     setText(next)
+  }
+  function applySwap(ref: Ref, swap: Swap) { applySwaps([[ref, swap]]) }
+  function applyBest() {
+    if (!result) return
+    applySwaps(result.references.filter(r => r.swaps.length > 0).map(r => [r, r.swaps[0]] as [Ref, Swap]))
   }
 
   const weakFirst = useMemo(() => result ? [...result.references].map((r, i) => ({ r, i })).sort((a, b) => rank(a.r) - rank(b.r)) : [], [result])
@@ -115,7 +127,9 @@ export default function App() {
         <section className="space-y-4">
           {result ? (
             <>
-              <Summary r={result} compare={compare} onCompare={setCompare} audience={label(age, gender, location)} />
+              <Summary r={result} compare={compare} onCompare={setCompare} audience={label(age, gender, location)}
+                canApply={!dirty && result.references.some(r => r.swaps.length > 0)} onApplyBest={applyBest}
+                onCopy={() => navigator.clipboard?.writeText(text).catch(() => {})} />
               {weakFirst.map(({ r, i }) => (
                 <div key={i} ref={el => { cards.current[i] = el }}>
                   <Card r={r} active={active === i} compare={compare} age={age} swapping={swapping} onHover={() => setActive(i)} onApply={s => applySwap(r, s)} />
@@ -179,7 +193,7 @@ function Highlighted(p: { text: string; refs: Ref[]; active: number | null; onPi
   return <div className="whitespace-pre-wrap p-5 text-[17px] leading-7 min-h-[320px]">{parts}</div>
 }
 
-function Summary(p: { r: Result; compare: boolean; onCompare: (v: boolean) => void; audience: string }) {
+function Summary(p: { r: Result; compare: boolean; onCompare: (v: boolean) => void; audience: string; canApply: boolean; onApplyBest: () => void; onCopy: () => void }) {
   const s = p.r.summary
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
@@ -187,9 +201,12 @@ function Summary(p: { r: Result; compare: boolean; onCompare: (v: boolean) => vo
         <h2 className="font-display text-2xl font-semibold">For {p.audience}</h2>
         <span className="text-xs text-muted">{p.r.took_s}s</span>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2 text-sm">
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
         <Pill color="lands" n={s.lands} label="land" /><Pill color="risky" n={s.risky} label="risky" /><Pill color="misses" n={s.misses} label="miss" />
         {s.not_in_qloo > 0 && <Pill color="unknown" n={s.not_in_qloo} label="not in Qloo" />}
+        <span className="flex-1" />
+        {p.canApply && <button onClick={p.onApplyBest} className="rounded-lg bg-ink px-3 py-1.5 text-xs font-medium text-paper">Apply best stand-ins</button>}
+        <button onClick={p.onCopy} className="rounded-lg border border-line px-3 py-1.5 text-xs hover:border-ink">Copy text</button>
       </div>
       <label className="mt-3 flex items-center gap-2 text-sm text-muted cursor-pointer">
         <input type="checkbox" checked={p.compare} onChange={e => p.onCompare(e.target.checked)} /> Show what the AI alone guessed, next to the Qloo-grounded score
