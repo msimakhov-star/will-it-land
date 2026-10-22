@@ -70,6 +70,7 @@ def check(req: CheckRequest):
     except qloo.QlooError as ex:
         raise HTTPException(502, str(ex))
     out["took_s"] = round(time.time() - t0, 1)
+    print(f"check {len(req.text)} chars audience={req.age},{req.gender},{req.location} took={out['took_s']}s timings={out.get('timings')}", flush=True)
     return out
 
 
