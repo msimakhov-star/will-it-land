@@ -238,6 +238,20 @@ function Card(p: { r: Ref; active: boolean; compare: boolean; age: string | null
       </div>
       {r.why && <p className="mt-2 text-sm text-muted">{r.why}</p>}
       {r.verdict === 'unknown' && <p className="mt-2 text-sm text-muted">{r.why || 'Qloo has no entity for this, so it is not scored.'}</p>}
+      {r.entity_id && (
+        <details className="mt-2 text-xs text-muted">
+          <summary className="cursor-pointer hover:text-ink">Evidence from Qloo</summary>
+          <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
+            <span>entity</span><span className="truncate" title={r.entity_id}>{r.name} ({TYPE_LABEL[r.type] ?? r.type})</span>
+            <span>popularity percentile</span><span>{r.popularity === null ? 'n/a' : Math.round(100 * r.popularity)}</span>
+            {r.age_skew && <><span>age affinity, selected band</span><span>{p.age ? (r.age_skew[p.age] ?? 0).toFixed(2) : 'no band selected'}</span></>}
+            {r.gender_skew && <><span>gender affinity (m / f)</span><span>{(r.gender_skew.male ?? 0).toFixed(2)} / {(r.gender_skew.female ?? 0).toFixed(2)}</span></>}
+            {r.affinity !== null && <><span>audience affinity (this call)</span><span>{r.affinity.toFixed(3)}</span></>}
+            {r.trend && <><span>trend, last 6 months</span><span>{r.trend.direction}{r.trend.delta != null ? ` (${r.trend.delta > 0 ? '+' : ''}${Number(r.trend.delta).toFixed(1)}%)` : ''}</span></>}
+            {r.candidates.length > 1 && <><span>other matches considered</span><span className="truncate">{r.candidates.filter(c => c.entity_id !== r.entity_id).map(c => c.name).join(', ')}</span></>}
+          </div>
+        </details>
+      )}
       {r.age_skew && <AgeBars skew={r.age_skew} age={p.age} />}
       {p.compare && r.score !== null && (
         <div className="mt-3 text-sm">
