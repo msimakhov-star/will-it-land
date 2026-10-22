@@ -130,7 +130,11 @@ def _locate(text: str, surface: str, used: list[tuple[int, int]]) -> tuple[int, 
 
 
 def extract(text: str, audience: Audience) -> list[Reference]:
-    out = llm.complete_json(EXTRACT_SYSTEM, f"TARGET AUDIENCE: {audience.label()}\n\nTEXT:\n{text}")
+    prompt = f"TARGET AUDIENCE: {audience.label()}\n\nTEXT:\n{text}"
+    try:
+        out = llm.complete_json(EXTRACT_SYSTEM, prompt)
+    except Exception:  # malformed JSON or a timeout: one retry on the fast model rather than a failed demo
+        out = llm.complete_json(EXTRACT_SYSTEM, prompt, fast=True)
     refs, used = [], []
     for r in out.get("references", []):
         if r.get("type") not in TYPES or not r.get("surface"):
