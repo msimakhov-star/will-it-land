@@ -1,0 +1,1828 @@
+group,qloo_type,name,slug,fame_all,fame_millennials,fame_generationx,fame_babyboomers,fame_men,fame_women,pop_all,pop_millennials,pop_generationx,pop_babyboomers,pop_men,pop_women
+all-time-tv-shows,tv_show,The Simpsons,The_Simpsons,97,97,99,99,98,97,68,69,67,54,74,61
+all-time-tv-shows,tv_show,Sesame Street,Sesame_Street,96,93,96,99,95,98,77,72,77,76,76,77
+all-time-tv-shows,tv_show,Tom and Jerry,Tom_and_Jerry,96,97,96,,97,96,76,76,79,,79,74
+all-time-tv-shows,tv_show,Dr. Phil,Dr_Phil,96,95,97,98,96,95,35,39,29,24,38,33
+all-time-tv-shows,tv_show,America's Got Talent,Americas_Got_Talent,96,93,98,,96,95,56,56,48,,55,57
+all-time-tv-shows,tv_show,Jeopardy!,Jeopardy,95,93,98,99,93,97,72,67,68,81,69,75
+all-time-tv-shows,tv_show,The Big Bang Theory,The_Big_Bang_Theory,95,95,98,97,96,94,60,60,54,62,65,55
+all-time-tv-shows,tv_show,Friends,Friends,95,94,95,,95,95,59,59,61,,55,62
+all-time-tv-shows,tv_show,Judge Judy,Judge_Judy,95,94,96,100,96,94,57,61,52,52,57,57
+all-time-tv-shows,tv_show,Family Guy,Family_Guy,95,94,97,,95,94,55,62,54,,61,47
+all-time-tv-shows,tv_show,Seinfeld,Seinfeld,94,93,98,98,95,94,60,59,66,67,64,57
+all-time-tv-shows,tv_show,The Price Is Right,The_Price_Is_Right,94,93,99,99,94,94,63,65,67,64,61,64
+all-time-tv-shows,tv_show,Grey's Anatomy,Greys_Anatomy,94,94,,,93,95,46,49,,,38,56
+all-time-tv-shows,tv_show,Fresh Prince of Bel-Air,Fresh_Prince_of_Bel_Air,94,96,97,97,93,95,64,73,70,48,61,68
+all-time-tv-shows,tv_show,Law & Order,Law_Order,93,94,96,98,93,94,66,62,64,71,66,67
+all-time-tv-shows,tv_show,The Super Bowl,The_Super_Bowl,93,,97,99,93,94,57,,61,60,62,51
+all-time-tv-shows,tv_show,The Flintstones,The_Flintstones,93,97,94,99,96,90,75,73,78,87,79,70
+all-time-tv-shows,tv_show,SpongeBob SquarePants,SpongeBob_SquarePants,93,94,,,93,94,60,63,,,63,57
+all-time-tv-shows,tv_show,American Idol,American_Idol,93,90,99,99,92,94,45,45,43,41,43,48
+all-time-tv-shows,tv_show,The Ellen DeGeneres Show,The_Ellen_DeGeneres_Show,93,92,99,99,91,96,37,38,32,33,33,41
+all-time-tv-shows,tv_show,CBS Local News,CBS_Local_News,93,90,96,99,94,92,45,48,42,38,45,46
+all-time-tv-shows,tv_show,Game of Thrones,Game_of_Thrones,93,94,,,94,91,56,62,,,65,46
+all-time-tv-shows,tv_show,Wheel of Fortune,Wheel_of_Fortune,93,94,98,98,92,94,60,72,57,60,60,60
+all-time-tv-shows,tv_show,The Twilight Zone,The_Twilight_Zone,93,92,97,99,95,90,65,65,65,81,73,58
+all-time-tv-shows,tv_show,South Park,South_Park,93,92,96,,93,92,57,59,53,,64,49
+all-time-tv-shows,tv_show,Family Feud,Family_Feud,92,93,98,99,92,93,62,68,57,62,62,64
+all-time-tv-shows,tv_show,The Academy Awards,The_Academy_Awards,92,90,96,99,95,89,47,56,40,39,55,39
+all-time-tv-shows,tv_show,60 Minutes,60_Minutes,92,94,,,94,90,56,56,,,54,58
+all-time-tv-shows,tv_show,Hannah Montana,Hannah_Montana,92,94,,,92,91,48,51,,,44,51
+all-time-tv-shows,tv_show,Dora the Explorer,Dora_the_Explorer,92,92,,,89,94,55,53,,,48,61
+all-time-tv-shows,tv_show,The Office,The_Office,92,91,,,92,91,58,62,,,61,55
+all-time-tv-shows,tv_show,America's Funniest Home Videos,Americas_Funniest_Home_Videos,92,93,95,98,93,90,62,65,62,63,62,62
+all-time-tv-shows,tv_show,Sex and the City,Sex_and_the_City,91,93,98,98,90,93,47,46,47,42,44,50
+all-time-tv-shows,tv_show,Jimmy Kimmel Live,Jimmy_Kimmel_Live,91,90,96,99,91,91,50,56,54,51,48,53
+all-time-tv-shows,tv_show,Barney & Friends,Barney_Friends,91,91,,,90,93,43,51,,,39,48
+all-time-tv-shows,tv_show,The Tonight Show Starring Jimmy Fallon,The_Tonight_Show_Starring_Jimmy_Fallon,91,,95,99,92,91,52,,49,50,53,52
+all-time-tv-shows,tv_show,Saturday Night Live,Saturday_Night_Live,91,,96,99,93,90,59,,63,65,54,64
+all-time-tv-shows,tv_show,Good Morning America,Good_Morning_America,91,93,99,98,91,91,50,53,50,47,52,47
+all-time-tv-shows,tv_show,The Oprah Winfrey Show,The_Oprah_Winfrey_Show,91,92,,100,91,91,40,41,,37,40,40
+all-time-tv-shows,tv_show,The Sopranos,The_Sopranos,91,91,95,98,95,87,55,53,63,57,61,50
+all-time-tv-shows,tv_show,Star Trek: The Original Series,Star_Trek_The_Original_Series,91,92,96,,93,88,60,53,59,,69,49
+all-time-tv-shows,tv_show,Dancing with the Stars,Dancing_with_the_Stars,91,93,96,98,,92,46,52,31,38,,51
+all-time-tv-shows,tv_show,Beavis and Butt-head,Beavis_and_Butt_head,91,91,95,97,92,89,45,55,48,27,51,39
+all-time-tv-shows,tv_show,Shark Tank,Shark_Tank,91,,95,,91,91,47,,41,,45,48
+all-time-tv-shows,tv_show,The Bugs Bunny Show,The_Bugs_Bunny_Show,91,,,,92,89,73,,,,76,70
+all-time-tv-shows,tv_show,Fox News Live,Fox_News_Live,91,91,,98,95,,37,40,,36,42,
+all-time-tv-shows,tv_show,Rugrats,Rugrats,90,96,,,91,90,50,72,,,48,52
+all-time-tv-shows,tv_show,The Walking Dead,The_Walking_Dead,90,94,95,,92,88,52,56,49,,53,50
+all-time-tv-shows,tv_show,Malcolm in the Middle,Malcolm_in_the_Middle,90,,97,,90,91,55,,52,,54,56
+all-time-tv-shows,tv_show,The Muppet Show,The_Muppet_Show,90,93,94,,,92,63,64,70,,,64
+all-time-tv-shows,tv_show,Hell's Kitchen,Hells_Kitchen,90,90,94,,90,91,48,52,46,,49,46
+all-time-tv-shows,tv_show,The Looney Tunes Show,The_Looney_Tunes_Show,90,97,,,90,90,65,75,,,67,63
+all-time-tv-shows,tv_show,The Golden Girls,The_Golden_Girls,90,92,99,98,90,90,67,63,78,72,64,69
+all-time-tv-shows,tv_show,How I Met Your Mother,How_I_Met_Your_Mother,90,,,,92,88,49,,,,46,52
+all-time-tv-shows,tv_show,The X-Files,The_X_Files,90,,97,98,93,,59,,63,67,65,
+all-time-tv-shows,tv_show,I Love Lucy,I_Love_Lucy,90,93,98,100,,91,67,65,73,86,,70
+all-time-tv-shows,tv_show,Keeping Up With The Kardashians,Keeping_Up_With_The_Kardashians,90,,,,,91,26,,,,,29
+all-time-tv-shows,tv_show,Full House,Full_House,90,96,96,,,91,55,68,49,,,59
+all-time-tv-shows,tv_show,Scrubs,Scrubs,90,92,,,91,88,54,60,,,53,54
+all-time-tv-shows,tv_show,CBS Morning News,CBS_Morning_News,90,91,,,91,89,42,41,,,45,39
+all-time-tv-shows,tv_show,Little House on the Prairie,Little_House_on_the_Prairie-TV_Show,90,90,99,99,89,90,58,52,65,64,55,62
+all-time-tv-shows,tv_show,CBS Evening News,CBS_Evening_News,90,,98,99,93,,44,,41,38,43,
+all-time-tv-shows,tv_show,CNN World News,CNN_World_News,89,,,,93,,43,,,,48,
+all-time-tv-shows,tv_show,Breaking Bad,Breaking_Bad,89,91,,,92,,61,64,,,66,
+all-time-tv-shows,tv_show,CSI: Miami,CSI_Miami,89,,,,90,88,52,,,,53,51
+all-time-tv-shows,tv_show,Teletubbies,Teletubbies,89,93,,,,89,42,40,,,,42
+all-time-tv-shows,tv_show,Paw Patrol,Paw_Patrol,89,,,,,91,47,,,,,56
+all-time-tv-shows,tv_show,Curious George,Curious_George-TV_Show,89,91,,,89,88,65,65,,,65,64
+all-time-tv-shows,tv_show,Star Trek: The Next Generation,Star_Trek_The_Next_Generation,89,,,,91,,55,,,,60,
+all-time-tv-shows,tv_show,Wonder Woman,Wonder_Woman-TV_Show,89,91,,,89,88,58,57,,,60,56
+all-time-tv-shows,tv_show,Two and a Half Men,Two_and_a_Half_Men,89,90,96,,90,87,48,52,55,,47,50
+all-time-tv-shows,tv_show,The Bachelorette,The_Bachelorette,89,,,,,91,26,,,,,29
+all-time-tv-shows,tv_show,Young Sheldon,Young_Sheldon,89,,,,90,87,50,,,,51,49
+all-time-tv-shows,tv_show,Law & Order: SVU,Law_Order_SVU,89,90,95,,,88,60,56,55,,,63
+all-time-tv-shows,tv_show,The Andy Griffith Show,The_Andy_Griffith_Show,89,90,95,100,92,,58,55,65,84,60,
+all-time-tv-shows,tv_show,The Jetsons,The_Jetsons,88,91,97,99,89,87,67,67,79,80,68,65
+all-time-tv-shows,tv_show,The Jerry Springer Show,The_Jerry_Springer_Show,88,91,96,,,89,39,46,33,,,39
+all-time-tv-shows,tv_show,Stranger Things,Stranger_Things,88,93,,,,88,54,57,,,,55
+all-time-tv-shows,tv_show,The Voice,The_Voice,88,,,,,90,50,,,,,53
+all-time-tv-shows,tv_show,Gilmore Girls,Gilmore_Girls,88,91,,,,90,45,53,,,,50
+all-time-tv-shows,tv_show,Peppa Pig,Peppa_Pig,,94,,,,,,49,,,,
+all-time-tv-shows,tv_show,Who Wants to Be a Millionaire?,Who_Wants_to_Be_a_Millionaire,,93,97,,,88,,60,49,,,51
+all-time-tv-shows,tv_show,Rick and Morty,Rick_and_Morty,,93,,,,,,57,,,,
+all-time-tv-shows,tv_show,Hey Arnold!,Hey_Arnold,,91,,,,,,66,,,,
+all-time-tv-shows,tv_show,Kim Possible,Kim_Possible,,91,,,,,,61,,,,
+all-time-tv-shows,tv_show,Everybody Loves Raymond,Everybody_Loves_Raymond,,91,95,99,90,,,52,63,65,55,
+all-time-tv-shows,tv_show,Deal or No Deal,Deal_or_No_Deal-TV_Show,,91,,,,,,56,,,,
+all-time-tv-shows,tv_show,Survivor,Survivor,,91,96,,90,,,42,34,,42,
+all-time-tv-shows,tv_show,Deal or no Deal,Deal_or_no_Deal,,91,,,89,,,49,,,47,
+all-time-tv-shows,tv_show,Home Improvement,Home_Improvement,,91,96,98,91,,,63,58,69,61,
+all-time-tv-shows,tv_show,America's Next Top Model,Americas_Next_Top_Model,,91,,,,,,35,,,,
+all-time-tv-shows,tv_show,The Dr. Oz Show,The_Dr_Oz_Show,,90,95,,,88,,36,28,,,34
+all-time-tv-shows,tv_show,The Biggest Loser,The_Biggest_Loser,,90,,,,,,41,,,,
+all-time-tv-shows,tv_show,Fox News Sunday,Fox_News_Sunday,,90,,,91,,,32,,,38,
+all-time-tv-shows,tv_show,Glee,Glee,,90,,,,,,38,,,,
+all-time-tv-shows,tv_show,King of the Hill,King_of_the_Hill,,90,,,92,,,54,,,62,
+all-time-tv-shows,tv_show,The Bachelor,The_Bachelor-TV_Show,,90,,,,88,,29,,,,29
+all-time-tv-shows,tv_show,The Three Stooges,The_Three_Stooges,,,98,98,90,,,,66,72,61,
+all-time-tv-shows,tv_show,Bewitched,Bewitched,,,98,99,,,,,69,79,,
+all-time-tv-shows,tv_show,Late Show with David Letterman,Late_Show_with_David_Letterman,,,98,98,,,,,62,59,,
+all-time-tv-shows,tv_show,Married… With Children,Married…_With_Children,,,98,99,,,,,74,64,,
+all-time-tv-shows,tv_show,The Cosby Show,The_Cosby_Show,,,97,99,,,,,55,54,,
+all-time-tv-shows,tv_show,Gilligan's Island,Gilligans_Island,,,97,99,90,,,,75,79,65,
+all-time-tv-shows,tv_show,M*A*S*H,M_A_S_H,,,96,98,94,,,,70,86,67,
+all-time-tv-shows,tv_show,Star Trek - The Next Generation,Star_Trek_The_Next_Generation-TV_Show,,,96,,91,,,,61,,61,
+all-time-tv-shows,tv_show,The Tonight Show with Johnny Carson,The_Tonight_Show_with_Johnny_Carson,,,96,99,,,,,64,83,,
+all-time-tv-shows,tv_show,Magnum P.I.,Magnum_P_I,,,96,98,,,,,68,64,,
+all-time-tv-shows,tv_show,Buffy the Vampire Slayer,Buffy_the_Vampire_Slayer,,,95,,,,,,53,,,
+all-time-tv-shows,tv_show,Will & Grace,Will_Grace,,,95,,,,,,58,,,
+all-time-tv-shows,tv_show,ALF,ALF,,,95,,,,,,61,,,
+all-time-tv-shows,tv_show,Miami Vice,Miami_Vice,,,95,97,,,,,57,61,,
+all-time-tv-shows,tv_show,Cheers,Cheers,,,95,98,,,,,72,83,,
+all-time-tv-shows,tv_show,NCIS,NCIS,,,95,,,,,,53,,,
+all-time-tv-shows,tv_show,Matlock,Matlock,,,95,99,,,,,57,64,,
+all-time-tv-shows,tv_show,The Drew Carey Show,The_Drew_Carey_Show,,,95,,,,,,45,,,
+all-time-tv-shows,tv_show,MacGyver,MacGyver,,,95,,,,,,58,,,
+all-time-tv-shows,tv_show,Three's Company,Threes_Company,,,95,98,,,,,74,70,,
+all-time-tv-shows,tv_show,Diff'rent Strokes,Diffrent_Strokes,,,95,,,,,,63,,,
+all-time-tv-shows,tv_show,ABC News: Nightline,ABC_News_Nightline,,,94,,,,,,44,,,
+all-time-tv-shows,tv_show,I Dream of Jeannie,I_Dream_of_Jeannie,,,94,99,,,,,70,81,,
+all-time-tv-shows,tv_show,Entertainment Tonight,Entertainment_Tonight,,,94,,,,,,42,,,
+all-time-tv-shows,tv_show,The View,The_View,,,94,98,,,,,23,32,,
+all-time-tv-shows,tv_show,The Carol Burnett Show,The_Carol_Burnett_Show,,,,99,,,,,,88,,
+all-time-tv-shows,tv_show,Perry Mason,Perry_Mason,,,,99,,,,,,76,,
+all-time-tv-shows,tv_show,"Murder, She Wrote",Murder_She_Wrote,,,,99,,,,,,63,,
+all-time-tv-shows,tv_show,The Brady Bunch,The_Brady_Bunch,,,,99,,89,,,,67,,60
+all-time-tv-shows,tv_show,The Dick Van Dyke Show,The_Dick_Van_Dyke_Show,,,,99,91,,,,,87,58,
+all-time-tv-shows,tv_show,Hawaii Five-O (1968),Hawaii_Five_O_1968,,,,99,,,,,,73,,
+all-time-tv-shows,tv_show,The Beverly Hillbillies,The_Beverly_Hillbillies,,,,99,,,,,,82,,
+all-time-tv-shows,tv_show,Leave It to Beaver,Leave_It_to_Beaver,,,,99,,,,,,73,,
+all-time-tv-shows,tv_show,Lassie,Lassie,,,,99,,,,,,81,,
+all-time-tv-shows,tv_show,The Tonight Show with Jay Leno,The_Tonight_Show_with_Jay_Leno,,,,99,,,,,,67,,
+all-time-tv-shows,tv_show,The Ed Sullivan Show,The_Ed_Sullivan_Show,,,,99,,,,,,79,,
+all-time-tv-shows,tv_show,Perry Mason,Perry_Mason-TV_Show,,,,99,,,,,,72,,
+all-time-tv-shows,tv_show,Hogan's Heroes,Hogans_Heroes,,,,99,,,,,,72,,
+all-time-tv-shows,tv_show,The Partridge Family,The_Partridge_Family,,,,99,,,,,,63,,
+all-time-tv-shows,tv_show,Mork and Mindy,Mork_and_Mindy,,,,98,,,,,,76,,
+all-time-tv-shows,tv_show,Gunsmoke,Gunsmoke,,,,98,,,,,,74,,
+all-time-tv-shows,tv_show,The Munsters,The_Munsters,,,,98,,,,,,71,,
+all-time-tv-shows,tv_show,The Red Skelton Show,The_Red_Skelton_Show,,,,98,,,,,,77,,
+all-time-tv-shows,tv_show,Sanford and Son,Sanford_and_Son,,,,98,,,,,,73,,
+all-time-tv-shows,tv_show,Charlie's Angels,Charlies_Angels-TV_Show,,,,98,,,,,,60,,
+all-time-tv-shows,tv_show,Hawaii Five-O,Hawaii_Five_O,,,,98,,,,,,58,,
+all-time-tv-shows,tv_show,Cagney & Lacey,Cagney_Lacey,,,,98,,,,,,61,,
+all-time-tv-shows,tv_show,Laverne & Shirley,Laverne_Shirley,,,,98,,,,,,79,,
+all-time-tv-shows,tv_show,The Mary Tyler Moore Show,The_Mary_Tyler_Moore_Show,,,,98,,,,,,77,,
+all-time-tv-shows,tv_show,Dateline NBC,Dateline_NBC,,,,97,,,,,,53,,
+all-time-tv-shows,tv_show,Columbo,Columbo,,,,97,,,,,,78,,
+all-time-tv-shows,tv_show,Pawn Stars,Pawn_Stars,,,,,90,,,,,,45,
+all-time-tv-shows,tv_show,2026 FIFA World Cup,2026_FIFA_World_Cup,,,,,89,,,,,,51,
+all-time-tv-shows,tv_show,Criminal Minds,Criminal_Minds,,,,,,90,,,,,,63
+all-time-tv-shows,tv_show,CBS Mornings,CBS_Mornings-TV_Show,,,,,,88,,,,,,44
+all-time-tv-shows,tv_show,The Real Housewives Of Beverly Hills,The_Real_Housewives_Of_Beverly_Hills,,,,,,88,,,,,,33
+all-time-movies,movie,Toy Story,Toy_Story,97,98,96,97,96,99,77,85,74,73,74,82
+all-time-movies,movie,Home Alone,Home_Alone,97,96,99,99,96,98,79,82,75,76,80,79
+all-time-movies,movie,Shrek,Shrek,97,98,99,98,96,97,76,80,77,74,77,75
+all-time-movies,movie,The Lion King,The_Lion_King-Movies,97,98,99,99,97,96,77,77,73,80,75,78
+all-time-movies,movie,The Wizard of Oz,The_Wizard_of_Oz,97,94,98,99,96,97,80,72,81,88,78,81
+all-time-movies,movie,Titanic,Titanic,96,92,98,99,94,98,72,67,66,76,67,77
+all-time-movies,movie,Jurassic Park,Jurassic_Park,96,96,98,99,99,94,74,76,76,67,78,70
+all-time-movies,movie,Ghostbusters,Ghostbusters,96,96,99,98,98,93,77,72,86,77,79,75
+all-time-movies,movie,Spider-Man,Spider_Man,96,95,96,97,95,96,71,75,69,65,74,69
+all-time-movies,movie,Toy Story 2,Toy_Story_2,95,93,98,96,96,95,71,73,74,66,68,73
+all-time-movies,movie,Shrek 2,Shrek_2,95,96,94,93,95,95,69,71,64,63,68,70
+all-time-movies,movie,The Hunger Games,The_Hunger_Games-Movies,95,96,94,95,97,92,64,71,54,55,67,60
+all-time-movies,movie,Harry Potter and the Sorcerer's Stone,Harry_Potter_and_the_Sorcerers_Stone,95,96,95,95,95,94,61,61,58,55,63,58
+all-time-movies,movie,Batman,Batman,95,94,98,98,94,95,66,72,72,62,70,62
+all-time-movies,movie,How the Grinch Stole Christmas!,How_the_Grinch_Stole_Christmas,94,94,96,97,93,95,74,74,73,71,72,76
+all-time-movies,movie,Forrest Gump,Forrest_Gump,94,94,97,99,94,93,77,75,84,86,75,78
+all-time-movies,movie,Barbie,Barbie-Movies,94,94,97,96,92,96,53,62,45,36,47,59
+all-time-movies,movie,The Lion King (2019),The_Lion_King_2019,94,94,96,94,93,95,63,59,70,69,55,71
+all-time-movies,movie,Elf,Elf,94,96,95,96,94,94,64,69,68,63,60,69
+all-time-movies,movie,Dr. Seuss' The Grinch,Dr_Seuss_The_Grinch,94,92,98,94,93,95,69,68,68,72,65,74
+all-time-movies,movie,Back to the Future,Back_to_the_Future,94,91,98,97,94,93,75,72,80,79,80,70
+all-time-movies,movie,Fast & Furious,Fast_Furious,94,96,97,,97,90,58,63,57,,58,58
+all-time-movies,movie,Madagascar,Madagascar,93,93,95,,93,94,67,66,68,,67,67
+all-time-movies,movie,Cars,Cars,93,96,97,,94,92,71,74,71,,70,73
+all-time-movies,movie,Minions,Minions,93,94,93,,93,94,60,62,61,,56,65
+all-time-movies,movie,Finding Nemo,Finding_Nemo,93,93,95,95,93,93,76,76,78,72,72,79
+all-time-movies,movie,The Fast and the Furious,The_Fast_and_the_Furious,93,94,97,94,95,91,55,59,55,47,56,55
+all-time-movies,movie,The Godfather,The_Godfather,92,93,95,99,94,91,72,68,75,81,77,66
+all-time-movies,movie,The Karate Kid,The_Karate_Kid,92,93,97,98,94,91,69,63,77,67,72,66
+all-time-movies,movie,The Lost World: Jurassic Park,The_Lost_World_Jurassic_Park,92,93,94,97,94,90,63,70,60,62,65,61
+all-time-movies,movie,Home Alone 2: Lost in New York,Home_Alone_2_Lost_in_New_York,92,93,96,,92,93,64,69,60,,64,63
+all-time-movies,movie,Fifty Shades of Grey,Fifty_Shades_of_Grey-Movies,92,94,94,94,94,91,40,43,34,30,38,42
+all-time-movies,movie,The Addams Family,The_Addams_Family,92,,97,97,93,92,63,,62,69,60,66
+all-time-movies,movie,The Polar Express,The_Polar_Express,92,,93,,91,93,66,,63,,62,69
+all-time-movies,movie,Despicable Me 2,Despicable_Me_2,92,91,93,,91,93,63,61,61,,61,65
+all-time-movies,movie,Jurassic World,Jurassic_World,92,93,95,94,91,93,62,63,58,58,59,65
+all-time-movies,movie,Despicable Me,Despicable_Me,92,94,,,91,94,66,67,,,64,68
+all-time-movies,movie,The Matrix,The_Matrix,92,96,97,,95,89,66,72,75,,74,58
+all-time-movies,movie,Toy Story 3,Toy_Story_3,92,94,,,93,91,66,68,,,65,67
+all-time-movies,movie,Ghostbusters (2016),Ghostbusters_2016,92,91,,96,91,93,59,53,,57,57,60
+all-time-movies,movie,X-Men,X_Men,92,96,95,,95,89,59,67,63,,63,56
+all-time-movies,movie,Charlotte's Web,Charlottes_Web-Movies,92,92,,,,94,66,67,,,,69
+all-time-movies,movie,Beetlejuice,Beetlejuice,92,,95,98,95,88,64,,74,65,67,61
+all-time-movies,movie,Wonder Woman,Wonder_Woman,91,,95,95,94,88,56,,60,53,59,52
+all-time-movies,movie,The Grinch (2018),The_Grinch_2018,91,,,94,,93,62,,,59,,71
+all-time-movies,movie,Harry Potter and the Half-Blood Prince,Harry_Potter_and_the_Half_Blood_Prince,91,96,,,93,90,60,66,,,59,61
+all-time-movies,movie,Charlie and the Chocolate Factory,Charlie_and_the_Chocolate_Factory,91,91,94,,,93,63,58,63,,,66
+all-time-movies,movie,Harry Potter and the Order of the Phoenix,Harry_Potter_and_the_Order_of_the_Phoenix,91,92,93,,92,90,60,66,55,,61,59
+all-time-movies,movie,Toy Story 4,Toy_Story_4,91,92,,,92,91,62,65,,,60,63
+all-time-movies,movie,Kung Fu Panda,Kung_Fu_Panda,91,94,,,91,91,63,68,,,63,64
+all-time-movies,movie,Saving Private Ryan,Saving_Private_Ryan,91,,93,98,93,89,71,,74,83,74,67
+all-time-movies,movie,Rudolph The Red-Nosed Reindeer,Rudolph_The_Red_Nosed_Reindeer,91,94,,97,,93,74,71,,82,,77
+all-time-movies,movie,The Terminator,The_Terminator,91,94,97,97,95,,70,72,77,70,81,
+all-time-movies,movie,"Monsters, Inc.",Monsters_Inc,91,93,94,,91,90,70,80,66,,69,71
+all-time-movies,movie,The Incredibles,The_Incredibles,91,95,,,91,90,67,74,,,62,72
+all-time-movies,movie,Iron Man,Iron_Man,90,93,93,,92,88,66,68,66,,70,61
+all-time-movies,movie,Back to the Future Part II,Back_to_the_Future_Part_II,90,94,,95,92,89,67,69,,67,72,62
+all-time-movies,movie,Frozen II,Frozen_II,90,91,,,,90,55,56,,,,60
+all-time-movies,movie,Indiana Jones and the Last Crusade,Indiana_Jones_and_the_Last_Crusade,90,92,96,97,,90,67,62,73,78,,64
+all-time-movies,movie,Joker (2019),Joker_2019,90,,94,,93,,54,,53,,63,
+all-time-movies,movie,Ghostbusters II,Ghostbusters_II,90,,96,94,,91,58,,61,55,,57
+all-time-movies,movie,A Charlie Brown Christmas,A_Charlie_Brown_Christmas,90,,97,98,,89,73,,82,84,,73
+all-time-movies,movie,Puss in Boots,Puss_in_Boots-Movies,90,91,,,,90,60,59,,,,62
+all-time-movies,movie,A Charlie Brown Thanksgiving,A_Charlie_Brown_Thanksgiving,90,,94,96,,89,72,,80,82,,73
+all-time-movies,movie,Rocky II,Rocky_II,90,92,98,97,95,,60,61,67,59,67,
+all-time-movies,movie,Star Wars Episode V: The Empire Strikes Back,Star_Wars_Episode_V_The_Empire_Strikes_Back,90,,,,92,,62,,,,68,
+all-time-movies,movie,Harry Potter and the Prisoner of Azkaban,Harry_Potter_and_the_Prisoner_of_Azkaban,90,94,,,91,88,57,71,,,57,56
+all-time-movies,movie,Beauty & the Beast (2017),Beauty_the_Beast_2017,90,91,,,,93,57,57,,,,62
+all-time-movies,movie,Edward Scissorhands,Edward_Scissorhands,90,91,95,94,,91,61,68,67,59,,64
+all-time-movies,movie,Spider-Man 2,Spider_Man_2,90,93,,,,89,64,70,,,,60
+all-time-movies,movie,Rocky,Rocky,89,,96,98,90,88,67,,73,70,70,63
+all-time-movies,movie,Harry Potter and the Goblet of Fire,Harry_Potter_and_the_Goblet_of_Fire,89,,,,91,,57,,,,57,
+all-time-movies,movie,Guardians of the Galaxy,Guardians_of_the_Galaxy,89,95,,,92,,63,69,,,66,
+all-time-movies,movie,Spider-Man 3,Spider_Man_3,89,,,,,88,60,,,,,56
+all-time-movies,movie,Harry Potter and the Chamber of Secrets,Harry_Potter_and_the_Chamber_of_Secrets,89,94,,,,,58,66,,,,
+all-time-movies,movie,Despicable Me 3,Despicable_Me_3,89,91,,,,,59,56,,,,
+all-time-movies,movie,Transformers,Transformers,89,,95,,,,55,,54,,,
+all-time-movies,movie,Cars 2,Cars_2,89,,,,,89,58,,,,,60
+all-time-movies,movie,Kung Fu Panda 2,Kung_Fu_Panda_2,89,,,,,,55,,,,,
+all-time-movies,movie,Top Gun: Maverick,Top_Gun_Maverick,89,,97,95,91,,61,,64,59,66,
+all-time-movies,movie,The Nightmare Before Christmas,The_Nightmare_Before_Christmas,,96,,,,93,,74,,,,68
+all-time-movies,movie,2 Fast 2 Furious,2_Fast_2_Furious,,94,,,91,,,65,,,57,
+all-time-movies,movie,Deadpool,Deadpool,,94,,,91,,,63,,,67,
+all-time-movies,movie,The Lord of the Rings: The Two Towers,The_Lord_of_the_Rings_The_Two_Towers,,94,,,,,,69,,,,
+all-time-movies,movie,Pirates of the Caribbean: Dead Man's Chest,Pirates_of_the_Caribbean_Dead_Mans_Chest,,93,,,,,,66,,,,
+all-time-movies,movie,Die Hard,Die_Hard,,93,96,96,,,,66,77,73,,
+all-time-movies,movie,Iron Man 2,Iron_Man_2-Movies,,93,,,,,,62,,,,
+all-time-movies,movie,Spider-Man: Into The Spider-Verse,Spider_Man_Into_The_Spider_Verse,,93,,,91,,,70,,,67,
+all-time-movies,movie,Harry Potter and the Deathly Hallows: Part 2,Harry_Potter_and_the_Deathly_Hallows_Part_2,,92,,,,,,62,,,,
+all-time-movies,movie,The Silence of the Lambs,The_Silence_of_the_Lambs,,92,98,97,,91,,67,76,70,,65
+all-time-movies,movie,Suicide Squad,Suicide_Squad,,92,,,,,,52,,,,
+all-time-movies,movie,The Lord of the Rings: The Fellowship of the Ring,The_Lord_of_the_Rings_The_Fellowship_of_the_Ring,,91,,,,,,70,,,,
+all-time-movies,movie,Twilight,Twilight,,91,,,,,,60,,,,
+all-time-movies,movie,The Dark Knight,The_Dark_Knight,,91,,,,,,72,,,,
+all-time-movies,movie,The Amazing Spider-Man 2,The_Amazing_Spider_Man_2,,91,,,91,,,61,,,57,
+all-time-movies,movie,The Da Vinci Code,The_Da_Vinci_Code-Movies,,91,93,94,,,,56,62,61,,
+all-time-movies,movie,Incredibles 2,Incredibles_2,,91,,,,,,64,,,,
+all-time-movies,movie,Moana,Moana,,91,,,,91,,67,,,,69
+all-time-movies,movie,Scarface,Scarface,,,98,,,,,,69,,,
+all-time-movies,movie,Dirty Dancing,Dirty_Dancing,,,97,97,,89,,,69,78,,67
+all-time-movies,movie,Charlie's Angels,Charlies_Angels,,,96,95,,,,,61,50,,
+all-time-movies,movie,Gladiator,Gladiator,,,96,,,,,,69,,,
+all-time-movies,movie,Buffy the Vampire Slayer,Buffy_the_Vampire_Slayer-Movies,,,95,93,,,,,48,34,,
+all-time-movies,movie,Die Hard: With a Vengeance,Die_Hard_With_a_Vengeance,,,95,,,,,,68,,,
+all-time-movies,movie,A Christmas Story,A_Christmas_Story,,,94,,,88,,,74,,,62
+all-time-movies,movie,The Incredible Hulk,The_Incredible_Hulk,,,94,94,,,,,51,51,,
+all-time-movies,movie,Ocean's Eleven,Oceans_Eleven,,,94,93,,,,,70,63,,
+all-time-movies,movie,Rocky V,Rocky_V,,,94,,,,,,53,,,
+all-time-movies,movie,Braveheart,Braveheart,,,94,95,,,,,67,66,,
+all-time-movies,movie,My Big Fat Greek Wedding,My_Big_Fat_Greek_Wedding,,,94,96,,,,,56,57,,
+all-time-movies,movie,National Lampoon,National_Lampoon,,,94,96,,,,,69,61,,
+all-time-movies,movie,Pulp Fiction,Pulp_Fiction,,,94,94,92,,,,72,57,68,
+all-time-movies,movie,The Green Mile,The_Green_Mile,,,94,93,,,,,76,80,,
+all-time-movies,movie,Good Will Hunting,Good_Will_Hunting,,,94,,,,,,70,,,
+all-time-movies,movie,The Shawshank Redemption,The_Shawshank_Redemption,,,93,94,,,,,79,82,,
+all-time-movies,movie,Batman Returns,Batman_Returns,,,93,,,,,,65,,,
+all-time-movies,movie,The Bourne Supremacy,The_Bourne_Supremacy,,,93,,,,,,65,,,
+all-time-movies,movie,Batman Forever,Batman_Forever,,,93,,,,,,50,,,
+all-time-movies,movie,Terminator 2: Judgment Day,Terminator_2_Judgment_Day,,,93,,93,,,,68,,74,
+all-time-movies,movie,Raiders of the Lost Ark,Raiders_of_the_Lost_Ark,,,,99,,,,,,82,,
+all-time-movies,movie,Star Trek,Star_Trek,,,,98,91,,,,,71,63,
+all-time-movies,movie,Casablanca,Casablanca,,,,98,,,,,,75,,
+all-time-movies,movie,Gone with the Wind,Gone_with_the_Wind,,,,98,,,,,,80,,
+all-time-movies,movie,One Flew Over the Cuckoo's Nest,One_Flew_Over_the_Cuckoos_Nest,,,,97,,,,,,82,,
+all-time-movies,movie,Butch Cassidy and the Sundance Kid,Butch_Cassidy_and_the_Sundance_Kid,,,,97,,,,,,83,,
+all-time-movies,movie,To Kill a Mockingbird,To_Kill_a_Mockingbird,,,,96,,,,,,76,,
+all-time-movies,movie,The Godfather Part II,The_Godfather_Part_II,,,,96,91,,,,,71,69,
+all-time-movies,movie,National Lampoon's Christmas Vacation,National_Lampoons_Christmas_Vacation,,,,95,,,,,,69,,
+all-time-movies,movie,Texas Chainsaw Massacre,Texas_Chainsaw_Massacre,,,,95,91,,,,,27,47,
+all-time-movies,movie,The Shining,The_Shining-Movies,,,,95,,,,,,65,,
+all-time-movies,movie,Schindler's List,Schindlers_List,,,,95,,,,,,78,,
+all-time-movies,movie,Rocky IV,Rocky_IV,,,,95,,,,,,54,,
+all-time-movies,movie,My Fair Lady,My_Fair_Lady-Movies,,,,95,,,,,,70,,
+all-time-movies,movie,Miracle on 34th Street (1947),Miracle_on_34th_Street_1947,,,,94,,,,,,81,,
+all-time-movies,movie,It's a Wonderful Life,Its_a_Wonderful_Life,,,,94,,,,,,78,,
+all-time-movies,movie,Ferris Bueller's Day Off,Ferris_Buellers_Day_Off,,,,94,,,,,,70,,
+all-time-movies,movie,Apollo 13,Apollo_13,,,,94,,,,,,72,,
+all-time-movies,movie,Ben-Hur,Ben_Hur-Movies,,,,94,,,,,,69,,
+all-time-movies,movie,Rocky III,Rocky_III,,,,94,,,,,,54,,
+all-time-movies,movie,Teenage Mutant Ninja Turtles (2007),Teenage_Mutant_Ninja_Turtles_2007,,,,93,,,,,,46,,
+all-time-movies,movie,Star Wars: The Clone Wars,Star_Wars_The_Clone_Wars,,,,,93,,,,,,57,
+all-time-movies,movie,John Wick,John_Wick,,,,,93,,,,,,69,
+all-time-movies,movie,Star Wars Episode VI: Return of the Jedi,Star_Wars_Episode_VI_Return_of_the_Jedi,,,,,92,,,,,,67,
+all-time-movies,movie,The Lord of the Rings: The Return of the King,The_Lord_of_the_Rings_The_Return_of_the_King,,,,,92,,,,,,71,
+all-time-movies,movie,Star Trek: The Motion Picture,Star_Trek_The_Motion_Picture,,,,,91,,,,,,58,
+all-time-movies,movie,Rise of the Planet of the Apes,Rise_of_the_Planet_of_the_Apes,,,,,91,,,,,,61,
+all-time-movies,movie,Star Wars Episode I: The Phantom Menace,Star_Wars_Episode_I_The_Phantom_Menace,,,,,91,,,,,,64,
+all-time-movies,movie,Black Panther,Black_Panther,,,,,91,,,,,,69,
+all-time-movies,movie,Star Wars Episode VII: The Force Awakens,Star_Wars_Episode_VII_The_Force_Awakens,,,,,91,,,,,,60,
+all-time-movies,movie,Mad Max: Fury Road,Mad_Max_Fury_Road,,,,,90,,,,,,63,
+all-time-movies,movie,Mean Girls,Mean_Girls,,,,,,92,,,,,,62
+all-time-movies,movie,Superman (2025),Superman_2025,,,,,,90,,,,,,56
+all-time-movies,movie,The Hunger Games: Mockingjay Part 1,The_Hunger_Games_Mockingjay_Part_1,,,,,,89,,,,,,55
+all-time-movies,movie,Beetlejuice Beetlejuice (2024),Beetlejuice_Beetlejuice_2024,,,,,,89,,,,,,50
+all-time-movies,movie,Lilo & Stitch (2025),Lilo_Stitch_2025,,,,,,88,,,,,,55
+all-time-movies,movie,Romeo and Juliet,Romeo_and_Juliet,,,,,,88,,,,,,58
+2024-movies,movie,Beetlejuice Beetlejuice (2024),Beetlejuice_Beetlejuice_2024,87,80,92,89,85,89,51,53,53,43,53,50
+2024-movies,movie,Wicked (2024),Wicked_2024,84,84,85,85,85,84,48,52,44,39,48,47
+2024-movies,movie,Despicable Me 4,Despicable_Me_4,83,84,85,80,83,84,51,55,51,46,48,54
+2024-movies,movie,Moana 2,Moana_2,82,84,79,73,78,87,48,55,46,33,39,56
+2024-movies,movie,Mufasa: The Lion King,Mufasa_The_Lion_King,82,79,82,81,81,83,52,51,47,53,48,57
+2024-movies,movie,Mean Girls (2024),Mean_Girls_2024,80,80,80,78,76,84,42,42,35,30,39,45
+2024-movies,movie,The Exorcism,The_Exorcism,80,81,82,79,82,78,45,49,39,36,51,37
+2024-movies,movie,Twisters (2024),Twisters_2024,80,81,81,78,83,77,52,55,46,47,55,50
+2024-movies,movie,Kung Fu Panda 4,Kung_Fu_Panda_4,80,82,78,74,82,78,49,53,44,34,51,47
+2024-movies,movie,The Garfield Movie,The_Garfield_Movie,80,82,84,74,81,78,44,51,42,34,43,46
+2024-movies,movie,Sonic the Hedgehog 3 (2024),Sonic_the_Hedgehog_3_2024,79,83,78,74,80,79,44,54,28,24,44,44
+2024-movies,movie,Deadpool & Wolverine,Deadpool_Wolverine,79,88,84,68,83,75,54,62,54,38,61,46
+2024-movies,movie,Kingdom of the Planet of the Apes,Kingdom_of_the_Planet_of_the_Apes,78,75,77,81,83,73,47,42,43,36,54,40
+2024-movies,movie,The Lord of the Rings: The War of the Rohirrim,The_Lord_of_the_Rings_The_War_of_the_Rohirrim,75,71,75,76,79,71,48,42,42,47,55,40
+2024-movies,movie,Transformers One,Transformers_One,73,78,72,70,76,70,46,51,37,30,50,43
+2024-movies,movie,Inside Out 2,Inside_Out_2,73,82,65,48,71,75,48,53,41,27,45,52
+2024-movies,movie,Godzilla x Kong: The New Empire,Godzilla_x_Kong_The_New_Empire,72,71,68,59,79,64,44,43,40,24,53,35
+2024-movies,movie,Inside Out 2,Inside_Out_2-Movies,72,82,62,45,71,73,45,50,37,22,42,49
+2024-movies,movie,Super/Man: The Christopher Reeve Story,Super_Man_The_Christopher_Reeve_Story,71,68,73,77,72,70,49,47,50,52,51,46
+2024-movies,movie,Gladiator II,Gladiator_II,71,74,76,71,77,63,38,43,36,30,44,31
+2024-movies,movie,The Count of Monte-Cristo,The_Count_of_Monte_Cristo-Movies,71,70,77,78,73,68,44,43,48,48,46,43
+2024-movies,movie,Dune: Part Two (2024),Dune_Part_Two_2024,71,68,75,69,80,60,41,47,35,29,50,32
+2024-movies,movie,The Fall Guy (Movie),The_Fall_Guy_Movie,68,64,71,59,74,62,42,39,38,25,43,40
+2024-movies,movie,Ghostbusters: Frozen Empire,Ghostbusters_Frozen_Empire,68,70,73,64,70,66,38,41,37,31,37,39
+2024-movies,movie,Bob Marley: One Love,Bob_Marley_One_Love,66,69,61,63,68,64,43,45,36,40,42,44
+2024-movies,movie,Road House (2024),Road_House_2024,66,71,70,64,77,52,41,44,36,36,51,30
+2024-movies,movie,Bad Boys: Ride or Die,Bad_Boys_Ride_or_Die,65,74,64,51,68,63,41,48,37,21,44,38
+2024-movies,movie,The Crow (2024),The_Crow_2024,63,65,71,54,71,56,37,37,37,23,42,31
+2024-movies,movie,The Beekeeper (2024),The_Beekeeper_2024,63,58,62,67,65,60,45,40,36,47,49,40
+2024-movies,movie,A Quiet Place: Day One,A_Quiet_Place_Day_One,61,67,60,33,62,61,41,43,35,19,39,42
+2024-movies,movie,Joker: Folie à Deux,Joker_Folie_a_Deux,61,75,53,38,69,54,33,37,21,15,39,27
+2024-movies,movie,I Am: Celine Dion,I_Am_Celine_Dion,59,55,55,63,58,60,35,34,23,35,34,35
+2024-movies,movie,Furiosa: A Mad Max Saga,Furiosa_A_Mad_Max_Saga,59,72,57,39,68,47,38,47,33,16,48,27
+2024-movies,movie,Alien: Romulus,Alien_Romulus,58,67,51,41,64,51,32,37,25,15,38,25
+2024-movies,movie,It Ends with Us,It_Ends_with_Us,57,59,53,46,53,63,33,37,21,21,32,35
+2024-movies,movie,Civil War (Movie),Civil_War_Movie,56,60,51,47,65,48,33,39,22,24,38,27
+2024-movies,movie,Venom: The Last Dance,Venom_The_Last_Dance,56,64,54,34,67,45,38,43,39,17,48,28
+2024-movies,movie,Dear Santa,Dear_Santa,56,62,49,50,61,50,33,38,22,24,38,27
+2024-movies,movie,Madame Web,Madame_Web-Movies,55,65,45,28,63,46,26,33,17,9,31,20
+2024-movies,movie,Civil War (2024),Civil_War_2024,55,57,51,47,65,44,31,34,25,24,38,22
+2024-movies,movie,Nosferatu (2024),Nosferatu_2024,54,67,50,36,58,51,31,39,22,12,34,29
+2024-movies,movie,Smile 2,Smile_2,54,62,52,33,57,52,34,40,26,9,37,30
+2024-movies,movie,The Wild Robot,The_Wild_Robot,54,62,46,32,59,49,36,41,27,17,40,33
+2024-movies,movie,Red One,Red_One,54,61,44,37,62,45,33,40,21,17,38,27
+2024-movies,movie,Borderlands (2024),Borderlands_2024,54,69,45,32,63,43,29,40,16,12,35,22
+2024-movies,movie,Speak No Evil (2024),Speak_No_Evil_2024,53,61,44,42,61,45,32,34,22,16,37,27
+2024-movies,movie,Wallace & Gromit: Vengeance Most Fowl,Wallace_Gromit_Vengeance_Most_Fowl,52,63,45,36,59,44,32,39,24,18,38,25
+2024-movies,movie,Arthur the King,Arthur_the_King,51,51,45,42,54,48,34,36,25,23,36,32
+2024-movies,movie,IF (Movie),IF_Movie,51,57,42,31,52,49,30,34,26,13,29,31
+2024-movies,movie,Reagan,Reagan,51,51,46,52,59,43,30,25,20,29,35,25
+2024-movies,movie,Terrifier 3,Terrifier_3,50,62,41,,60,40,26,33,19,,35,18
+2024-movies,movie,Harold and the Purple Crayon,Harold_and_the_Purple_Crayon,50,52,36,31,54,45,31,34,18,13,34,29
+2024-movies,movie,The Watchers (Movie),The_Watchers_Movie,49,55,44,35,55,42,29,33,24,12,34,24
+2024-movies,movie,The First Omen,The_First_Omen,49,50,46,41,54,44,28,31,25,18,29,26
+2024-movies,movie,Megalopolis,Megalopolis,49,58,42,30,58,39,28,30,17,10,34,22
+2024-movies,movie,Conclave,Conclave,49,53,42,40,55,41,32,34,25,24,37,26
+2024-movies,movie,Saturday Night,Saturday_Night,48,52,46,43,51,45,31,34,26,21,35,28
+2024-movies,movie,God's Not Dead 5: In God We Trust,Gods_Not_Dead_5_In_God_We_Trust,46,55,42,28,55,37,28,30,22,14,34,21
+2024-movies,movie,Challengers,Challengers,46,53,33,,,44,27,31,13,,,24
+2024-movies,movie,The Brutalist,The_Brutalist,46,54,34,30,53,38,27,30,15,12,33,21
+2024-movies,movie,Homestead,Homestead,46,49,42,31,53,39,28,30,22,15,34,21
+2024-movies,movie,Sing Sing,Sing_Sing,46,49,,25,55,,28,30,,11,35,
+2024-movies,movie,Emilia Pérez,Emilia_Perez,45,50,,26,,43,26,30,,13,,23
+2024-movies,movie,Monkey Man,Monkey_Man,45,55,33,26,53,,28,39,14,8,34,
+2024-movies,movie,The Ministry of Ungentlemanly Warfare,The_Ministry_of_Ungentlemanly_Warfare,45,,35,31,55,,27,,17,14,34,
+2024-movies,movie,Heretic (2024),Heretic_2024,45,57,37,28,52,37,26,33,17,10,31,20
+2024-movies,movie,Kraven: The Hunter,Kraven_The_Hunter,44,56,40,25,56,,23,30,19,9,29,
+2024-movies,movie,Immaculate,Immaculate,44,,36,26,52,36,27,,17,10,33,21
+2024-movies,movie,Usher: Rendezvous In Paris,Usher_Rendezvous_In_Paris,44,,34,32,52,36,25,,12,11,31,19
+2024-movies,movie,A Complete Unknown,A_Complete_Unknown,44,,,31,50,39,26,,,17,31,22
+2024-movies,movie,Juror #2,Juror_2,44,,,35,,43,25,,,17,,23
+2024-movies,movie,The Best Christmas Pageant Ever,The_Best_Christmas_Pageant_Ever,44,51,36,32,,44,28,33,17,14,,28
+2024-movies,movie,The Strangers: Chapter 1,The_Strangers_Chapter_1,44,52,37,,50,37,28,35,18,,31,24
+2024-movies,movie,The Substance,The_Substance,44,55,36,,50,37,27,36,19,,31,22
+2024-movies,movie,Babygirl,Babygirl,44,,35,27,,42,26,,17,10,,24
+2024-movies,movie,Night Swim,Night_Swim,43,50,38,,51,,23,33,10,,27,
+2024-movies,movie,Abigail,Abigail,43,,39,27,,40,27,,16,14,,24
+2024-movies,movie,Argylle,Argylle,43,52,,,52,,26,32,,,30,
+2024-movies,movie,Carry-On,Carry_On,43,,32,25,49,36,28,,17,10,35,20
+2024-movies,movie,Longlegs,Longlegs,42,50,,,49,36,24,29,,,28,21
+2024-movies,movie,Trap,Trap,,56,,,,,,34,,,,
+2024-movies,movie,Thelma (2024),Thelma_2024,,51,,25,,,,34,,11,,
+2024-movies,movie,Memoir of a Snail,Memoir_of_a_Snail,,51,,,,,,33,,,,
+2024-movies,movie,The Idea of You,The_Idea_of_You,,51,34,,,42,,36,17,,,23
+2024-movies,movie,Ryan's World The Movie: Titan Universe Adventure,Ryans_World_The_Movie_Titan_Universe_Adventure,,50,,,,38,,25,,,,20
+2024-movies,movie,Horizon: An American Saga - Chapter 1,Horizon_An_American_Saga_Chapter_1,,50,,,49,,,30,,,30,
+2024-movies,movie,Hard Truths,Hard_Truths,,50,,,,,,37,,,,
+2024-movies,movie,Gracie and Pedro: Pets to the Rescue,Gracie_and_Pedro_Pets_to_the_Rescue,,49,,,,,,31,,,,
+2024-movies,movie,Never Let Go,Never_Let_Go,,,35,,,37,,,17,,,21
+2024-movies,movie,Late Night with the Devil,Late_Night_with_the_Devil,,,35,,,,,,13,,,
+2024-movies,movie,You Gotta Believe,You_Gotta_Believe,,,35,,,,,,22,,,
+2024-movies,movie,The Killer's Game,The_Killers_Game,,,34,,,,,,17,,,
+2024-movies,movie,Imaginary,Imaginary,,,33,,,,,,16,,,
+2024-movies,movie,Bird (2024),Bird_2024,,,,31,51,,,,,14,35,
+2024-movies,movie,Goodrich,Goodrich,,,,30,,38,,,,15,,24
+2024-movies,movie,Slingshot (2024),Slingshot_2024,,,,28,50,,,,,11,36,
+2024-movies,movie,I'm Still Here (2024),Im_Still_Here_2024,,,,26,,38,,,,11,,21
+2024-movies,movie,Black Box Diaries,Black_Box_Diaries,,,,26,,,,,,6,,
+2024-movies,movie,The Forge,The_Forge,,,,26,,37,,,,11,,25
+2024-movies,movie,Ultraman: Rising,Ultraman_Rising,,,,,51,,,,,,30,
+2024-movies,movie,Cuckoo,Cuckoo-Movies,,,,,49,,,,,,32,
+2024-movies,movie,A Real Pain,A_Real_Pain,,,,,48,,,,,,31,
+2025-movies,movie,Superman (2025),Superman_2025,88,89,89,88,87,90,56,58,49,45,56,56
+2025-movies,movie,Lilo & Stitch (2025),Lilo_Stitch_2025,84,89,86,87,80,88,49,45,47,46,43,55
+2025-movies,movie,How to Train Your Dragon (2025),How_to_Train_Your_Dragon_2025,83,85,84,80,83,83,51,51,50,42,48,54
+2025-movies,movie,Mission: Impossible – The Final Reckoning,Mission_Impossible_The_Final_Reckoning,81,78,86,83,85,76,50,49,49,49,58,41
+2025-movies,movie,Snow White (2025),Snow_White_2025,79,85,80,79,81,78,38,41,27,36,37,38
+2025-movies,movie,Captain America: Brave New World,Captain_America_Brave_New_World,79,83,83,75,82,76,50,48,48,36,55,45
+2025-movies,movie,Zootopia 2,Zootopia_2,77,85,80,59,74,80,48,56,47,29,43,53
+2025-movies,movie,Wicked: For Good,Wicked_For_Good,76,81,75,61,71,81,40,38,34,31,35,45
+2025-movies,movie,A Minecraft Movie,A_Minecraft_Movie,75,76,76,59,80,70,35,41,27,14,40,30
+2025-movies,movie,Avatar: Fire and Ash,Avatar_Fire_and_Ash,75,77,72,66,81,69,45,45,34,35,52,39
+2025-movies,movie,Anaconda (2025),Anaconda_2025,75,77,76,75,77,73,39,43,34,26,44,34
+2025-movies,movie,Jurassic World Rebirth,Jurassic_World_Rebirth,74,78,73,69,74,75,43,43,40,32,42,44
+2025-movies,movie,Frankenstein (2025),Frankenstein_2025,73,74,76,67,70,76,46,49,43,30,44,48
+2025-movies,movie,Five Nights at Freddy's 2,Five_Nights_at_Freddys_2,70,78,68,47,74,66,35,41,23,14,35,34
+2025-movies,movie,Karate Kid Legends,Karate_Kid_Legends,69,68,66,59,68,69,42,43,29,31,41,43
+2025-movies,movie,KPop Demon Hunters,KPop_Demon_Hunters,67,80,61,42,69,64,34,44,25,10,35,32
+2025-movies,movie,Sinners,Sinners,64,73,55,44,68,60,42,50,35,24,43,42
+2025-movies,movie,Now You See Me: Now You Don't,Now_You_See_Me_Now_You_Dont,64,72,63,51,66,62,41,42,43,30,42,41
+2025-movies,movie,Animal Farm (2025),Animal_Farm_2025,63,63,58,58,67,59,36,33,30,29,40,33
+2025-movies,movie,Final Destination: Bloodlines,Final_Destination_Bloodlines,61,70,61,44,66,56,37,45,28,18,42,32
+2025-movies,movie,Bridget Jones: Mad about the Boy (2025),Bridget_Jones_Mad_about_the_Boy_2025,61,63,56,52,60,61,32,36,23,17,33,31
+2025-movies,movie,The Running Man (2025),The_Running_Man_2025,60,60,62,62,69,52,33,32,28,32,41,25
+2025-movies,movie,Predator: Badlands,Predator_Badlands,60,64,60,49,72,48,36,41,33,20,49,22
+2025-movies,movie,The Hand That Rocks the Cradle (2025),The_Hand_That_Rocks_the_Cradle_2025,59,52,65,66,62,57,35,35,34,33,36,35
+2025-movies,movie,28 Years Later,28_Years_Later,59,72,57,35,68,49,37,44,27,12,44,28
+2025-movies,movie,The Housemaid (2025),The_Housemaid_2025,59,64,52,48,57,60,33,34,25,23,35,31
+2025-movies,movie,Tron: Ares,Tron_Ares,59,63,55,37,69,48,33,33,22,13,39,26
+2025-movies,movie,The Conjuring: Last Rites,The_Conjuring_Last_Rites,58,64,56,42,59,57,32,37,25,16,33,31
+2025-movies,movie,M3GAN 2.0,M3GAN_2_0,57,68,54,32,60,54,28,32,23,11,29,26
+2025-movies,movie,Thunderbolts*,Thunderbolts,54,58,44,37,61,47,33,34,21,15,39,27
+2025-movies,movie,A Very Jonas Christmas Movie,A_Very_Jonas_Christmas_Movie,54,59,49,44,56,51,28,30,14,14,31,25
+2025-movies,movie,F1: The Movie,F1_The_Movie,53,62,51,36,66,41,33,38,25,16,43,23
+2025-movies,movie,Weapons (2025),Weapons_2025,53,56,44,28,61,44,35,38,21,13,42,27
+2025-movies,movie,The Long Walk (2025),The_Long_Walk_2025,53,53,49,37,59,46,36,38,31,18,42,30
+2025-movies,movie,Hamnet,Hamnet,53,59,42,47,56,48,29,39,20,24,31,27
+2025-movies,movie,The King of Kings,The_King_of_Kings,50,55,41,47,56,44,33,34,24,26,34,32
+2025-movies,movie,One Battle After Another,One_Battle_After_Another,50,56,40,34,58,42,31,35,21,14,37,24
+2025-movies,movie,Black Phone 2,Black_Phone_2,50,57,41,26,52,47,29,30,17,11,32,26
+2025-movies,movie,The Diplomat (2025),The_Diplomat_2025,50,54,43,40,57,41,34,37,27,19,43,25
+2025-movies,movie,Death of a Unicorn,Death_of_a_Unicorn,49,56,37,26,56,43,28,32,20,7,33,24
+2025-movies,movie,Demon Slayer: Infinity Castle,Demon_Slayer_Infinity_Castle,49,51,34,26,54,42,29,34,13,8,34,25
+2025-movies,movie,The Monkey,The_Monkey,48,59,35,26,55,41,32,37,18,12,38,24
+2025-movies,movie,Marty Supreme,Marty_Supreme,48,59,37,27,53,43,26,31,13,8,32,20
+2025-movies,movie,The Last Rodeo,The_Last_Rodeo,48,,34,40,56,39,30,,19,20,35,25
+2025-movies,movie,Zombies 4: Dawn of the Vampires,Zombies_4_Dawn_of_the_Vampires,48,48,40,38,51,44,27,32,12,12,33,21
+2025-movies,movie,Becoming Led Zeppelin,Becoming_Led_Zeppelin,47,50,45,39,53,41,30,32,30,23,35,24
+2025-movies,movie,The Strangers: Chapter 2,The_Strangers_Chapter_2,47,53,43,29,54,40,27,32,21,8,30,23
+2025-movies,movie,The Amateur (2025),The_Amateur_2025,47,51,39,36,55,39,30,34,17,17,36,23
+2025-movies,movie,Elio,Elio,47,57,38,27,50,44,26,33,17,11,28,23
+2025-movies,movie,Heads of State,Heads_of_State,47,53,46,43,51,42,28,33,24,23,31,26
+2025-movies,movie,Cleaner,Cleaner,47,53,40,31,53,39,28,35,19,14,33,24
+2025-movies,movie,Predator: Killer of Killers,Predator_Killer_of_Killers,46,50,44,33,55,37,30,34,22,14,38,21
+2025-movies,movie,Love Hurts,Love_Hurts,46,,39,35,51,41,26,,20,15,29,23
+2025-movies,movie,Ballerina (2025),Ballerina_2025,45,47,42,31,50,40,32,36,26,13,37,28
+2025-movies,movie,David (2025),David_2025,45,51,32,26,,44,26,29,13,11,,25
+2025-movies,movie,Titan: The OceanGate Disaster,Titan_The_OceanGate_Disaster,45,57,39,36,50,39,30,38,22,18,34,25
+2025-movies,movie,Chainsaw Man - The Movie: Reze Arc,Chainsaw_Man_The_Movie_Reze_Arc,45,52,34,31,51,38,22,29,11,5,25,19
+2025-movies,movie,Plankton: The Movie,Plankton_The_Movie,45,56,35,,48,42,29,35,17,,34,23
+2025-movies,movie,Mickey 17,Mickey_17,45,56,37,,49,41,27,32,21,,31,23
+2025-movies,movie,Novocaine,Novocaine,44,57,39,28,49,40,24,32,16,9,27,21
+2025-movies,movie,A Merry Little Ex-Mas,A_Merry_Little_Ex_Mas,44,,33,34,,43,26,,14,14,,27
+2025-movies,movie,Tin Soldier,Tin_Soldier,44,46,36,37,54,,26,30,20,16,33,
+2025-movies,movie,The Gorge,The_Gorge,44,53,32,30,52,,31,42,16,14,38,
+2025-movies,movie,Freaky Tales,Freaky_Tales,44,,31,29,49,39,27,,15,8,32,23
+2025-movies,movie,Until Dawn (2025),Until_Dawn_2025,43,52,38,,48,37,27,36,19,,30,23
+2025-movies,movie,Nonnas,Nonnas,43,,31,29,48,37,28,,17,14,29,26
+2025-movies,movie,Diablo (2025),Diablo_2025,43,,35,30,,42,23,,16,8,,21
+2025-movies,movie,Roofman,Roofman,43,49,35,29,49,37,26,34,17,10,30,22
+2025-movies,movie,Warfare,Warfare,43,48,36,26,53,,30,34,24,7,38,
+2025-movies,movie,The Phoenician Scheme,The_Phoenician_Scheme,43,50,,,50,,22,29,,,28,
+2025-movies,movie,The Roses,The_Roses,42,,37,26,49,35,27,,16,11,31,23
+2025-movies,movie,The Woman in Cabin 10,The_Woman_in_Cabin_10,42,50,34,33,,37,25,31,17,17,,24
+2025-movies,movie,Bugonia,Bugonia,42,53,,,,38,24,31,,,,21
+2025-movies,movie,Havoc (2025),Havoc_2025,42,,38,,53,,27,,21,,36,
+2025-movies,movie,The Woman in the Yard,The_Woman_in_the_Yard,42,58,34,,,39,26,40,15,,,23
+2025-movies,movie,Regretting You,Regretting_You,42,55,,,,39,25,30,,,,23
+2025-movies,movie,Bring Her Back,Bring_Her_Back,41,,,,49,,25,,,,29,
+2025-movies,movie,The Old Guard 2,The_Old_Guard_2,41,,39,25,48,,26,,22,14,33,
+2025-movies,movie,Den of Thieves: Pantera,Den_of_Thieves_Pantera,41,,39,25,,36,27,,20,13,,19
+2025-movies,movie,The Thursday Murder Club,The_Thursday_Murder_Club,41,,36,34,48,,28,,18,20,34,
+2025-movies,movie,Good Fortune,Good_Fortune,,54,32,27,47,,,31,16,10,25,
+2025-movies,movie,Brick (2025),Brick_2025,,51,,,47,,,37,,,32,
+2025-movies,movie,Companion,Companion,,50,31,,,36,,36,13,,,22
+2025-movies,movie,Last Bullet,Last_Bullet,,50,,,,,,30,,,,
+2025-movies,movie,A Working Man,A_Working_Man,,49,31,26,47,,,39,16,13,33,
+2025-movies,movie,Shadow Force,Shadow_Force,,48,,27,48,,,35,,11,34,
+2025-movies,movie,Fountain of Youth,Fountain_of_Youth,,47,34,26,,36,,32,13,8,,20
+2025-movies,movie,Dangerous Animals,Dangerous_Animals,,47,,27,,39,,28,,12,,25
+2025-movies,movie,JUJUTSU KAISEN: Hidden Inventory/Premature Death,JUJUTSU_KAISEN_Hidden_Inventory_Premature_Death,,47,,,,35,,30,,,,22
+2025-movies,movie,Unknown Number: The High School Catfish,Unknown_Number_The_High_School_Catfish,,47,,,,35,,31,,,,20
+2025-movies,movie,Eenie Meanie,Eenie_Meanie,,47,,,,,,34,,,,
+2025-movies,movie,K.O.,K_O,,46,,,47,,,29,,,32,
+2025-movies,movie,Summer of 69 (2025),Summer_of_69_2025,,,,29,,,,,,8,,
+2025-movies,movie,The Secret Agent (2025),The_Secret_Agent_2025,,,,27,50,,,,,13,32,
+2025-movies,movie,The Match (2025),The_Match_2025,,,,25,,,,,,6,,
+2025-movies,movie,Exterritorial,Exterritorial,,,,25,,,,,,10,,
+2025-movies,movie,In Your Dreams (2025),In_Your_Dreams_2025,,,,,47,,,,,,32,
+2025-movies,movie,Alma and the Wolf,Alma_and_the_Wolf,,,,,47,,,,,,28,
+2025-movies,movie,Straw,Straw,,,,,,40,,,,,,28
+2025-movies,movie,Caught Stealing,Caught_Stealing,,,,,,37,,,,,,21
+2025-movies,movie,Last Breath (2025),Last_Breath_2025,,,,,,36,,,,,,24
+all-time-music-artists,artist,Taylor Swift,Taylor_Swift,98,99,99,99,97,98,53,55,45,49,52,53
+all-time-music-artists,artist,Beyoncé,Beyonce,97,98,99,99,98,96,58,62,46,43,58,57
+all-time-music-artists,artist,Jennifer Lopez,Jennifer_Lopez,97,98,99,99,98,97,55,58,50,48,56,54
+all-time-music-artists,artist,Snoop Dogg,Snoop_Dogg,97,96,98,98,97,97,61,67,61,46,62,60
+all-time-music-artists,artist,Lady Gaga,Lady_Gaga,97,96,99,99,97,97,64,66,63,61,59,70
+all-time-music-artists,artist,Britney Spears,Britney_Spears,97,95,99,100,97,96,55,61,47,36,55,55
+all-time-music-artists,artist,Michael Jackson,Michael_Jackson,97,95,99,100,97,96,71,68,75,67,70,71
+all-time-music-artists,artist,Kanye West,Kanye_West,96,97,97,,97,96,34,42,23,,38,30
+all-time-music-artists,artist,Justin Timberlake,Justin_Timberlake,96,96,98,,96,97,56,55,56,,56,55
+all-time-music-artists,artist,Justin Bieber,Justin_Bieber,96,96,98,98,96,97,46,51,36,28,42,50
+all-time-music-artists,artist,Madonna,Madonna,96,95,99,99,95,97,57,55,60,50,57,57
+all-time-music-artists,artist,Dolly Parton,Dolly_Parton,96,96,99,99,95,96,80,76,87,91,79,82
+all-time-music-artists,artist,Miley Cyrus,Miley_Cyrus,95,93,97,98,94,96,50,54,42,40,47,53
+all-time-music-artists,artist,The Beatles,The_Beatles,95,94,98,100,96,95,73,67,74,88,73,73
+all-time-music-artists,artist,Elvis Presley,Elvis_Presley,95,97,98,99,95,95,69,68,71,77,69,70
+all-time-music-artists,artist,Rihanna,Rihanna,95,94,98,,95,95,61,64,58,,60,61
+all-time-music-artists,artist,Adele,Adele,95,97,96,,95,95,72,73,68,,69,75
+all-time-music-artists,artist,Celine Dion,Celine_Dion,95,95,97,99,94,96,66,67,59,66,62,72
+all-time-music-artists,artist,Selena Gomez,Selena_Gomez,95,93,96,,94,95,56,62,48,,54,59
+all-time-music-artists,artist,Katy Perry,Katy_Perry,94,95,97,,94,95,51,49,46,,52,49
+all-time-music-artists,artist,Elton John,Elton_John,94,94,99,100,96,93,74,69,80,84,74,74
+all-time-music-artists,artist,The Rolling Stones,The_Rolling_Stones,94,95,97,99,93,95,69,69,72,81,69,69
+all-time-music-artists,artist,Stevie Wonder,Stevie_Wonder,94,93,99,99,95,93,73,71,80,87,74,73
+all-time-music-artists,artist,Mariah Carey,Mariah_Carey,94,96,99,99,92,96,61,65,60,59,60,62
+all-time-music-artists,artist,Prince,Prince,94,92,98,99,93,94,70,67,81,70,68,72
+all-time-music-artists,artist,Bruno Mars,Bruno_Mars,94,95,96,,93,94,64,66,60,,58,70
+all-time-music-artists,artist,Janet Jackson,Janet_Jackson,94,94,98,99,92,95,63,63,67,57,60,66
+all-time-music-artists,artist,Christina Aguilera,Christina_Aguilera,94,95,99,,93,95,57,62,55,,53,62
+all-time-music-artists,artist,Bob Marley,Bob_Marley,93,95,96,,95,92,71,73,73,,72,71
+all-time-music-artists,artist,P. Diddy,P_Diddy,93,95,,,93,93,24,28,,,29,19
+all-time-music-artists,artist,John Lennon,John_Lennon,93,92,98,99,93,94,68,63,74,80,67,69
+all-time-music-artists,artist,Ariana Grande,Ariana_Grande,93,96,,,92,94,54,61,,,53,54
+all-time-music-artists,artist,Whitney Houston,Whitney_Houston,93,93,99,99,92,94,71,71,77,79,67,75
+all-time-music-artists,artist,Usher,Usher,93,94,97,,92,94,55,57,51,,52,58
+all-time-music-artists,artist,Eminem,Eminem,93,95,97,,94,92,59,68,63,,60,58
+all-time-music-artists,artist,Carrie Underwood,Carrie_Underwood,93,94,,,91,95,59,57,,,57,61
+all-time-music-artists,artist,Backstreet Boys,Backstreet_Boys,93,95,97,99,93,92,55,64,51,49,50,59
+all-time-music-artists,artist,Ozzy Osbourne,Ozzy_Osbourne,93,95,96,,93,92,59,61,68,,62,56
+all-time-music-artists,artist,Frank Sinatra,Frank_Sinatra,93,93,97,99,95,91,71,73,74,81,71,71
+all-time-music-artists,artist,Bon Jovi,Bon_Jovi,93,92,98,99,95,91,66,63,72,73,64,68
+all-time-music-artists,artist,Shakira,Shakira,93,93,,,92,94,62,70,,,60,65
+all-time-music-artists,artist,Jay-Z,Jay_Z,93,93,,,93,92,41,48,,,43,37
+all-time-music-artists,artist,Ice Cube,Ice_Cube,92,95,96,,95,90,59,68,63,,62,56
+all-time-music-artists,artist,Pink,Pink,92,96,96,,91,93,57,64,61,,51,63
+all-time-music-artists,artist,Bad Bunny,Bad_Bunny,92,92,,,92,92,49,54,,,47,52
+all-time-music-artists,artist,The Jackson 5,The_Jackson_5,92,91,97,99,93,91,67,62,71,75,66,68
+all-time-music-artists,artist,Johnny Cash,Johnny_Cash,92,,97,99,93,91,73,,80,84,76,69
+all-time-music-artists,artist,Guns N' Roses,Guns_N_Roses,92,,97,,94,91,61,,72,,62,59
+all-time-music-artists,artist,Nicki Minaj,Nicki_Minaj,92,94,,,92,92,40,44,,,41,39
+all-time-music-artists,artist,The Beach Boys,The_Beach_Boys,92,92,96,99,94,89,66,62,67,85,67,65
+all-time-music-artists,artist,Cher,Cher,92,94,98,100,94,90,61,59,66,72,58,64
+all-time-music-artists,artist,Jonas Brothers,Jonas_Brothers,92,93,,,90,93,47,46,,,44,51
+all-time-music-artists,artist,Alicia Keys,Alicia_Keys,92,95,96,,91,92,63,67,66,,60,67
+all-time-music-artists,artist,Kid Rock,Kid_Rock,91,92,96,,93,89,40,40,43,,41,38
+all-time-music-artists,artist,Paul McCartney,Paul_McCartney,91,93,,99,93,90,71,66,,86,72,70
+all-time-music-artists,artist,50 Cent,50_Cent,91,96,,,93,89,50,58,,,52,47
+all-time-music-artists,artist,Queen,Queen,91,,96,,94,,73,,82,,75,
+all-time-music-artists,artist,The Black Eyed Peas,The_Black_Eyed_Peas,91,94,96,,92,91,60,57,66,,56,63
+all-time-music-artists,artist,KISS,KISS,91,,97,98,91,91,54,,62,58,56,52
+all-time-music-artists,artist,Kelly Clarkson,Kelly_Clarkson,91,91,96,,90,93,60,61,60,,53,69
+all-time-music-artists,artist,Spice Girls,Spice_Girls,91,94,97,,,95,54,63,49,,,60
+all-time-music-artists,artist,Cardi B,Cardi_B,91,,,,90,91,44,,,,44,44
+all-time-music-artists,artist,Billy Ray Cyrus,Billy_Ray_Cyrus,91,,,,91,90,44,,,,47,39
+all-time-music-artists,artist,Aerosmith,Aerosmith,91,92,97,,92,89,66,63,73,,69,64
+all-time-music-artists,artist,Red Hot Chili Peppers,Red_Hot_Chili_Peppers,91,,,,92,89,60,,,,62,58
+all-time-music-artists,artist,AC/DC,AC_DC,90,91,97,,92,89,62,64,69,,65,59
+all-time-music-artists,artist,Led Zeppelin,Led_Zeppelin,90,,96,,91,89,65,,73,,68,62
+all-time-music-artists,artist,Billy Joel,Billy_Joel,90,,97,99,95,,66,,77,83,70,
+all-time-music-artists,artist,Billie Eilish,Billie_Eilish,90,93,,,,91,52,55,,,,56
+all-time-music-artists,artist,Tina Turner,Tina_Turner,90,93,96,100,,91,72,67,81,87,,75
+all-time-music-artists,artist,Ed Sheeran,Ed_Sheeran,90,94,,,,92,56,60,,,,61
+all-time-music-artists,artist,Aretha Franklin,Aretha_Franklin,90,,97,99,92,,72,,79,87,71,
+all-time-music-artists,artist,Bruce Springsteen,Bruce_Springsteen,90,,98,99,91,88,59,,63,64,60,58
+all-time-music-artists,artist,David Bowie,David_Bowie,90,,,,91,,68,,,,70,
+all-time-music-artists,artist,Nirvana,Nirvana,90,,,,92,,62,,,,68,
+all-time-music-artists,artist,Metallica,Metallica,90,,,,94,,55,,,,61,
+all-time-music-artists,artist,John Legend,John_Legend,90,93,,,,93,63,64,,,,64
+all-time-music-artists,artist,Lionel Richie,Lionel_Richie,90,92,99,98,,90,67,63,77,80,,68
+all-time-music-artists,artist,Drake,Drake,90,94,,,91,,41,44,,,44,
+all-time-music-artists,artist,Tupac Shakur,Tupac_Shakur,89,93,,,90,,56,67,,,58,
+all-time-music-artists,artist,Maroon 5,Maroon_5,,95,,,,,,61,,,,
+all-time-music-artists,artist,Destiny's Child,Destinys_Child,,95,,,,89,,64,,,,59
+all-time-music-artists,artist,Coldplay,Coldplay,,94,,,,90,,58,,,,57
+all-time-music-artists,artist,Lil Wayne,Lil_Wayne,,94,,,90,,,54,,,45,
+all-time-music-artists,artist,Linkin Park,Linkin_Park,,93,,,,,,69,,,,
+all-time-music-artists,artist,R. Kelly,R_Kelly,,93,,,,,,37,,,,
+all-time-music-artists,artist,Avril Lavigne,Avril_Lavigne,,93,,,,,,63,,,,
+all-time-music-artists,artist,Chris Brown,Chris_Brown,,93,,,,89,,39,,,,37
+all-time-music-artists,artist,Vanilla Ice,Vanilla_Ice,,93,97,,,,,44,36,,,
+all-time-music-artists,artist,Gwen Stefani,Gwen_Stefani,,92,,,,91,,56,,,,53
+all-time-music-artists,artist,Ludacris,Ludacris,,92,,,,,,57,,,,
+all-time-music-artists,artist,Beastie Boys,Beastie_Boys,,91,,,,,,59,,,,
+all-time-music-artists,artist,Nickelback,Nickelback,,91,,,,,,53,,,,
+all-time-music-artists,artist,'N Sync,N_Sync,,91,97,,,90,,58,49,,,58
+all-time-music-artists,artist,Jon Bon Jovi,Jon_Bon_Jovi,,,98,98,,90,,,77,73,,65
+all-time-music-artists,artist,Paula Abdul,Paula_Abdul,,,98,99,,,,,66,61,,
+all-time-music-artists,artist,Diana Ross,Diana_Ross,,,98,99,90,88,,,73,83,69,70
+all-time-music-artists,artist,Shania Twain,Shania_Twain,,,97,,,,,,63,,,
+all-time-music-artists,artist,Gloria Estefan,Gloria_Estefan,,,97,,,,,,67,,,
+all-time-music-artists,artist,New Kids on the Block,New_Kids_on_the_Block,,,97,,,,,,49,,,
+all-time-music-artists,artist,LL Cool J,LL_Cool_J,,,97,,,,,,65,,,
+all-time-music-artists,artist,Cyndi Lauper,Cyndi_Lauper,,,96,98,,,,,76,75,,
+all-time-music-artists,artist,Kenny G,Kenny_G,,,96,,,,,,52,,,
+all-time-music-artists,artist,Willie Nelson,Willie_Nelson,,,96,99,,,,,71,79,,
+all-time-music-artists,artist,Ray Charles,Ray_Charles,,,96,99,,,,,80,88,,
+all-time-music-artists,artist,Mick Jagger,Mick_Jagger,,,96,98,,,,,65,77,,
+all-time-music-artists,artist,MC Hammer,MC_Hammer,,,96,,,,,,57,,,
+all-time-music-artists,artist,Kenny Rogers,Kenny_Rogers,,,96,99,,,,,70,79,,
+all-time-music-artists,artist,Rod Stewart,Rod_Stewart,,,96,99,,,,,64,82,,
+all-time-music-artists,artist,Marvin Gaye,Marvin_Gaye,,,96,98,,,,,77,84,,
+all-time-music-artists,artist,Billy Idol,Billy_Idol,,,96,,,,,,72,,,
+all-time-music-artists,artist,Bee Gees,Bee_Gees,,,96,99,,,,,71,85,,
+all-time-music-artists,artist,Phil Collins,Phil_Collins,,,95,,,,,,79,,,
+all-time-music-artists,artist,Neil Diamond,Neil_Diamond,,,,99,,,,,,80,,
+all-time-music-artists,artist,Jimi Hendrix,Jimi_Hendrix,,,,99,90,,,,,79,70,
+all-time-music-artists,artist,The Carpenters,The_Carpenters,,,,99,,,,,,83,,
+all-time-music-artists,artist,John Denver,John_Denver,,,,99,,,,,,77,,
+all-time-music-artists,artist,Barbra Streisand,Barbra_Streisand,,,,99,,,,,,65,,
+all-time-music-artists,artist,The Temptations,The_Temptations,,,,99,,,,,,91,,
+all-time-music-artists,artist,Bette Midler,Bette_Midler,,,,99,,,,,,68,,
+all-time-music-artists,artist,The Monkees,The_Monkees,,,,99,,,,,,81,,
+all-time-music-artists,artist,Ringo Starr,Ringo_Starr,,,,99,,,,,,80,,
+all-time-music-artists,artist,Barry Manilow,Barry_Manilow,,,,99,,,,,,69,,
+all-time-music-artists,artist,Dionne Warwick,Dionne_Warwick,,,,99,,,,,,80,,
+all-time-music-artists,artist,"Earth, Wind & Fire",Earth_Wind_Fire,,,,99,,,,,,87,,
+all-time-music-artists,artist,Glen Campbell,Glen_Campbell,,,,99,,,,,,77,,
+all-time-music-artists,artist,Dean Martin,Dean_Martin,,,,99,,,,,,78,,
+all-time-music-artists,artist,Bing Crosby,Bing_Crosby,,,,98,,,,,,67,,
+all-time-music-artists,artist,Nat King Cole,Nat_King_Cole,,,,98,,,,,,86,,
+all-time-music-artists,artist,The Osmonds,The_Osmonds,,,,98,,,,,,54,,
+all-time-music-artists,artist,Ike & Tina Turner,Ike_Tina_Turner,,,,98,,,,,,74,,
+all-time-music-artists,artist,Linda Ronstadt,Linda_Ronstadt,,,,98,,,,,,85,,
+all-time-music-artists,artist,Fleetwood Mac,Fleetwood_Mac,,,,98,,,,,,86,,
+all-time-music-artists,artist,James Brown,James_Brown,,,,98,,,,,,72,,
+all-time-music-artists,artist,Loretta Lynn,Loretta_Lynn,,,,98,,,,,,76,,
+all-time-music-artists,artist,Tony Bennett,Tony_Bennett,,,,98,,,,,,77,,
+all-time-music-artists,artist,Reba McEntire,Reba_McEntire,,,,98,,,,,,75,,
+all-time-music-artists,artist,The Supremes,The_Supremes,,,,98,,,,,,86,,
+all-time-music-artists,artist,Garth Brooks,Garth_Brooks,,,,98,,,,,,64,,
+all-time-music-artists,artist,The Blues Brothers,The_Blues_Brothers,,,,98,,,,,,78,,
+all-time-music-artists,artist,Gladys Knight & the Pips,Gladys_Knight_the_Pips,,,,98,,,,,,86,,
+all-time-music-artists,artist,Simon and Garfunkel,Simon_and_Garfunkel,,,,98,,,,,,84,,
+all-time-music-artists,artist,Marie Osmond,Marie_Osmond,,,,98,,,,,,60,,
+all-time-music-artists,artist,"Sammy Davis, Jr.",Sammy_Davis_Jr,,,,98,,,,,,79,,
+all-time-music-artists,artist,Boy George,Boy_George,,,,98,,,,,,47,,
+all-time-music-artists,artist,Lisa Marie Presley,Lisa_Marie_Presley,,,,98,,,,,,37,,
+all-time-music-artists,artist,Pink Floyd,Pink_Floyd,,,,,92,,,,,,68,
+all-time-music-artists,artist,ABBA,ABBA,,,,,91,,,,,,65,
+all-time-music-artists,artist,Weird Al Yankovic,Weird_Al_Yankovic,,,,,90,,,,,,63,
+all-time-music-artists,artist,Selena,Selena,,,,,,92,,,,,,67
+pop-artists,artist,Taylor Swift,Taylor_Swift,98,99,99,99,97,98,53,55,45,49,52,53
+pop-artists,artist,Beyoncé,Beyonce,97,98,99,99,98,96,58,62,46,43,58,57
+pop-artists,artist,Jennifer Lopez,Jennifer_Lopez,97,98,99,99,98,97,55,58,50,48,56,54
+pop-artists,artist,Lady Gaga,Lady_Gaga,97,96,99,99,97,97,64,66,63,61,59,70
+pop-artists,artist,Britney Spears,Britney_Spears,97,95,99,100,97,96,55,61,47,36,55,55
+pop-artists,artist,Michael Jackson,Michael_Jackson,97,95,99,100,97,96,71,68,75,67,70,71
+pop-artists,artist,Justin Timberlake,Justin_Timberlake,96,96,98,98,96,97,56,55,56,50,56,55
+pop-artists,artist,Justin Bieber,Justin_Bieber,96,96,98,98,96,97,46,51,36,28,42,50
+pop-artists,artist,Madonna,Madonna,96,95,99,99,95,97,57,55,60,50,57,57
+pop-artists,artist,Miley Cyrus,Miley_Cyrus,95,93,97,98,94,96,50,54,42,40,47,53
+pop-artists,artist,Adele,Adele,95,97,96,95,95,95,72,73,68,68,69,75
+pop-artists,artist,Celine Dion,Celine_Dion,95,95,97,99,94,96,66,67,59,66,62,72
+pop-artists,artist,Selena Gomez,Selena_Gomez,95,93,96,96,94,95,56,62,48,50,54,59
+pop-artists,artist,Katy Perry,Katy_Perry,94,95,97,96,94,95,51,49,46,46,52,49
+pop-artists,artist,Elton John,Elton_John,94,94,99,100,96,93,74,69,80,84,74,74
+pop-artists,artist,Mariah Carey,Mariah_Carey,94,96,99,99,92,96,61,65,60,59,60,62
+pop-artists,artist,Prince,Prince,94,92,98,99,93,94,70,67,81,70,68,72
+pop-artists,artist,Bruno Mars,Bruno_Mars,94,95,96,91,93,94,64,66,60,59,58,70
+pop-artists,artist,Janet Jackson,Janet_Jackson,94,94,98,99,92,95,63,63,67,57,60,66
+pop-artists,artist,Christina Aguilera,Christina_Aguilera,94,95,99,97,93,95,57,62,55,54,53,62
+pop-artists,artist,Ariana Grande,Ariana_Grande,93,96,95,91,92,94,54,61,47,46,53,54
+pop-artists,artist,Whitney Houston,Whitney_Houston,93,93,99,99,92,94,71,71,77,79,67,75
+pop-artists,artist,Usher,Usher,93,94,97,92,92,94,55,57,51,47,52,58
+pop-artists,artist,Backstreet Boys,Backstreet_Boys,93,95,97,99,93,92,55,64,51,49,50,59
+pop-artists,artist,Shakira,Shakira,93,93,95,91,92,94,62,70,58,49,60,65
+pop-artists,artist,Pink,Pink,92,96,96,95,91,93,57,64,61,55,51,63
+pop-artists,artist,The Jackson 5,The_Jackson_5,92,91,97,99,93,91,67,62,71,75,66,68
+pop-artists,artist,The Beach Boys,The_Beach_Boys,92,92,96,99,94,89,66,62,67,85,67,65
+pop-artists,artist,Cher,Cher,92,94,98,100,94,90,61,59,66,72,58,64
+pop-artists,artist,Jonas Brothers,Jonas_Brothers,92,93,94,94,90,93,47,46,39,40,44,51
+pop-artists,artist,The Black Eyed Peas,The_Black_Eyed_Peas,91,94,96,93,92,91,60,57,66,57,56,63
+pop-artists,artist,Kelly Clarkson,Kelly_Clarkson,91,91,96,96,90,93,60,61,60,62,53,69
+pop-artists,artist,Spice Girls,Spice_Girls,91,94,97,97,88,95,54,63,49,44,48,60
+pop-artists,artist,Billie Eilish,Billie_Eilish,90,93,89,,89,91,52,55,42,,48,56
+pop-artists,artist,Ed Sheeran,Ed_Sheeran,90,94,89,,89,92,56,60,52,,52,61
+pop-artists,artist,Gwen Stefani,Gwen_Stefani,89,92,94,94,88,91,53,56,60,50,54,53
+pop-artists,artist,Coldplay,Coldplay,89,94,91,,88,90,57,58,54,,56,57
+pop-artists,artist,Maroon 5,Maroon_5,89,95,92,,89,88,57,61,54,,56,59
+pop-artists,artist,Amy Winehouse,Amy_Winehouse,88,89,94,90,88,88,57,60,55,49,56,58
+pop-artists,artist,'N Sync,N_Sync,88,91,97,94,86,90,51,58,49,49,44,58
+pop-artists,artist,Paula Abdul,Paula_Abdul,88,90,98,99,89,86,55,53,66,61,55,56
+pop-artists,artist,Chris Brown,Chris_Brown,87,93,87,,86,89,37,39,25,,37,37
+pop-artists,artist,ABBA,ABBA,87,83,92,95,91,82,62,58,66,71,65,60
+pop-artists,artist,Cyndi Lauper,Cyndi_Lauper,87,88,96,98,86,87,64,64,76,75,62,66
+pop-artists,artist,Fergie,Fergie,86,89,91,,86,86,49,53,49,,47,50
+pop-artists,artist,Nick Jonas,Nick_Jonas,86,89,89,,84,88,45,49,38,,39,51
+pop-artists,artist,Demi Lovato,Demi_Lovato,86,90,86,,84,87,47,56,39,,46,48
+pop-artists,artist,Jessica Simpson,Jessica_Simpson,86,90,93,90,84,87,40,45,38,26,39,41
+pop-artists,artist,Barbra Streisand,Barbra_Streisand,85,82,94,99,87,84,54,48,57,65,53,55
+pop-artists,artist,R. Kelly,R_Kelly,85,93,90,,86,83,29,37,21,,32,27
+pop-artists,artist,Sting,Sting,84,82,94,96,87,82,58,51,70,73,61,56
+pop-artists,artist,Duran Duran,Duran_Duran,84,80,95,96,87,82,57,50,73,62,58,57
+pop-artists,artist,One Direction,One_Direction,84,86,,,82,85,46,45,,,40,51
+pop-artists,artist,New Kids on the Block,New_Kids_on_the_Block,83,82,97,95,84,83,47,50,49,45,45,50
+pop-artists,artist,Adam Levine,Adam_Levine,82,88,,,81,83,45,47,,,43,47
+pop-artists,artist,Michael Bublé,Michael_Buble,82,85,,,79,85,49,48,,,45,54
+pop-artists,artist,Boy George,Boy_George,81,,95,98,84,78,46,,56,47,47,45
+pop-artists,artist,Barry Manilow,Barry_Manilow,81,82,95,99,86,76,51,46,56,69,54,49
+pop-artists,artist,Lizzo,Lizzo,81,84,,,79,83,37,39,,,34,40
+pop-artists,artist,Selena Gomez and the Scene,Selena_Gomez_and_the_Scene,81,78,,,,84,45,46,,,,49
+pop-artists,artist,Sheryl Crow,Sheryl_Crow,81,81,93,96,81,80,53,51,61,67,51,56
+pop-artists,artist,The Pussycat Dolls,The_Pussycat_Dolls,80,90,88,,79,80,41,48,38,,41,41
+pop-artists,artist,George Michael,George_Michael,79,,93,91,84,74,53,,63,57,53,52
+pop-artists,artist,Bette Midler,Bette_Midler,79,,93,99,80,79,52,,58,68,50,55
+pop-artists,artist,Blondie,Blondie,79,,87,92,83,76,55,,66,68,60,51
+pop-artists,artist,Dean Martin,Dean_Martin,79,,90,99,82,76,57,,61,78,60,54
+pop-artists,artist,Meghan Trainor,Meghan_Trainor,79,84,,,,81,43,47,,,,45
+pop-artists,artist,Bono,Bono,79,81,89,89,83,74,46,43,55,53,48,43
+pop-artists,artist,Hall & Oates,Hall_Oates,79,,92,97,82,75,57,,71,80,60,55
+pop-artists,artist,Sabrina Carpenter,Sabrina_Carpenter,79,86,,,80,77,47,52,,,48,45
+pop-artists,artist,Kesha,Kesha,78,91,,,78,78,45,53,,,43,46
+pop-artists,artist,Dua Lipa,Dua_Lipa,77,82,,,79,76,48,51,,,50,46
+pop-artists,artist,Sinéad O'Connor,Sinead_OConnor,77,,95,89,82,,49,,62,44,50,
+pop-artists,artist,Joe Jonas,Joe_Jonas,77,82,,,,80,38,43,,,,39
+pop-artists,artist,Sarah McLachlan,Sarah_McLachlan,77,78,85,,,76,51,50,56,,,51
+pop-artists,artist,Alanis Morissette,Alanis_Morissette,77,81,91,,,76,53,59,66,,,52
+pop-artists,artist,John Mayer,John_Mayer,77,82,,,,77,46,46,,,,43
+pop-artists,artist,Smash Mouth,Smash_Mouth,76,84,,,82,,44,53,,,48,
+pop-artists,artist,Clay Aiken,Clay_Aiken,76,78,86,89,79,,35,35,34,38,34,
+pop-artists,artist,Luther Vandross,Luther_Vandross,76,,90,88,79,,55,,65,67,55,
+pop-artists,artist,Nelly Furtado,Nelly_Furtado,,88,,,,,,60,,,,
+pop-artists,artist,Ashlee Simpson,Ashlee_Simpson,,85,,,,74,,41,,,,30
+pop-artists,artist,OneRepublic,OneRepublic,,81,,,,,,54,,,,
+pop-artists,artist,Lana Del Rey,Lana_Del_Rey,,81,,,,,,53,,,,
+pop-artists,artist,Olivia Rodrigo,Olivia_Rodrigo,,81,,,,,,52,,,,
+pop-artists,artist,Jason Derulo,Jason_Derulo,,80,,,,,,45,,,,
+pop-artists,artist,Adam Lambert,Adam_Lambert,,80,,,,77,,45,,,,44
+pop-artists,artist,Sam Smith,Sam_Smith,,78,,,,,,42,,,,
+pop-artists,artist,The Bangles,The_Bangles,,,90,,,,,,69,,,
+pop-artists,artist,Culture Club,Culture_Club,,,89,,78,,,,58,,49,
+pop-artists,artist,Billy Ocean,Billy_Ocean,,,89,,,,,,59,,,
+pop-artists,artist,WHAM!,WHAM,,,89,,,,,,64,,,
+pop-artists,artist,The Osmonds,The_Osmonds,,,87,98,,,,,42,54,,
+pop-artists,artist,Sheena Easton,Sheena_Easton,,,87,90,,,,,55,58,,
+pop-artists,artist,The B-52's,The_B_52s,,,87,,82,,,,57,,52,
+pop-artists,artist,Frankie Valli & The Four Seasons,Frankie_Valli_The_Four_Seasons,,,86,97,,,,,54,78,,
+pop-artists,artist,Tears for Fears,Tears_for_Fears,,,85,,,,,,58,,,
+pop-artists,artist,Wilson Phillips,Wilson_Phillips,,,85,,,,,,52,,,
+pop-artists,artist,Tom Jones,Tom_Jones,,,85,97,79,,,,48,71,52,
+pop-artists,artist,The Righteous Brothers,The_Righteous_Brothers,,,85,93,,,,,57,76,,
+pop-artists,artist,Captain & Tennille,Captain_Tennille,,,,97,,,,,,68,,
+pop-artists,artist,Engelbert Humperdinck,Engelbert_Humperdinck,,,,97,,,,,,55,,
+pop-artists,artist,Andy Gibb,Andy_Gibb,,,,97,,,,,,69,,
+pop-artists,artist,Karen Carpenter,Karen_Carpenter,,,,97,,,,,,79,,
+pop-artists,artist,Tony Orlando,Tony_Orlando,,,,97,,,,,,60,,
+pop-artists,artist,Frankie Avalon,Frankie_Avalon,,,,97,,,,,,73,,
+pop-artists,artist,Johnny Mathis,Johnny_Mathis,,,,96,,,,,,77,,
+pop-artists,artist,Carly Simon,Carly_Simon,,,,96,,,,,,79,,
+pop-artists,artist,David Cassidy,David_Cassidy,,,,95,,,,,,56,,
+pop-artists,artist,Harry Belafonte,Harry_Belafonte,,,,94,,,,,,74,,
+pop-artists,artist,Nancy Sinatra,Nancy_Sinatra,,,,94,,,,,,51,,
+pop-artists,artist,Liberace,Liberace,,,,92,,,,,,44,,
+pop-artists,artist,Steely Dan,Steely_Dan,,,,90,80,,,,,75,56,
+pop-artists,artist,Burt Bacharach,Burt_Bacharach,,,,90,,,,,,66,,
+pop-artists,artist,"Harry Connick, Jr.",Harry_Connick_Jr,,,,89,,,,,,63,,
+pop-artists,artist,Connie Francis,Connie_Francis,,,,89,,,,,,63,,
+pop-artists,artist,Anne Murray,Anne_Murray,,,,88,,,,,,60,,
+pop-artists,artist,Herman's Hermits,Hermans_Hermits,,,,88,,,,,,64,,
+pop-artists,artist,Joni Mitchell,Joni_Mitchell,,,,88,,,,,,63,,
+pop-artists,artist,Peter Gabriel,Peter_Gabriel,,,,,79,,,,,,55,
+pop-artists,artist,Toto,Toto,,,,,78,,,,,,50,
+pop-artists,artist,Victoria Beckham,Victoria_Beckham,,,,,,77,,,,,,33
+pop-artists,artist,Sia,Sia,,,,,,73,,,,,,45
+rap-hiphop-artists,artist,Kanye West,Kanye_West,96,97,97,97,97,96,34,42,23,13,38,30
+rap-hiphop-artists,artist,Eminem,Eminem,93,95,97,93,94,92,59,68,63,38,60,58
+rap-hiphop-artists,artist,Jay-Z,Jay_Z,93,93,95,93,93,92,41,48,34,20,43,37
+rap-hiphop-artists,artist,Ice Cube,Ice_Cube,92,95,96,94,95,90,59,68,63,44,62,56
+rap-hiphop-artists,artist,Nicki Minaj,Nicki_Minaj,92,94,93,85,92,92,40,44,37,25,41,39
+rap-hiphop-artists,artist,50 Cent,50_Cent,91,96,91,88,93,89,50,58,47,26,52,47
+rap-hiphop-artists,artist,Cardi B,Cardi_B,91,91,94,85,90,91,44,50,33,24,44,44
+rap-hiphop-artists,artist,Drake,Drake,90,94,92,79,91,88,41,44,34,26,44,38
+rap-hiphop-artists,artist,Tupac Shakur,Tupac_Shakur,89,93,93,88,90,88,56,67,54,28,58,54
+rap-hiphop-artists,artist,Vanilla Ice,Vanilla_Ice,89,93,97,94,90,88,39,44,36,28,39,40
+rap-hiphop-artists,artist,Lil Wayne,Lil_Wayne,89,94,91,83,90,87,44,54,39,19,45,43
+rap-hiphop-artists,artist,MC Hammer,MC_Hammer,87,89,96,93,89,85,51,54,57,40,52,51
+rap-hiphop-artists,artist,Ludacris,Ludacris,87,92,94,84,88,86,49,57,51,32,48,49
+rap-hiphop-artists,artist,Dr. Dre,Dr_Dre,87,91,92,82,89,84,50,58,53,27,54,45
+rap-hiphop-artists,artist,Post Malone,Post_Malone,86,91,85,72,87,84,48,53,44,33,45,52
+rap-hiphop-artists,artist,Beastie Boys,Beastie_Boys,86,91,93,91,88,82,52,59,67,38,54,51
+rap-hiphop-artists,artist,Pitbull,Pitbull,85,90,87,71,86,84,46,49,43,29,44,49
+rap-hiphop-artists,artist,Jelly Roll,Jelly_Roll-Music_Artist,85,87,91,90,85,84,41,44,40,45,41,42
+rap-hiphop-artists,artist,Pharrell Williams,Pharrell_Williams,84,90,83,71,83,84,55,57,50,46,52,57
+rap-hiphop-artists,artist,LL Cool J,LL_Cool_J,84,86,97,92,87,80,53,58,65,45,54,52
+rap-hiphop-artists,artist,Kendrick Lamar,Kendrick_Lamar,83,89,83,65,84,82,49,54,41,24,51,47
+rap-hiphop-artists,artist,Salt-N-Pepa,Salt_N_Pepa,83,87,93,84,82,84,50,59,60,40,47,54
+rap-hiphop-artists,artist,The Notorious B.I.G.,The_Notorious_B_I_G,83,89,88,74,87,78,48,60,45,22,51,46
+rap-hiphop-artists,artist,Machine Gun Kelly,Machine_Gun_Kelly,82,87,82,74,83,81,31,36,24,17,32,31
+rap-hiphop-artists,artist,Run-D.M.C.,Run_D_M_C,80,85,92,79,85,75,50,55,64,37,51,48
+rap-hiphop-artists,artist,Bobby Brown,Bobby_Brown,80,77,94,88,82,77,40,44,40,24,43,36
+rap-hiphop-artists,artist,Nelly,Nelly,79,87,86,69,79,79,45,53,40,25,44,46
+rap-hiphop-artists,artist,Missy Elliott,Missy_Elliott,78,89,85,64,77,79,50,56,53,31,48,51
+rap-hiphop-artists,artist,Lil Nas X,Lil_Nas_X,76,83,73,56,78,75,36,40,25,15,35,36
+rap-hiphop-artists,artist,DJ Khaled,DJ_Khaled,76,87,77,52,78,74,36,42,29,17,36,36
+rap-hiphop-artists,artist,Lil' Kim,Lil_Kim,76,83,85,76,78,75,34,45,33,13,36,32
+rap-hiphop-artists,artist,Doja Cat,Doja_Cat,76,88,70,48,76,76,38,48,30,13,38,38
+rap-hiphop-artists,artist,Will.i.am,Will_i_am,75,84,77,56,77,73,45,49,43,26,46,44
+rap-hiphop-artists,artist,Coolio,Coolio,74,85,86,65,81,68,43,52,48,22,47,39
+rap-hiphop-artists,artist,Flo Rida,Flo_Rida,74,88,77,49,76,72,40,51,35,17,38,41
+rap-hiphop-artists,artist,Wu-Tang Clan,Wu_Tang_Clan,74,84,82,54,81,66,44,54,50,20,50,38
+rap-hiphop-artists,artist,OutKast,OutKast,73,88,78,52,76,70,49,67,52,22,50,47
+rap-hiphop-artists,artist,Soulja Boy,Soulja_Boy,73,88,69,41,75,71,34,40,23,11,35,34
+rap-hiphop-artists,artist,Busta Rhymes,Busta_Rhymes,73,83,84,63,75,71,41,56,43,19,40,41
+rap-hiphop-artists,artist,Travis Scott,Travis_Scott,73,82,67,47,75,71,34,41,23,17,37,31
+rap-hiphop-artists,artist,Iggy Azalea,Iggy_Azalea,72,84,71,50,73,71,36,42,30,17,37,34
+rap-hiphop-artists,artist,Lil' Jon,Lil_Jon,72,82,75,53,75,70,40,53,34,16,41,40
+rap-hiphop-artists,artist,Wiz Khalifa,Wiz_Khalifa,72,85,70,38,75,68,41,56,28,11,44,37
+rap-hiphop-artists,artist,DMX,DMX,71,83,75,50,77,64,42,56,38,18,46,38
+rap-hiphop-artists,artist,Chance the Rapper,Chance_the_Rapper,71,79,69,52,75,67,35,45,27,16,37,34
+rap-hiphop-artists,artist,Macklemore,Macklemore,70,81,67,45,71,69,37,46,29,15,39,36
+rap-hiphop-artists,artist,Ice Spice,Ice_Spice,69,75,59,48,72,65,31,39,18,11,36,26
+rap-hiphop-artists,artist,Public Enemy,Public_Enemy,69,72,82,65,76,61,41,45,48,22,46,34
+rap-hiphop-artists,artist,Donald Glover,Donald_Glover,68,80,65,53,72,64,45,54,39,31,45,45
+rap-hiphop-artists,artist,T-Pain,T_Pain,68,87,65,35,69,66,40,55,33,9,40,41
+rap-hiphop-artists,artist,Nas,Nas,67,80,70,44,71,62,37,49,34,15,41,33
+rap-hiphop-artists,artist,A$AP Rocky,A_AP_Rocky,67,79,59,44,69,65,35,45,21,11,36,35
+rap-hiphop-artists,artist,DJ Jazzy Jeff & the Fresh Prince,DJ_Jazzy_Jeff_the_Fresh_Prince,66,,86,58,70,62,39,,52,24,41,37
+rap-hiphop-artists,artist,Ja Rule,Ja_Rule,66,82,76,43,73,58,33,45,33,16,36,30
+rap-hiphop-artists,artist,Arrested Development,Arrested_Development-Music_Artist,64,,80,60,70,59,36,,47,25,38,34
+rap-hiphop-artists,artist,Timbaland,Timbaland,64,83,66,41,68,61,38,52,31,17,40,35
+rap-hiphop-artists,artist,Macklemore &  Ryan Lewis,Macklemore_Ryan_Lewis,64,76,61,39,68,61,34,42,31,15,35,33
+rap-hiphop-artists,artist,Cypress Hill,Cypress_Hill,64,74,75,39,71,56,39,46,49,17,44,33
+rap-hiphop-artists,artist,Wyclef Jean,Wyclef_Jean,63,71,69,51,69,57,40,48,39,27,45,35
+rap-hiphop-artists,artist,Lin-Manuel Miranda,Lin_Manuel_Miranda,63,,,47,67,59,43,,,31,44,41
+rap-hiphop-artists,artist,T.I.,T_I,63,80,61,,67,58,37,51,27,,39,34
+rap-hiphop-artists,artist,"Tyler, the Creator",Tyler_the_Creator,62,71,,,68,57,33,40,,,33,34
+rap-hiphop-artists,artist,Eazy-E,Eazy_E,62,73,69,39,71,54,39,49,41,14,47,31
+rap-hiphop-artists,artist,Fugees,Fugees,62,,73,45,66,57,39,,45,18,41,38
+rap-hiphop-artists,artist,N.W.A,N_W_A,62,,73,45,71,,35,,42,16,41,
+rap-hiphop-artists,artist,Common,Common,61,,62,47,64,57,34,,33,20,34,35
+rap-hiphop-artists,artist,Shaboozey,Shaboozey,60,,65,47,62,59,35,,30,20,35,34
+rap-hiphop-artists,artist,2 Live Crew,2_Live_Crew,60,,80,58,69,,32,,41,19,36,
+rap-hiphop-artists,artist,Insane Clown Posse,Insane_Clown_Posse,60,74,64,39,68,,27,33,21,8,31,
+rap-hiphop-artists,artist,Rick Ross,Rick_Ross,60,73,57,,66,54,32,41,22,,37,27
+rap-hiphop-artists,artist,Method Man,Method_Man,60,71,68,38,66,53,35,48,39,14,40,30
+rap-hiphop-artists,artist,The Roots,The_Roots,60,72,61,47,66,,39,50,41,28,44,
+rap-hiphop-artists,artist,Tyga,Tyga,59,72,,32,,60,30,36,,9,,28
+rap-hiphop-artists,artist,Fred Durst,Fred_Durst,59,74,66,35,67,,31,41,28,11,37,
+rap-hiphop-artists,artist,Kid Cudi,Kid_Cudi,59,76,55,31,63,55,33,45,23,7,37,30
+rap-hiphop-artists,artist,Mac Miller,Mac_Miller,59,72,,,62,55,37,46,,,39,35
+rap-hiphop-artists,artist,Fetty Wap,Fetty_Wap,59,71,,,61,56,31,39,,,33,29
+rap-hiphop-artists,artist,Big Sean,Big_Sean,58,,,,,56,33,,,,,28
+rap-hiphop-artists,artist,2 Chainz,2_Chainz,58,72,55,31,,55,31,40,24,9,,30
+rap-hiphop-artists,artist,Bone Thugs-N-Harmony,Bone_Thugs_N_Harmony,58,73,68,,64,,37,52,41,,40,
+rap-hiphop-artists,artist,Waka Flocka Flame,Waka_Flocka_Flame,,72,,,,,,37,,,,
+rap-hiphop-artists,artist,J. Cole,J_Cole,,72,,,,53,,47,,,,33
+rap-hiphop-artists,artist,Three 6 Mafia,Three_6_Mafia,,72,,,,,,45,,,,
+rap-hiphop-artists,artist,Mos Def,Mos_Def,,72,60,42,67,,,44,32,11,38,
+rap-hiphop-artists,artist,Eve,Eve,,71,59,35,,53,,47,33,14,,33
+rap-hiphop-artists,artist,Daddy Yankee,Daddy_Yankee,,71,,,,,,40,,,,
+rap-hiphop-artists,artist,Gucci Mane,Gucci_Mane,,71,,,,54,,41,,,,31
+rap-hiphop-artists,artist,Ying Yang Twins,Ying_Yang_Twins,,71,,,,,,43,,,,
+rap-hiphop-artists,artist,G-Unit,G_Unit,,70,,,,,,41,,,,
+rap-hiphop-artists,artist,The Sugarhill Gang,The_Sugarhill_Gang,,,65,50,64,,,,39,27,40,
+rap-hiphop-artists,artist,Master P,Master_P,,,60,34,,,,,27,11,,
+rap-hiphop-artists,artist,A Tribe Called Quest,A_Tribe_Called_Quest,,,60,,,,,,36,,,
+rap-hiphop-artists,artist,Nipsey Hussle,Nipsey_Hussle,,,59,42,62,,,,31,16,39,
+rap-hiphop-artists,artist,Questlove,Questlove,,,,35,,,,,,18,,
+rap-hiphop-artists,artist,Young Jeezy,Young_Jeezy,,,,35,,,,,,10,,
+rap-hiphop-artists,artist,GloRilla,GloRilla,,,,,,56,,,,,,31
+rap-hiphop-artists,artist,21 Savage,21_Savage,,,,,,55,,,,,,29
+rap-hiphop-artists,artist,Future,Future,,,,,,54,,,,,,33
+alternative-indie-music-artists,artist,Nirvana,Nirvana,90,91,94,90,92,87,62,67,68,53,68,55
+alternative-indie-music-artists,artist,Kurt Cobain,Kurt_Cobain,87,87,92,86,90,84,55,62,56,39,58,52
+alternative-indie-music-artists,artist,Pearl Jam,Pearl_Jam,84,86,93,93,87,81,55,55,67,54,58,51
+alternative-indie-music-artists,artist,U2,U2,84,86,90,85,89,78,51,49,58,57,53,48
+alternative-indie-music-artists,artist,Foo Fighters,Foo_Fighters,82,88,89,84,85,77,53,58,61,48,56,49
+alternative-indie-music-artists,artist,Avril Lavigne,Avril_Lavigne,81,93,84,68,80,83,52,63,51,34,50,55
+alternative-indie-music-artists,artist,Creed,Creed,81,85,91,81,84,78,47,47,52,44,49,45
+alternative-indie-music-artists,artist,Goo Goo Dolls,Goo_Goo_Dolls,81,85,90,80,83,79,49,56,54,39,49,48
+alternative-indie-music-artists,artist,Hootie & the Blowfish,Hootie_the_Blowfish,80,80,93,94,83,77,53,50,58,66,51,54
+alternative-indie-music-artists,artist,The Smashing Pumpkins,The_Smashing_Pumpkins,79,78,89,83,84,74,49,55,58,40,53,44
+alternative-indie-music-artists,artist,Imagine Dragons,Imagine_Dragons,78,85,76,54,79,77,53,57,48,32,52,54
+alternative-indie-music-artists,artist,The Cranberries,The_Cranberries,78,85,84,65,82,73,54,59,61,42,55,52
+alternative-indie-music-artists,artist,Tracy Chapman,Tracy_Chapman,75,74,90,85,78,73,52,49,60,59,51,53
+alternative-indie-music-artists,artist,Ramones,Ramones,75,78,83,75,79,70,48,47,58,47,54,43
+alternative-indie-music-artists,artist,Lorde,Lorde,73,82,71,50,74,73,49,54,43,23,49,48
+alternative-indie-music-artists,artist,Weezer,Weezer,72,80,75,55,78,66,44,57,44,24,47,41
+alternative-indie-music-artists,artist,The Cure,The_Cure,72,75,84,56,77,67,47,50,56,32,50,43
+alternative-indie-music-artists,artist,Counting Crows,Counting_Crows,72,76,83,72,75,67,44,47,53,41,47,41
+alternative-indie-music-artists,artist,Oasis,Oasis,71,78,75,59,75,66,44,55,45,30,45,44
+alternative-indie-music-artists,artist,Barenaked Ladies,Barenaked_Ladies,70,75,78,71,74,65,40,42,46,34,44,36
+alternative-indie-music-artists,artist,No Doubt,No_Doubt,70,84,82,53,72,67,46,56,57,33,45,46
+alternative-indie-music-artists,artist,Third Eye Blind,Third_Eye_Blind,69,77,81,57,72,65,43,53,47,31,46,40
+alternative-indie-music-artists,artist,Twenty One Pilots,Twenty_One_Pilots,68,79,61,32,69,66,43,49,35,15,42,43
+alternative-indie-music-artists,artist,Panic! at the Disco,Panic_at_the_Disco,67,82,64,35,69,66,44,54,33,16,43,45
+alternative-indie-music-artists,artist,Mumford & Sons,Mumford_Sons,67,79,65,57,70,63,38,48,35,28,40,37
+alternative-indie-music-artists,artist,Soundgarden,Soundgarden,66,77,77,57,75,58,44,53,55,32,50,37
+alternative-indie-music-artists,artist,INXS,INXS,66,62,82,71,73,59,42,35,60,42,46,37
+alternative-indie-music-artists,artist,Train,Train,65,69,67,52,68,61,41,40,38,32,43,39
+alternative-indie-music-artists,artist,Chris Daughtry,Chris_Daughtry,65,72,74,60,63,66,37,41,40,32,33,41
+alternative-indie-music-artists,artist,Beck,Beck,63,69,73,53,71,55,37,45,40,25,44,30
+alternative-indie-music-artists,artist,Chris Martin,Chris_Martin,62,70,65,52,61,62,36,43,32,27,34,38
+alternative-indie-music-artists,artist,The Lumineers,The_Lumineers,61,67,60,42,61,61,38,42,34,23,38,38
+alternative-indie-music-artists,artist,The All-American Rejects,The_All_American_Rejects,61,80,55,26,64,57,39,54,32,9,42,37
+alternative-indie-music-artists,artist,SZA,SZA,60,69,56,32,61,60,38,45,26,11,38,37
+alternative-indie-music-artists,artist,The Killers,The_Killers,60,75,55,33,65,55,40,50,32,15,42,37
+alternative-indie-music-artists,artist,Florence And the Machine,Florence_And_the_Machine,60,72,56,44,63,57,38,46,33,23,39,38
+alternative-indie-music-artists,artist,The White Stripes,The_White_Stripes,59,73,61,36,65,52,37,47,36,17,40,33
+alternative-indie-music-artists,artist,Patti Smith,Patti_Smith,59,57,64,65,63,54,38,37,35,40,41,35
+alternative-indie-music-artists,artist,Dave Grohl,Dave_Grohl,59,68,67,49,64,54,36,39,41,29,40,32
+alternative-indie-music-artists,artist,Jon Batiste,Jon_Batiste,59,57,53,56,63,55,35,34,32,29,35,35
+alternative-indie-music-artists,artist,Bush,Bush,59,67,69,41,65,51,35,42,40,19,41,29
+alternative-indie-music-artists,artist,Jane's Addiction,Janes_Addiction,59,67,67,50,66,51,35,41,43,22,40,31
+alternative-indie-music-artists,artist,Hoobastank,Hoobastank,58,75,60,33,63,51,32,45,29,13,36,28
+alternative-indie-music-artists,artist,The Fray,The_Fray,58,72,58,35,57,58,34,43,29,17,31,36
+alternative-indie-music-artists,artist,Three Days Grace,Three_Days_Grace,58,74,56,27,62,53,39,52,33,13,43,36
+alternative-indie-music-artists,artist,Brandi Carlile,Brandi_Carlile,57,55,59,59,59,55,36,35,35,33,38,34
+alternative-indie-music-artists,artist,Jack White,Jack_White,57,62,62,48,65,49,35,41,33,24,40,30
+alternative-indie-music-artists,artist,30 Seconds to Mars,30_Seconds_to_Mars,57,72,56,30,60,54,31,42,23,12,30,32
+alternative-indie-music-artists,artist,Jimmy Eat World,Jimmy_Eat_World,57,74,54,29,65,48,33,48,25,10,38,27
+alternative-indie-music-artists,artist,The Strokes,The_Strokes,56,65,56,31,63,48,33,40,28,12,37,29
+alternative-indie-music-artists,artist,David Byrne,David_Byrne,55,54,54,52,63,46,35,36,31,30,41,28
+alternative-indie-music-artists,artist,Oingo Boingo,Oingo_Boingo,54,55,63,46,62,46,30,33,32,17,35,24
+alternative-indie-music-artists,artist,Soul Asylum,Soul_Asylum,54,54,71,47,60,47,32,35,42,22,36,28
+alternative-indie-music-artists,artist,Audioslave,Audioslave,54,68,53,32,61,45,33,43,30,12,39,25
+alternative-indie-music-artists,artist,Arctic Monkeys,Arctic_Monkeys,54,62,45,26,58,50,31,41,20,10,33,28
+alternative-indie-music-artists,artist,The Smiths,The_Smiths,54,61,54,32,57,50,32,38,29,15,34,30
+alternative-indie-music-artists,artist,Gotye,Gotye,53,63,48,24,59,47,32,37,26,10,33,30
+alternative-indie-music-artists,artist,Foster the People,Foster_the_People,53,67,47,25,56,50,32,39,28,11,35,29
+alternative-indie-music-artists,artist,The Verve,The_Verve,53,62,56,35,60,46,32,38,32,14,37,28
+alternative-indie-music-artists,artist,They Might Be Giants,They_Might_Be_Giants,52,55,55,37,59,45,31,34,29,16,35,27
+alternative-indie-music-artists,artist,Death Cab for Cutie,Death_Cab_for_Cutie,52,65,53,31,58,47,30,38,24,10,32,28
+alternative-indie-music-artists,artist,The Black Keys,The_Black_Keys,52,62,50,38,57,47,30,38,27,19,33,28
+alternative-indie-music-artists,artist,Sonic Youth,Sonic_Youth,51,62,59,30,60,43,27,35,31,11,34,21
+alternative-indie-music-artists,artist,Staind,Staind,50,67,55,28,57,43,29,40,32,12,32,26
+alternative-indie-music-artists,artist,Bastille,Bastille,50,58,38,26,55,44,28,33,16,10,29,26
+alternative-indie-music-artists,artist,Simple Plan,Simple_Plan,50,72,38,,53,47,30,44,19,,31,29
+alternative-indie-music-artists,artist,Cake,Cake,50,63,48,27,57,42,30,41,26,10,34,25
+alternative-indie-music-artists,artist,Snow Patrol,Snow_Patrol,49,60,45,24,51,48,29,36,23,8,29,29
+alternative-indie-music-artists,artist,Lindsey Stirling,Lindsey_Stirling,49,62,,24,52,46,33,45,,12,37,29
+alternative-indie-music-artists,artist,Modest Mouse,Modest_Mouse,49,61,41,23,55,43,29,41,21,7,35,24
+alternative-indie-music-artists,artist,Queens of the Stone Age,Queens_of_the_Stone_Age,48,62,43,29,59,,31,43,24,12,40,
+alternative-indie-music-artists,artist,Alien Ant Farm,Alien_Ant_Farm,48,64,52,,56,39,28,39,28,,34,22
+alternative-indie-music-artists,artist,Liz Phair,Liz_Phair,47,52,50,28,55,39,29,32,23,12,33,25
+alternative-indie-music-artists,artist,Michael Stipe,Michael_Stipe,47,,56,32,54,41,29,,32,17,34,25
+alternative-indie-music-artists,artist,Jeff Buckley,Jeff_Buckley,47,52,45,29,51,42,29,31,23,14,34,25
+alternative-indie-music-artists,artist,KT Tunstall,KT_Tunstall,46,,44,30,53,39,26,,21,12,32,20
+alternative-indie-music-artists,artist,Blur,Blur,46,56,43,,54,,29,37,21,,35,
+alternative-indie-music-artists,artist,Walk the Moon,Walk_the_Moon,45,,,,,41,29,,,,,26
+alternative-indie-music-artists,artist,Yeah Yeah Yeahs,Yeah_Yeah_Yeahs,45,59,38,,50,39,26,33,21,,30,22
+alternative-indie-music-artists,artist,Live,Live,44,54,51,25,51,,25,32,27,11,30,
+alternative-indie-music-artists,artist,N.E.R.D,N_E_R_D-Music_Artist,,59,,,,39,,35,,,,22
+alternative-indie-music-artists,artist,A Perfect Circle,A_Perfect_Circle,,54,,,,,,39,,,,
+alternative-indie-music-artists,artist,Hellogoodbye,Hellogoodbye,,53,,,,,,33,,,,
+alternative-indie-music-artists,artist,'Til Tuesday,Til_Tuesday,,,47,31,51,,,,27,15,31,
+alternative-indie-music-artists,artist,Halestorm,Halestorm,,,40,,,,,,21,,,
+alternative-indie-music-artists,artist,Mahalia,Mahalia,,,,28,,38,,,,10,,22
+alternative-indie-music-artists,artist,Laurie Anderson,Laurie_Anderson,,,,25,,,,,,10,,
+alternative-indie-music-artists,artist,The Kooks,The_Kooks,,,,25,,,,,,8,,
+alternative-indie-music-artists,artist,Brittany Howard,Brittany_Howard,,,,24,,,,,,10,,
+alternative-indie-music-artists,artist,We the Kings,We_the_Kings,,,,,,38,,,,,,23
+food-snack-brands,brand,Lay's,Lays,99,98,100,100,99,99,79,77,80,85,80,78
+food-snack-brands,brand,Kraft Foods,Kraft_Foods,99,98,99,100,100,98,69,64,69,76,66,73
+food-snack-brands,brand,Skittles,Skittles,99,99,97,99,98,99,68,76,65,55,64,73
+food-snack-brands,brand,Fritos,Fritos,99,97,99,100,99,98,73,71,75,80,76,70
+food-snack-brands,brand,Cheetos,Cheetos,98,98,98,100,98,99,74,73,77,71,73,75
+food-snack-brands,brand,Hershey's,Hersheys,98,98,99,98,99,98,79,73,84,87,82,77
+food-snack-brands,brand,Chips Ahoy!,Chips_Ahoy,98,98,99,99,99,97,73,70,75,73,75,71
+food-snack-brands,brand,M&M's,M_Ms,98,100,100,98,99,97,81,86,81,88,81,81
+food-snack-brands,brand,Snickers,Snickers,98,99,100,100,98,98,77,77,80,82,75,79
+food-snack-brands,brand,Doritos,Doritos,98,98,98,99,98,98,74,70,73,71,73,74
+food-snack-brands,brand,Ritz,Ritz,98,99,99,99,97,98,76,76,76,84,76,75
+food-snack-brands,brand,Frosted Flakes,Frosted_Flakes,98,96,98,100,97,98,63,62,73,68,62,64
+food-snack-brands,brand,Nestlé,Nestle,98,95,99,100,99,97,68,60,75,77,66,69
+food-snack-brands,brand,Goldfish,Goldfish,98,98,97,,97,98,74,79,72,,72,76
+food-snack-brands,brand,Rice Krispies Treats,Rice_Krispies_Treats,97,96,97,99,97,98,69,68,72,65,65,72
+food-snack-brands,brand,Oreo,Oreo,97,97,100,100,97,97,78,84,80,76,80,77
+food-snack-brands,brand,Kraft Mac & Cheese,Kraft_Mac_Cheese,97,97,98,99,97,97,64,66,64,66,63,65
+food-snack-brands,brand,Lucky Charms,Lucky_Charms,97,98,99,,96,99,61,66,59,,56,66
+food-snack-brands,brand,Cheez-It,Cheez_It,97,97,100,98,96,99,70,74,74,68,65,74
+food-snack-brands,brand,Ben & Jerry's,Ben_Jerrys,97,96,97,100,97,96,72,79,66,70,72,72
+food-snack-brands,brand,Cheerios,Cheerios,97,96,98,99,95,99,70,62,71,73,63,78
+food-snack-brands,brand,Lay's Chips,Lays_Chips,97,97,98,100,96,98,73,78,76,78,76,70
+food-snack-brands,brand,Dove,Dove-Brand,97,99,100,98,97,97,78,80,82,78,73,83
+food-snack-brands,brand,Kellogg's,Kelloggs,97,99,99,99,98,96,73,68,73,80,75,72
+food-snack-brands,brand,Nesquik,Nesquik,97,98,98,98,96,98,68,66,69,70,67,69
+food-snack-brands,brand,Heinz Ketchup,Heinz_Ketchup,97,,100,100,96,97,78,,83,86,78,77
+food-snack-brands,brand,Kit Kat,Kit_Kat,97,97,97,98,96,97,78,78,76,77,78,78
+food-snack-brands,brand,Nestlé Crunch,Nestle_Crunch,97,,98,100,97,97,69,,70,77,69,70
+food-snack-brands,brand,Pringles,Pringles,97,98,98,99,96,97,72,81,76,60,69,74
+food-snack-brands,brand,Special K,Special_K,96,94,100,100,96,96,62,62,62,65,58,64
+food-snack-brands,brand,Frito-Lay,Frito_Lay,96,,99,100,94,99,73,,81,79,66,80
+food-snack-brands,brand,Eggo,Eggo,96,96,99,100,97,95,72,69,71,66,71,73
+food-snack-brands,brand,Heinz,Heinz,96,96,98,100,96,97,72,75,76,79,75,69
+food-snack-brands,brand,Chex Mix,Chex_Mix,96,95,97,98,95,97,67,66,64,70,67,67
+food-snack-brands,brand,Milky Way,Milky_Way,96,97,97,,98,94,73,68,70,,73,73
+food-snack-brands,brand,Jell-O Pudding Snacks,Jell_O_Pudding_Snacks,96,95,99,98,94,98,69,66,61,62,66,72
+food-snack-brands,brand,Honey Nut Cheerios,Honey_Nut_Cheerios,96,,98,99,93,99,69,,76,65,64,73
+food-snack-brands,brand,Sour Patch Kids,Sour_Patch_Kids,96,95,,,95,96,60,65,,,65,55
+food-snack-brands,brand,Oscar Mayer,Oscar_Mayer,96,99,99,100,98,94,65,72,61,65,69,61
+food-snack-brands,brand,Hidden Valley Ranch,Hidden_Valley_Ranch-Brand,96,,99,98,95,96,66,,69,71,66,66
+food-snack-brands,brand,Starburst,Starburst,96,97,97,98,94,97,66,70,69,63,62,71
+food-snack-brands,brand,Quaker,Quaker,95,98,97,99,96,95,72,70,77,84,69,75
+food-snack-brands,brand,Cinnamon Toast Crunch,Cinnamon_Toast_Crunch,95,94,,,93,98,62,65,,,57,67
+food-snack-brands,brand,Tyson,Tyson,95,97,99,99,97,94,65,65,64,67,68,62
+food-snack-brands,brand,Reese's,Reeses,95,97,99,99,96,95,78,80,78,82,80,76
+food-snack-brands,brand,Tostitos,Tostitos,95,96,97,98,94,97,69,75,71,70,67,71
+food-snack-brands,brand,Heinz Mustard,Heinz_Mustard,95,94,99,99,96,95,66,61,71,75,64,68
+food-snack-brands,brand,Milk Duds,Milk_Duds,95,96,,,95,96,62,56,,,61,63
+food-snack-brands,brand,Campbell's,Campbells,95,94,99,100,95,95,67,66,67,77,63,72
+food-snack-brands,brand,Planters,Planters,95,95,,98,96,94,76,77,,87,76,77
+food-snack-brands,brand,Cadbury Egg,Cadbury_Egg,95,,,,95,95,64,,,,64,64
+food-snack-brands,brand,Land O'Lakes,Land_OLakes,95,95,,99,97,,68,68,,81,71,
+food-snack-brands,brand,Jolly Rancher,Jolly_Rancher,95,95,,98,95,94,71,68,,62,70,72
+food-snack-brands,brand,Twizzlers,Twizzlers,95,96,100,98,94,96,58,59,68,54,56,61
+food-snack-brands,brand,Pillsbury,Pillsbury,95,94,98,99,94,96,76,78,81,83,76,77
+food-snack-brands,brand,Cool Ranch Doritos,Cool_Ranch_Doritos,95,,98,,93,97,65,,65,,64,66
+food-snack-brands,brand,Ruffles,Ruffles,95,96,98,,94,95,72,73,74,,69,75
+food-snack-brands,brand,Jif,Jif,95,,99,,96,,72,,75,,71,
+food-snack-brands,brand,General Mills,General_Mills,95,,99,,97,,71,,71,,71,
+food-snack-brands,brand,Coffee-Mate,Coffee_Mate,94,94,98,99,94,95,59,61,64,53,57,61
+food-snack-brands,brand,Milky Way bar,Milky_Way_bar,94,94,98,98,97,,67,60,66,77,71,
+food-snack-brands,brand,Lifesavers,Lifesavers,94,,99,100,,97,71,,74,83,,73
+food-snack-brands,brand,Whoppers,Whoppers,94,95,,,,96,63,63,,,,59
+food-snack-brands,brand,Three Musketeers,Three_Musketeers,94,93,,,95,,65,63,,,68,
+food-snack-brands,brand,Tabasco,Tabasco,94,94,98,100,96,,61,63,55,68,65,
+food-snack-brands,brand,Butterfinger,Butterfinger,94,95,,99,96,,67,63,,76,69,
+food-snack-brands,brand,Häagen-Dazs,Haagen_Dazs,94,,,98,,96,71,,,81,,76
+food-snack-brands,brand,McCormick,McCormick,94,96,98,98,,96,76,75,79,81,,80
+food-snack-brands,brand,Honey Bunches of Oats,Honey_Bunches_of_Oats,94,95,,,94,93,66,69,,,66,67
+food-snack-brands,brand,Hostess CupCake,Hostess_CupCake,94,,,98,93,95,65,,,71,64,66
+food-snack-brands,brand,Dots,Dots,94,95,,,94,,52,52,,,54,
+food-snack-brands,brand,Twix,Twix,94,,99,,94,,75,,81,,77,
+food-snack-brands,brand,Weight Watchers,Weight_Watchers,94,,,99,95,,44,,,40,48,
+food-snack-brands,brand,French's Mustard,Frenchs_Mustard,94,94,99,,93,94,69,65,73,,69,69
+food-snack-brands,brand,Baby Ruth,Baby_Ruth,94,,98,99,94,,65,,62,76,68,
+food-snack-brands,brand,Nature Valley,Nature_Valley,94,96,97,,94,,67,69,67,,66,
+food-snack-brands,brand,Dove (chocolate),Dove_chocolate,93,,97,98,,98,73,,75,78,,83
+food-snack-brands,brand,Tostitos Scoops,Tostitos_Scoops,93,93,,,94,,71,79,,,66,
+food-snack-brands,brand,Totino's Pizza Rolls,Totinos_Pizza_Rolls,93,98,,,,94,57,66,,,,56
+food-snack-brands,brand,Velveeta,Velveeta,93,,,,,94,57,,,,,57
+food-snack-brands,brand,Fruit Gushers,Fruit_Gushers,,97,,,,,,63,,,,
+food-snack-brands,brand,Yoplait,Yoplait,,96,,97,93,93,,65,,65,60,70
+food-snack-brands,brand,Baked Lay's,Baked_Lays,,96,,,,94,,72,,,,66
+food-snack-brands,brand,Air Heads,Air_Heads,,96,,,,,,64,,,,
+food-snack-brands,brand,Flamin' Hot Cheetos,Flamin_Hot_Cheetos,,96,,,,,,51,,,,
+food-snack-brands,brand,Hunt's Ketchup,Hunts_Ketchup,,96,98,99,,94,,67,67,74,,70
+food-snack-brands,brand,Teddy Grahams,Teddy_Grahams,,96,,,,95,,71,,,,69
+food-snack-brands,brand,Chex,Chex,,95,97,,,94,,65,67,,,65
+food-snack-brands,brand,Sunchips,Sunchips,,95,,,,,,77,,,,
+food-snack-brands,brand,Betty Crocker,Betty_Crocker,,95,,100,,,,68,,85,,
+food-snack-brands,brand,Orville Redenbacher's Popcorn,Orville_Redenbachers_Popcorn,,95,98,99,,,,70,77,76,,
+food-snack-brands,brand,Wheat Thins,Wheat_Thins,,94,,98,,,,65,,72,,
+food-snack-brands,brand,Breyers,Breyers,,94,,97,,,,67,,74,,
+food-snack-brands,brand,DiGiorno,DiGiorno,,94,,,95,,,64,,,60,
+food-snack-brands,brand,Planters Trail Mix,Planters_Trail_Mix,,94,,,,,,67,,,,
+food-snack-brands,brand,Sargento,Sargento,,93,,,,,,65,,,,
+food-snack-brands,brand,Go-gurt,Go_gurt,,93,,,,,,52,,,,
+food-snack-brands,brand,Ragú,Ragu,,,99,,,,,,61,,,
+food-snack-brands,brand,Thin Mints Girl Scout Cookies,Thin_Mints_Girl_Scout_Cookies,,,99,98,,96,,,70,73,,69
+food-snack-brands,brand,Nabisco,Nabisco,,,99,99,96,,,,79,82,79,
+food-snack-brands,brand,Triscuit,Triscuit,,,98,97,,94,,,59,62,,65
+food-snack-brands,brand,Progresso,Progresso,,,98,,,,,,67,,,
+food-snack-brands,brand,Land O Lakes (butter),Land_O_Lakes_butter,,,98,98,,,,,71,78,,
+food-snack-brands,brand,Mars Bar,Mars_Bar,,,98,,,,,,60,,,
+food-snack-brands,brand,Sargento String Cheese,Sargento_String_Cheese,,,98,,,,,,71,,,
+food-snack-brands,brand,Stouffer’s,Stouffers,,,98,98,,,,,70,68,,
+food-snack-brands,brand,Old El Paso,Old_El_Paso,,,97,,,,,,74,,,
+food-snack-brands,brand,Chiquita,Chiquita,,,97,99,,,,,76,84,,
+food-snack-brands,brand,Bisquick,Bisquick,,,97,,,,,,68,,,
+food-snack-brands,brand,Pez Candy Dispenser,Pez_Candy_Dispenser,,,97,,,,,,70,,,
+food-snack-brands,brand,Jenny Craig,Jenny_Craig,,,97,,,,,,24,,,
+food-snack-brands,brand,PayDay,PayDay,,,96,,96,,,,52,,63,
+food-snack-brands,brand,Jimmy Dean,Jimmy_Dean-Brand,,,,99,93,,,,,74,65,
+food-snack-brands,brand,Hormel,Hormel-Brand,,,,99,,,,,,63,,
+food-snack-brands,brand,Chicken of the Sea,Chicken_of_the_Sea,,,,99,,,,,,71,,
+food-snack-brands,brand,Orville Redenbacher's,Orville_Redenbachers,,,,98,,,,,,75,,
+food-snack-brands,brand,Mr. Goodbar,Mr_Goodbar,,,,98,,,,,,69,,
+food-snack-brands,brand,Kraft Barbecue Sauce,Kraft_Barbecue_Sauce,,,,98,95,,,,,63,58,
+food-snack-brands,brand,Omaha Steaks,Omaha_Steaks,,,,98,,,,,,53,,
+food-snack-brands,brand,Almond Joy,Almond_Joy,,,,98,,94,,,,75,,66
+food-snack-brands,brand,Smucker's,Smuckers,,,,98,,,,,,81,,
+food-snack-brands,brand,Tootsie Pop,Tootsie_Pop,,,,,95,,,,,,62,
+food-snack-brands,brand,York Peppermint Patties,York_Peppermint_Patties,,,,,,95,,,,,,70
+food-snack-brands,brand,Ghirardelli,Ghirardelli,,,,,,94,,,,,,78
+food-snack-brands,brand,Dove Chocolate Candy Bar,Dove_Chocolate_Candy_Bar,,,,,,94,,,,,,70
+food-snack-brands,brand,SweetTarts,SweetTarts,,,,,,94,,,,,,56
+food-snack-brands,brand,Nerds,Nerds,,,,,,93,,,,,,59
+clothing-footwear-brands,brand,Adidas,Adidas,99,98,98,100,99,98,75,76,71,65,79,72
+clothing-footwear-brands,brand,Victoria's Secret,Victorias_Secret,98,98,100,100,98,98,63,61,64,56,63,64
+clothing-footwear-brands,brand,Levi's,Levis,98,99,98,100,97,98,76,76,77,85,75,78
+clothing-footwear-brands,brand,Nike,Nike,97,96,98,100,97,97,67,71,70,57,64,70
+clothing-footwear-brands,brand,Fruit of the Loom,Fruit_of_the_Loom,97,93,100,100,98,96,74,67,81,79,73,75
+clothing-footwear-brands,brand,Old Navy,Old_Navy,96,95,99,100,96,97,61,56,59,63,58,65
+clothing-footwear-brands,brand,Under Armour,Under_Armour,96,97,98,93,97,95,64,69,65,64,63,65
+clothing-footwear-brands,brand,Calvin Klein,Calvin_Klein,96,93,98,100,96,96,56,63,53,46,54,58
+clothing-footwear-brands,brand,PUMA,PUMA,96,94,98,95,96,95,63,66,62,50,67,58
+clothing-footwear-brands,brand,Skechers,Skechers,96,95,96,97,95,97,67,66,64,73,60,74
+clothing-footwear-brands,brand,Gucci,Gucci,95,95,96,97,94,96,48,56,43,35,50,47
+clothing-footwear-brands,brand,Reebok,Reebok,95,94,98,99,94,95,66,63,66,64,62,69
+clothing-footwear-brands,brand,Hanes,Hanes,95,95,98,99,96,93,67,67,81,79,60,74
+clothing-footwear-brands,brand,Crocs,Crocs,94,94,92,96,94,94,54,53,40,48,51,57
+clothing-footwear-brands,brand,Tommy Hilfiger,Tommy_Hilfiger,94,97,98,98,94,94,51,49,44,48,48,53
+clothing-footwear-brands,brand,Converse,Converse,94,94,97,96,95,92,68,72,71,64,69,67
+clothing-footwear-brands,brand,New Balance,New_Balance,93,95,95,94,94,92,65,62,65,70,67,64
+clothing-footwear-brands,brand,RayBan,RayBan,93,93,97,95,95,91,59,64,57,61,60,58
+clothing-footwear-brands,brand,Louis Vuitton,Louis_Vuitton,92,93,90,93,88,95,52,58,47,46,50,54
+clothing-footwear-brands,brand,Gap,Gap,92,96,98,99,89,94,57,62,56,58,52,61
+clothing-footwear-brands,brand,Ralph Lauren,Ralph_Lauren,91,95,98,96,91,92,56,58,55,55,55,58
+clothing-footwear-brands,brand,Wrangler,Wrangler,91,92,98,99,92,91,65,61,62,83,66,64
+clothing-footwear-brands,brand,American Eagle Outfitters,American_Eagle_Outfitters,91,89,97,95,88,94,51,55,48,51,48,54
+clothing-footwear-brands,brand,Abercrombie & Fitch,Abercrombie_Fitch,91,92,91,91,90,93,47,46,35,37,48,46
+clothing-footwear-brands,brand,Chanel,Chanel,91,95,96,91,88,94,51,56,45,45,45,58
+clothing-footwear-brands,brand,Polo Ralph Lauren,Polo_Ralph_Lauren,91,90,97,98,90,91,59,60,64,54,59,59
+clothing-footwear-brands,brand,Prada,Prada,91,88,92,91,87,94,47,49,41,38,46,48
+clothing-footwear-brands,brand,The North Face,The_North_Face,90,93,93,84,91,89,64,69,61,54,64,64
+clothing-footwear-brands,brand,Lee,Lee,90,89,96,98,90,90,63,54,66,74,64,62
+clothing-footwear-brands,brand,Banana Republic,Banana_Republic,89,94,93,97,88,90,52,58,44,53,54,49
+clothing-footwear-brands,brand,Dr. Scholl's shoes,Dr_Scholls_shoes,89,95,97,98,89,89,62,60,63,68,61,63
+clothing-footwear-brands,brand,Dior,Dior,89,91,89,92,85,93,49,53,48,46,43,56
+clothing-footwear-brands,brand,Champion,Champion,89,92,94,90,93,85,59,61,59,62,64,54
+clothing-footwear-brands,brand,L. L. Bean,L_L_Bean,87,85,86,94,88,86,56,48,57,68,55,57
+clothing-footwear-brands,brand,Lululemon,Lululemon,87,93,82,75,84,90,42,49,27,26,41,44
+clothing-footwear-brands,brand,Forever 21,Forever_21,87,90,87,80,78,95,41,45,30,28,31,50
+clothing-footwear-brands,brand,Michael Kors,Michael_Kors,87,91,88,78,83,90,51,48,50,38,48,55
+clothing-footwear-brands,brand,Coach,Coach,86,89,90,82,84,89,55,58,49,45,52,58
+clothing-footwear-brands,brand,H&M,H_M,86,93,87,71,85,88,49,54,42,29,50,48
+clothing-footwear-brands,brand,Eddie Bauer,Eddie_Bauer,86,86,91,92,88,84,55,56,54,60,55,55
+clothing-footwear-brands,brand,Vans,Vans,86,94,93,71,84,88,58,66,62,37,56,61
+clothing-footwear-brands,brand,Versace,Versace,85,88,86,82,84,87,45,43,39,35,42,48
+clothing-footwear-brands,brand,Urban Outfitters,Urban_Outfitters,85,88,84,80,83,87,46,47,37,39,46,46
+clothing-footwear-brands,brand,Dockers,Dockers,85,88,96,96,89,81,52,44,57,64,56,48
+clothing-footwear-brands,brand,Columbia,Columbia,85,89,88,89,86,84,60,61,61,57,62,58
+clothing-footwear-brands,brand,Armani,Armani,85,86,84,87,87,82,44,46,44,39,45,43
+clothing-footwear-brands,brand,Aéropostale,Aeropostale,84,89,85,74,80,88,42,40,39,27,39,45
+clothing-footwear-brands,brand,Men's Wearhouse,Mens_Wearhouse,84,84,92,92,91,78,50,46,49,53,56,44
+clothing-footwear-brands,brand,J.Crew,J_Crew,83,86,87,86,84,82,48,50,45,43,47,50
+clothing-footwear-brands,brand,Cartier,Cartier,83,77,82,90,82,84,46,43,37,47,42,51
+clothing-footwear-brands,brand,Timberland,Timberland,82,90,87,85,82,83,53,56,55,53,54,53
+clothing-footwear-brands,brand,Hollister,Hollister,82,95,84,,81,83,44,45,39,,43,45
+clothing-footwear-brands,brand,Nautica,Nautica,81,83,86,82,83,79,48,48,43,46,50,46
+clothing-footwear-brands,brand,Wilson Sporting Goods,Wilson_Sporting_Goods,80,80,87,90,84,77,53,50,56,58,54,51
+clothing-footwear-brands,brand,UGG,UGG,80,87,80,71,,90,42,50,39,36,,51
+clothing-footwear-brands,brand,Dolce & Gabbana,Dolce_Gabbana,80,86,87,,76,83,45,46,43,,40,49
+clothing-footwear-brands,brand,Shein,Shein,79,86,82,,,88,36,43,25,,,36
+clothing-footwear-brands,brand,Birkenstock,Birkenstock,79,77,82,79,75,83,45,44,42,40,38,51
+clothing-footwear-brands,brand,Oakley,Oakley,79,86,88,77,79,78,47,49,50,44,45,49
+clothing-footwear-brands,brand,Claire's Accessories,Claires_Accessories,78,89,,,72,85,43,49,,,41,45
+clothing-footwear-brands,brand,Hot Topic,Hot_Topic,78,92,81,,79,78,41,51,31,,37,44
+clothing-footwear-brands,brand,Kate Spade,Kate_Spade,78,84,,70,72,85,46,46,,31,38,55
+clothing-footwear-brands,brand,Samsonite,Samsonite,78,74,91,96,80,75,53,44,59,70,55,51
+clothing-footwear-brands,brand,Vera Wang,Vera_Wang,78,79,85,84,76,80,45,49,46,42,41,50
+clothing-footwear-brands,brand,DKNY,DKNY,77,79,77,75,75,79,45,42,37,36,39,51
+clothing-footwear-brands,brand,Lane Bryant,Lane_Bryant,77,73,84,86,,83,40,42,38,38,,44
+clothing-footwear-brands,brand,Asics,Asics,76,81,84,70,78,75,49,50,50,40,50,48
+clothing-footwear-brands,brand,Lands' End,Lands_End,76,,83,89,75,77,46,,42,56,42,49
+clothing-footwear-brands,brand,Liz Claiborne,Liz_Claiborne,76,,91,92,75,77,41,,38,52,37,46
+clothing-footwear-brands,brand,Duluth Trading Co.,Duluth_Trading_Co,76,75,85,83,84,,45,48,47,52,52,
+clothing-footwear-brands,brand,Burberry,Burberry,75,82,77,,74,77,43,48,40,,38,49
+clothing-footwear-brands,brand,Hush Puppies,Hush_Puppies,75,,86,93,77,73,46,,46,59,47,46
+clothing-footwear-brands,brand,Yves Saint Laurent,Yves_Saint_Laurent,74,,77,83,72,77,45,,38,40,43,48
+clothing-footwear-brands,brand,Fossil,Fossil,74,77,80,,76,,40,49,44,,37,
+clothing-footwear-brands,brand,GapBody,GapBody,74,76,,,79,,43,51,,,45,
+clothing-footwear-brands,brand,Jimmy Choo,Jimmy_Choo,74,78,76,,,79,41,43,36,,,46
+clothing-footwear-brands,brand,Seiko,Seiko,73,,86,91,79,,48,,50,66,57,
+clothing-footwear-brands,brand,K-Swiss,K_Swiss,73,79,83,,75,,43,43,46,,43,
+clothing-footwear-brands,brand,Ann Taylor,Ann_Taylor,72,,,74,,77,41,,,37,,45
+clothing-footwear-brands,brand,Hugo Boss,Hugo_Boss,72,79,79,70,81,,41,40,40,29,49,
+clothing-footwear-brands,brand,Balenciaga,Balenciaga,,78,,,,,,35,,,,
+clothing-footwear-brands,brand,Red Wing Shoes,Red_Wing_Shoes,,78,75,84,74,,,47,39,47,44,
+clothing-footwear-brands,brand,Pacific Sunwear,Pacific_Sunwear,,76,,,,,,47,,,,
+clothing-footwear-brands,brand,Kenneth Cole,Kenneth_Cole,,76,76,,,,,49,39,,,
+clothing-footwear-brands,brand,Express,Express,,73,,,,,,46,,,,
+clothing-footwear-brands,brand,Marc Jacobs,Marc_Jacobs,,73,,,,75,,45,,,,42
+clothing-footwear-brands,brand,Gloria Vanderbilt,Gloria_Vanderbilt,,,84,93,,,,,41,46,,
+clothing-footwear-brands,brand,London Fog,London_Fog,,,80,83,,,,,44,55,,
+clothing-footwear-brands,brand,Oscar de La Renta,Oscar_de_La_Renta,,,,84,,77,,,,44,,47
+clothing-footwear-brands,brand,Van Heusen,Van_Heusen,,,,81,76,,,,,43,39,
+clothing-footwear-brands,brand,Talbots,Talbots,,,,78,,75,,,,33,,37
+clothing-footwear-brands,brand,Brooks Brothers,Brooks_Brothers,,,,76,,,,,,41,,
+clothing-footwear-brands,brand,Church's,Churchs,,,,75,,,,,,40,,
+clothing-footwear-brands,brand,Jos. A. Bank,Jos_A_Bank,,,,73,75,,,,,36,43,
+clothing-footwear-brands,brand,Wolverine,Wolverine,,,,71,78,,,,,40,55,
+clothing-footwear-brands,brand,Patagonia,Patagonia,,,,,76,,,,,,45,
+clothing-footwear-brands,brand,Juicy Couture,Juicy_Couture,,,,,,79,,,,,,46
+clothing-footwear-brands,brand,Swarovski,Swarovski,,,,,,78,,,,,,55
+clothing-footwear-brands,brand,Nine West,Nine_West,,,,,,74,,,,,,44
+car-makers,brand,Chevrolet,Chevrolet,98,99,99,100,99,98,65,61,68,66,69,60
+car-makers,brand,Honda,Honda,98,97,99,99,98,98,70,71,72,75,74,65
+car-makers,brand,BMW,BMW,98,96,97,99,98,98,68,66,60,62,72,63
+car-makers,brand,Nissan,Nissan,98,96,99,100,98,97,64,62,58,60,66,62
+car-makers,brand,Ford,Ford,96,98,99,99,96,97,62,62,54,59,63,60
+car-makers,brand,Toyota,Toyota,96,95,95,100,96,97,69,72,69,77,66,73
+car-makers,brand,Kia,Kia,96,97,97,98,95,98,53,54,52,52,54,52
+car-makers,brand,Jeep,Jeep,96,94,98,100,95,96,57,61,56,54,56,58
+car-makers,brand,Volkswagen,Volkswagen,96,95,99,99,98,94,63,56,59,64,65,62
+car-makers,brand,GMC,GMC,96,97,99,99,96,95,59,57,53,63,64,54
+car-makers,brand,Audi,Audi,96,93,97,99,98,93,58,60,55,58,61,54
+car-makers,brand,Tesla,Tesla,96,93,99,97,98,94,42,41,32,28,48,37
+car-makers,brand,Mercedes-Benz,Mercedes_Benz,95,93,98,100,96,94,65,67,60,57,68,61
+car-makers,brand,Cadillac,Cadillac,95,95,96,99,97,94,59,62,54,59,60,58
+car-makers,brand,Hyundai,Hyundai,95,95,99,99,95,95,54,56,53,53,52,57
+car-makers,brand,Dodge,Dodge,95,94,98,99,98,92,52,55,53,49,54,50
+car-makers,brand,Mazda,Mazda,95,96,98,98,97,93,62,65,60,60,63,61
+car-makers,brand,Ferrari,Ferrari,95,91,97,96,98,91,60,60,57,54,68,52
+car-makers,brand,Lamborghini,Lamborghini,95,93,96,97,96,93,56,60,49,55,62,49
+car-makers,brand,Chrysler,Chrysler,95,94,94,99,96,93,50,47,47,49,53,47
+car-makers,brand,Buick,Buick,94,90,99,99,94,94,49,50,45,60,51,47
+car-makers,brand,Subaru,Subaru,94,97,97,99,97,91,62,61,62,70,66,59
+car-makers,brand,Porsche,Porsche,94,93,97,99,96,92,62,60,57,68,66,57
+car-makers,brand,Acura,Acura,94,95,96,98,94,94,60,53,56,60,63,56
+car-makers,brand,Land Rover,Land_Rover,93,92,97,97,97,88,57,58,53,51,61,52
+car-makers,brand,Lexus,Lexus,93,96,98,97,94,92,61,65,57,59,64,57
+car-makers,brand,General Motors,General_Motors,93,97,97,99,94,92,57,64,55,67,56,59
+car-makers,brand,Mitsubishi,Mitsubishi,92,95,98,99,93,91,51,56,53,46,53,49
+car-makers,brand,Jaguar,Jaguar,92,91,94,98,94,90,55,58,50,61,59,50
+car-makers,brand,RAM,RAM,91,88,89,94,92,90,52,52,42,50,55,49
+car-makers,brand,Ram Trucks,Ram_Trucks,90,92,96,96,94,86,51,51,47,48,54,48
+car-makers,brand,Volvo,Volvo,90,94,93,97,91,90,56,56,48,60,59,52
+car-makers,brand,Infiniti,Infiniti,89,90,90,90,93,85,51,58,48,49,56,45
+car-makers,brand,Bentley,Bentley,87,83,89,93,87,87,51,47,43,53,55,47
+car-makers,brand,Lincoln,Lincoln,85,85,84,85,92,78,52,47,45,47,60,44
+car-makers,brand,Carvana,Carvana,84,86,92,91,82,86,42,45,40,36,44,41
+car-makers,brand,Aston Martin,Aston_Martin,82,81,84,86,92,71,50,45,55,46,57,42
+car-makers,brand,Fiat,Fiat,81,85,87,91,85,78,38,41,29,42,38,37
+car-makers,brand,Bugatti,Bugatti,80,82,74,70,87,73,49,52,40,38,61,38
+car-makers,brand,Maserati,Maserati,78,86,89,78,85,71,42,46,39,40,49,34
+car-makers,brand,MINI,MINI,71,76,69,70,72,71,40,46,34,32,40,40
+car-makers,brand,Alfa Romeo,Alfa_Romeo,70,60,77,87,79,61,35,35,40,39,42,30
+car-makers,brand,Genesis,Genesis-Brand,69,69,77,69,74,63,40,41,40,32,45,35
+car-makers,brand,Peugeot,Peugeot,65,59,60,75,80,50,34,32,18,30,42,27
+car-makers,brand,Renault,Renault,62,51,66,79,70,54,29,21,21,30,33,24
+car-makers,brand,Rivian,Rivian,54,62,45,42,70,36,30,38,19,12,40,18
+car-makers,brand,Citroën,Citroen,53,58,47,51,66,38,29,37,15,18,37,20
+car-makers,brand,Polestar,Polestar,52,54,41,40,64,39,31,33,18,11,37,24
+car-makers,brand,Scout Motors,Scout_Motors,44,59,30,21,50,37,25,34,12,9,28,21
+car-makers,brand,Daihatsu,Daihatsu,43,44,37,39,54,32,19,29,13,9,24,15
+car-makers,brand,BYD Auto,BYD_Auto,42,54,23,17,55,27,25,36,12,7,35,13
+car-makers,brand,Slate Auto,Slate_Auto,39,48,20,16,48,30,24,31,11,4,33,16
+socials-apps-websites,brand,TikTok,TikTok-Social_Network,99,99,99,100,99,98,46,51,44,29,41,50
+socials-apps-websites,brand,YouTube,YouTube-Social_Network,98,97,99,100,99,98,82,77,85,81,81,84
+socials-apps-websites,brand,Instagram,Instagram-Social_Network,98,99,99,100,98,99,63,62,60,46,62,64
+socials-apps-websites,brand,Facebook App,Facebook_App,97,96,99,97,98,97,56,58,54,56,54,58
+socials-apps-websites,brand,Facebook,Facebook-Social_Network,97,97,100,100,97,98,56,58,56,57,55,58
+socials-apps-websites,brand,GoFundMe,GoFundMe,97,98,99,96,98,96,56,61,54,50,53,60
+socials-apps-websites,brand,Linkedin,Linkedin,97,97,95,96,97,96,52,44,41,41,54,51
+socials-apps-websites,brand,Snapchat,Snapchat-Social_Network,96,95,97,96,96,97,41,44,34,17,40,42
+socials-apps-websites,brand,Facebook Messenger,Facebook_Messenger,96,96,96,97,95,97,58,63,58,61,53,64
+socials-apps-websites,brand,Pinterest,Pinterest-Social_Network,96,97,96,97,95,97,58,55,54,46,47,67
+socials-apps-websites,brand,WhatsApp,WhatsApp-Social_Network,96,97,96,95,96,96,47,53,36,32,47,46
+socials-apps-websites,brand,X (formerly known as Twitter),X_formerly_known_as_Twitter,95,94,96,98,96,94,41,45,33,25,47,35
+socials-apps-websites,brand,Reddit,Reddit-Social_Network,95,94,96,94,97,92,49,54,46,38,48,51
+socials-apps-websites,brand,Facetime,Facetime,93,95,92,90,91,96,59,64,49,54,53,66
+socials-apps-websites,brand,Tinder,Tinder,90,90,89,86,90,89,24,33,17,9,29,19
+socials-apps-websites,brand,Myspace,Myspace-Social_Network,89,95,92,86,90,88,39,48,36,18,38,40
+socials-apps-websites,brand,Threads,Threads-Social_Network,86,91,81,75,87,84,37,39,31,21,35,39
+socials-apps-websites,brand,iMessage,iMessage-Application,84,88,76,73,84,83,56,62,47,45,57,55
+socials-apps-websites,brand,Tumblr,Tumblr-Social_Network,83,89,81,70,87,79,33,39,19,11,31,37
+socials-apps-websites,brand,Match.com,Match_com,82,90,87,77,82,81,25,28,21,16,26,24
+socials-apps-websites,brand,eHarmony,eHarmony,81,81,90,86,83,79,29,27,23,20,33,24
+socials-apps-websites,brand,Twitch,Twitch-Social_Network,80,83,74,60,85,73,33,34,18,9,37,28
+socials-apps-websites,brand,Discord,Discord,78,86,74,53,83,73,36,43,23,8,41,31
+socials-apps-websites,brand,Tumblr,Tumblr,77,85,78,65,83,71,32,43,22,12,35,30
+socials-apps-websites,brand,Nextdoor,Nextdoor,76,84,72,71,79,73,43,46,33,35,43,42
+socials-apps-websites,brand,Truth Social,Truth_Social,72,69,72,77,81,64,26,22,22,19,32,20
+socials-apps-websites,brand,Grindr,Grindr,69,73,59,55,74,64,21,27,9,9,25,18
+socials-apps-websites,brand,Quora,Quora,68,73,62,47,74,63,33,32,19,14,38,29
+socials-apps-websites,brand,Bumble,Bumble,66,74,67,50,70,62,25,28,19,12,30,20
+socials-apps-websites,brand,Flickr,Flickr,65,68,66,51,70,58,32,35,23,11,36,28
+socials-apps-websites,brand,Goodreads,Goodreads,62,76,52,55,61,63,39,53,25,33,37,41
+socials-apps-websites,brand,Change.org,Change_org-Website,61,65,57,40,64,58,36,38,28,18,35,36
+socials-apps-websites,brand,Bluesky,Bluesky,58,68,46,43,68,48,26,31,16,16,28,24
+socials-apps-websites,brand,Hinge,Hinge,58,70,40,21,59,56,24,27,10,4,31,17
+socials-apps-websites,brand,Bitmoji,Bitmoji,57,66,47,31,54,59,29,38,20,11,24,34
+socials-apps-websites,brand,Rumble,Rumble,56,59,43,48,66,46,27,28,14,11,31,23
+socials-apps-websites,brand,Facebook Lite,Facebook_Lite,56,65,46,37,61,50,29,38,15,12,31,27
+socials-apps-websites,brand,Answers.com,Answers_com,55,69,48,37,63,47,26,35,19,10,25,28
+socials-apps-websites,brand,Wikia,Wikia,53,62,33,34,61,43,30,38,16,13,37,23
+socials-apps-websites,brand,Google Duo,Google_Duo,52,61,43,30,57,47,29,35,21,11,31,25
+socials-apps-websites,brand,Meetup,Meetup-Social_Network,52,60,41,41,55,48,23,26,10,9,27,20
+socials-apps-websites,brand,OkCupid,OkCupid-Mobile_Application_2,50,65,46,21,53,47,18,24,9,4,21,15
+socials-apps-websites,brand,Blogger.com,Blogger_com,50,64,42,31,57,43,24,41,16,6,27,21
+socials-apps-websites,brand,Kik Messenger,Kik_Messenger,46,57,37,17,52,40,24,32,14,6,29,19
+socials-apps-websites,brand,Parler,Parler,46,45,38,37,55,36,20,21,7,5,27,12
+socials-apps-websites,brand,PicsArt Photo Studio,PicsArt_Photo_Studio,45,54,35,18,48,43,28,39,16,7,28,28
+socials-apps-websites,brand,Lifehacker,Lifehacker,45,57,28,23,54,33,26,37,12,3,32,18
+socials-apps-websites,brand,BeReal,BeReal-Social_Network,45,44,27,17,47,43,23,20,9,2,25,20
+socials-apps-websites,brand,StackExchange,StackExchange,45,57,32,26,52,36,25,28,16,8,28,22
+socials-apps-websites,brand,Imgur,Imgur,42,56,30,11,55,29,21,29,9,3,25,16
+socials-apps-websites,brand,Meet me,Meet_me,42,51,33,18,50,34,23,30,12,3,29,16
+socials-apps-websites,brand,TuneIn Radio,TuneIn_Radio,41,50,33,21,48,34,24,31,13,8,30,19
+socials-apps-websites,brand,Gab,Gab,41,44,24,23,49,31,18,21,7,2,21,14
+socials-apps-websites,brand,Zoosk,Zoosk,40,51,38,26,44,36,17,20,8,6,19,15
+socials-apps-websites,brand,Smule,Smule,39,49,22,12,43,36,22,32,8,1,24,21
+socials-apps-websites,brand,Viber,Viber,36,43,25,20,45,26,18,21,9,3,23,13
+socials-apps-websites,brand,Hive Social,Hive_Social,36,43,24,15,44,28,17,21,5,2,22,12
+socials-apps-websites,brand,Swarm,Swarm,36,43,19,16,40,32,20,25,8,3,22,18
+socials-apps-websites,brand,Clubhouse,Clubhouse-Social_Network,36,44,23,15,41,30,18,25,7,2,20,15
+socials-apps-websites,brand,Yubo,Yubo,35,39,19,14,41,28,19,22,7,2,21,16
+socials-apps-websites,brand,MeWe,MeWe,34,39,25,17,39,30,18,20,8,3,20,16
+all-time-actors-actresses,person,Will Smith,Will_Smith,97,97,99,99,99,96,57,61,50,53,59,56
+all-time-actors-actresses,person,Brad Pitt,Brad_Pitt,97,97,99,99,98,96,72,65,72,76,79,65
+all-time-actors-actresses,person,Johnny Depp,Johnny_Depp,97,94,98,100,97,96,67,69,68,70,64,71
+all-time-actors-actresses,person,Leonardo DiCaprio,Leonardo_DiCaprio,96,99,97,99,98,95,66,67,65,72,70,61
+all-time-actors-actresses,person,Eddie Murphy,Eddie_Murphy,96,98,99,100,98,95,74,69,80,81,74,74
+all-time-actors-actresses,person,Adam Sandler,Adam_Sandler,96,97,98,100,97,96,71,71,69,70,73,70
+all-time-actors-actresses,person,Marilyn Monroe,Marilyn_Monroe,96,99,99,99,97,95,70,68,71,76,71,68
+all-time-actors-actresses,person,Tom Cruise,Tom_Cruise,96,92,100,100,96,96,59,55,58,52,62,56
+all-time-actors-actresses,person,Jim Carrey,Jim_Carrey,96,96,98,100,95,96,74,80,71,67,75,74
+all-time-actors-actresses,person,Sandra Bullock,Sandra_Bullock,96,97,98,100,95,97,79,80,82,87,76,83
+all-time-actors-actresses,person,Cameron Diaz,Cameron_Diaz,96,99,99,99,96,95,69,69,71,70,70,67
+all-time-actors-actresses,person,Robert Downey Jr.,Robert_Downey_Jr,96,97,,,96,95,71,74,,,71,72
+all-time-actors-actresses,person,Whoopi Goldberg,Whoopi_Goldberg,96,96,100,100,96,95,52,55,53,48,50,55
+all-time-actors-actresses,person,Dwayne Johnson,Dwayne_Johnson,95,96,99,,96,95,69,70,68,,69,69
+all-time-actors-actresses,person,Jackie Chan,Jackie_Chan,95,94,,,96,94,78,71,,,79,76
+all-time-actors-actresses,person,Ben Affleck,Ben_Affleck,95,97,98,99,95,95,67,65,65,70,66,68
+all-time-actors-actresses,person,Bruce Lee,Bruce_Lee,95,95,98,99,97,94,77,77,79,75,83,70
+all-time-actors-actresses,person,Jennifer Aniston,Jennifer_Aniston,95,95,99,99,95,95,70,72,77,73,69,70
+all-time-actors-actresses,person,Keanu Reeves,Keanu_Reeves,95,96,97,,95,95,82,86,83,,82,82
+all-time-actors-actresses,person,Morgan Freeman,Morgan_Freeman-Actor,95,96,,99,96,94,83,83,,90,83,84
+all-time-actors-actresses,person,Bill Cosby,Bill_Cosby,95,96,98,100,97,92,37,35,28,30,42,32
+all-time-actors-actresses,person,Tom Hanks,Tom_Hanks,94,97,98,99,98,90,74,81,78,78,77,71
+all-time-actors-actresses,person,Robert De Niro,Robert_De_Niro,94,,100,100,96,92,67,,68,72,68,66
+all-time-actors-actresses,person,Robin Williams,Robin_Williams,94,96,,99,92,96,80,81,,91,77,84
+all-time-actors-actresses,person,Matt Damon,Matt_Damon,94,,97,,96,92,73,,74,,74,72
+all-time-actors-actresses,person,Lindsay Lohan,Lindsay_Lohan,94,93,98,,95,92,51,56,43,,53,48
+all-time-actors-actresses,person,Sylvester Stallone,Sylvester_Stallone,94,95,99,100,95,92,68,64,73,70,70,65
+all-time-actors-actresses,person,Danny DeVito,Danny_DeVito,94,93,97,99,95,92,77,75,85,85,79,75
+all-time-actors-actresses,person,Jennifer Lawrence,Jennifer_Lawrence,94,94,,,95,92,72,72,,,74,71
+all-time-actors-actresses,person,Kevin Hart,Kevin_Hart,94,94,,,94,93,63,64,,,64,62
+all-time-actors-actresses,person,Samuel L. Jackson,Samuel_L_Jackson,93,95,100,,94,93,78,81,89,,77,78
+all-time-actors-actresses,person,Angelina Jolie,Angelina_Jolie,93,95,97,99,92,95,64,63,58,57,64,63
+all-time-actors-actresses,person,Vin Diesel,Vin_Diesel,93,93,,,94,92,59,61,,,58,61
+all-time-actors-actresses,person,Clint Eastwood,Clint_Eastwood,93,94,99,100,94,92,64,57,80,85,65,63
+all-time-actors-actresses,person,Michael J. Fox,Michael_J_Fox,93,94,99,100,94,92,76,72,83,91,77,75
+all-time-actors-actresses,person,Queen Latifah,Queen_Latifah,93,94,99,,,96,64,68,69,,,71
+all-time-actors-actresses,person,Nicolas Cage,Nicolas_Cage,93,92,97,,92,94,71,68,79,,72,70
+all-time-actors-actresses,person,Betty White,Betty_White,93,,98,99,95,91,80,,91,92,78,83
+all-time-actors-actresses,person,Demi Moore,Demi_Moore,93,,99,98,,95,64,,71,66,,61
+all-time-actors-actresses,person,Megan Fox,Megan_Fox,93,94,,,96,89,52,56,,,60,43
+all-time-actors-actresses,person,Will Ferrell,Will_Ferrell,93,95,97,,94,91,66,69,69,,67,65
+all-time-actors-actresses,person,Hugh Jackman,Hugh_Jackman,93,94,,,94,91,72,75,,,76,68
+all-time-actors-actresses,person,John Travolta,John_Travolta,93,96,98,99,95,91,63,59,68,76,67,60
+all-time-actors-actresses,person,Julia Roberts,Julia_Roberts,93,95,100,99,93,93,67,63,74,77,65,70
+all-time-actors-actresses,person,George Lopez,George_Lopez,92,,,,94,91,56,,,,55,57
+all-time-actors-actresses,person,Ryan Reynolds,Ryan_Reynolds,92,94,,,92,93,63,68,,,63,63
+all-time-actors-actresses,person,Harrison Ford,Harrison_Ford,92,96,97,,95,90,76,78,80,,83,70
+all-time-actors-actresses,person,Halle Berry,Halle_Berry,92,93,98,,,95,71,71,76,,,73
+all-time-actors-actresses,person,Scarlett Johansson,Scarlett_Johansson,92,,,,94,90,69,,,,72,67
+all-time-actors-actresses,person,Kate Hudson,Kate_Hudson,92,93,98,,92,92,66,68,67,,65,67
+all-time-actors-actresses,person,George Clooney,George_Clooney,92,95,98,,91,93,61,67,67,,60,62
+all-time-actors-actresses,person,Chuck Norris,Chuck_Norris,92,93,99,,94,90,62,59,62,,68,56
+all-time-actors-actresses,person,Ryan Gosling,Ryan_Gosling,92,93,,,,94,68,69,,,,68
+all-time-actors-actresses,person,Alec Baldwin,Alec_Baldwin,92,94,99,99,92,92,49,49,47,51,54,44
+all-time-actors-actresses,person,Meryl Streep,Meryl_Streep,92,92,,,91,93,68,70,,,62,74
+all-time-actors-actresses,person,Denzel Washington,Denzel_Washington,92,92,99,99,91,92,80,81,87,90,78,83
+all-time-actors-actresses,person,Jamie Foxx,Jamie_Foxx,92,96,,98,92,91,65,70,,65,67,63
+all-time-actors-actresses,person,Ben Stiller,Ben_Stiller,92,97,97,,93,90,66,74,64,,70,63
+all-time-actors-actresses,person,Matthew McConaughey,Matthew_McConaughey,91,,,,92,91,72,,,,72,73
+all-time-actors-actresses,person,Tim Allen,Tim_Allen,91,,,,94,,62,,,,64,
+all-time-actors-actresses,person,Michael Keaton,Michael_Keaton,91,,,,97,,71,,,,76,
+all-time-actors-actresses,person,Chris Rock,Chris_Rock,91,94,97,,97,,59,65,64,,64,
+all-time-actors-actresses,person,Bill Murray,Bill_Murray,91,94,97,,93,,72,77,75,,78,
+all-time-actors-actresses,person,Bruce Willis,Bruce_Willis,91,93,98,99,,92,78,79,88,86,,79
+all-time-actors-actresses,person,Mel Gibson,Mel_Gibson,91,,97,99,92,89,58,,62,66,57,58
+all-time-actors-actresses,person,Ashton Kutcher,Ashton_Kutcher,91,94,,,93,,54,56,,,55,
+all-time-actors-actresses,person,Drew Barrymore,Drew_Barrymore,91,,98,,,91,66,,69,,,69
+all-time-actors-actresses,person,Charlie Chaplin,Charlie_Chaplin,91,,98,99,93,,61,,64,74,68,
+all-time-actors-actresses,person,Emma Stone,Emma_Stone,91,95,,,,91,66,70,,,,63
+all-time-actors-actresses,person,Macaulay Culkin,Macaulay_Culkin,90,94,,,94,,63,67,,,65,
+all-time-actors-actresses,person,Jamie Lee Curtis,Jamie_Lee_Curtis,90,,99,,,91,71,,77,,,72
+all-time-actors-actresses,person,Jack Black,Jack_Black,90,,,,93,,67,,,,71,
+all-time-actors-actresses,person,Tina Fey,Tina_Fey,90,,,,,90,67,,,,,67
+all-time-actors-actresses,person,Al Pacino,Al_Pacino,90,93,99,,91,89,69,70,78,,71,67
+all-time-actors-actresses,person,Jennifer Garner,Jennifer_Garner,90,94,97,,,94,67,65,73,,,72
+all-time-actors-actresses,person,Russell Crowe,Russell_Crowe,90,93,,,96,,62,65,,,70,
+all-time-actors-actresses,person,Mark Wahlberg,Mark_Wahlberg,90,93,97,,93,,68,68,73,,69,
+all-time-actors-actresses,person,Reese Witherspoon,Reese_Witherspoon,90,,,,,91,68,,,,,68
+all-time-actors-actresses,person,Emma Watson,Emma_Watson,90,93,,,,91,62,69,,,,63
+all-time-actors-actresses,person,William Shatner,William_Shatner,90,,,,95,,64,,,,72,
+all-time-actors-actresses,person,Nicole Kidman,Nicole_Kidman,,95,99,99,,,,64,72,72,,
+all-time-actors-actresses,person,Jessica Alba,Jessica_Alba,,95,,,,,,67,,,,
+all-time-actors-actresses,person,Jason Momoa,Jason_Momoa,,95,,,,90,,68,,,,70
+all-time-actors-actresses,person,Owen Wilson,Owen_Wilson,,95,,,,,,68,,,,
+all-time-actors-actresses,person,Jaden Smith,Jaden_Smith,,94,,,,90,,46,,,,39
+all-time-actors-actresses,person,Mike Myers,Mike_Myers,,93,,,,,,69,,,,
+all-time-actors-actresses,person,Charlie Sheen,Charlie_Sheen,,93,,100,92,,,49,,59,55,
+all-time-actors-actresses,person,Kristen Bell,Kristen_Bell,,93,,,,,,68,,,,
+all-time-actors-actresses,person,Paul Rudd,Paul_Rudd,,93,,,,,,73,,,,
+all-time-actors-actresses,person,David Spade,David_Spade,,92,,,94,,,56,,,62,
+all-time-actors-actresses,person,Terry Crews,Terry_Crews,,92,,,,,,75,,,,
+all-time-actors-actresses,person,Bob Saget,Bob_Saget,,92,,,,,,61,,,,
+all-time-actors-actresses,person,Raven-Symoné,Raven_Symone,,92,,,,,,55,,,,
+all-time-actors-actresses,person,Sean Connery,Sean_Connery,,92,98,100,92,,,74,86,91,77,
+all-time-actors-actresses,person,Liam Hemsworth,Liam_Hemsworth,,92,,,,,,65,,,,
+all-time-actors-actresses,person,Zac Efron,Zac_Efron,,92,,,91,,,58,,,54,
+all-time-actors-actresses,person,Mandy Moore,Mandy_Moore,,92,,,,,,63,,,,
+all-time-actors-actresses,person,Jane Fonda,Jane_Fonda,,,99,99,,,,,57,59,,
+all-time-actors-actresses,person,Jack Nicholson,Jack_Nicholson,,,98,,,90,,,81,,,64
+all-time-actors-actresses,person,Steven Seagal,Steven_Seagal,,,98,,91,,,,46,,46,
+all-time-actors-actresses,person,Jennifer Love Hewitt,Jennifer_Love_Hewitt,,,98,,,,,,72,,,
+all-time-actors-actresses,person,Rosie O'Donnell,Rosie_ODonnell,,,98,99,,,,,40,37,,
+all-time-actors-actresses,person,Mr. T,Mr_T,,,98,99,,91,,,70,60,,57
+all-time-actors-actresses,person,Steve Martin,Steve_Martin,,,98,,,,,,87,,,
+all-time-actors-actresses,person,Sean Penn,Sean_Penn,,,98,,,,,,58,,,
+all-time-actors-actresses,person,Kurt Russell,Kurt_Russell,,,98,99,,,,,77,86,,
+all-time-actors-actresses,person,Meg Ryan,Meg_Ryan,,,98,99,,,,,65,79,,
+all-time-actors-actresses,person,Sharon Stone,Sharon_Stone,,,97,,,,,,69,,,
+all-time-actors-actresses,person,Bob Hope,Bob_Hope,,,97,99,,,,,74,81,,
+all-time-actors-actresses,person,Christina Applegate,Christina_Applegate,,,97,,,,,,77,,,
+all-time-actors-actresses,person,Wesley Snipes,Wesley_Snipes,,,97,,,,,,68,,,
+all-time-actors-actresses,person,Tony Danza,Tony_Danza,,,97,,,,,,63,,,
+all-time-actors-actresses,person,Tom Selleck,Tom_Selleck,,,97,100,,,,,73,80,,
+all-time-actors-actresses,person,Shirley Temple,Shirley_Temple,,,97,100,,91,,,71,85,,70
+all-time-actors-actresses,person,Tommy Lee Jones,Tommy_Lee_Jones,,,97,,,,,,75,,,
+all-time-actors-actresses,person,Woody Harrelson,Woody_Harrelson,,,97,,,,,,77,,,
+all-time-actors-actresses,person,Brooke Shields,Brooke_Shields,,,97,99,,,,,67,70,,
+all-time-actors-actresses,person,Richard Dreyfuss,Richard_Dreyfuss,,,97,,,,,,67,,,
+all-time-actors-actresses,person,Dustin Hoffman,Dustin_Hoffman,,,97,99,,,,,79,83,,
+all-time-actors-actresses,person,Roseanne Barr,Roseanne_Barr,,,97,,,,,,36,,,
+all-time-actors-actresses,person,Burt Reynolds,Burt_Reynolds,,,97,99,91,,,,67,74,65,
+all-time-actors-actresses,person,Hugh Grant,Hugh_Grant,,,97,,,,,,63,,,
+all-time-actors-actresses,person,Dick Van Dyke,Dick_Van_Dyke,,,,100,,,,,,91,,
+all-time-actors-actresses,person,Mary Tyler Moore,Mary_Tyler_Moore,,,,100,,,,,,91,,
+all-time-actors-actresses,person,Kirk Douglas,Kirk_Douglas,,,,100,,,,,,84,,
+all-time-actors-actresses,person,Farrah Fawcett,Farrah_Fawcett,,,,100,,,,,,81,,
+all-time-actors-actresses,person,Kevin Costner,Kevin_Costner,,,,100,,,,,,83,,
+all-time-actors-actresses,person,Robert Redford,Robert_Redford,,,,100,,,,,,86,,
+all-time-actors-actresses,person,Jodie Foster,Jodie_Foster,,,,100,,90,,,,82,,69
+all-time-actors-actresses,person,Sally Field,Sally_Field,,,,100,,,,,,88,,
+all-time-actors-actresses,person,Elizabeth Taylor,Elizabeth_Taylor,,,,100,,,,,,81,,
+all-time-actors-actresses,person,Marlon Brando,Marlon_Brando,,,,100,,,,,,80,,
+all-time-actors-actresses,person,Carol Burnett,Carol_Burnett,,,,99,,,,,,93,,
+all-time-actors-actresses,person,Bette Davis,Bette_Davis,,,,99,,,,,,78,,
+all-time-actors-actresses,person,John Wayne,John_Wayne,,,,99,,,,,,71,,
+all-time-actors-actresses,person,Chevy Chase,Chevy_Chase,,,,99,,,,,,69,,
+all-time-actors-actresses,person,Richard Gere,Richard_Gere,,,,99,,,,,,70,,
+all-time-actors-actresses,person,Olivia Newton-John,Olivia_Newton_John,,,,99,,,,,,81,,
+all-time-actors-actresses,person,Michael Landon,Michael_Landon,,,,99,,,,,,79,,
+all-time-actors-actresses,person,Lucille Ball,Lucille_Ball,,,,99,,,,,,90,,
+all-time-actors-actresses,person,Jim Belushi,Jim_Belushi,,,,99,,,,,,74,,
+all-time-actors-actresses,person,Andy Griffith,Andy_Griffith,,,,99,,,,,,86,,
+all-time-actors-actresses,person,Ted Danson,Ted_Danson,,,,99,,,,,,77,,
+all-time-actors-actresses,person,Suzanne Somers,Suzanne_Somers,,,,99,,,,,,70,,
+all-time-actors-actresses,person,Audrey Hepburn,Audrey_Hepburn,,,,99,,92,,,,87,,75
+all-time-actors-actresses,person,Goldie Hawn,Goldie_Hawn,,,,99,,,,,,82,,
+all-time-actors-actresses,person,Shirley MacLaine,Shirley_MacLaine,,,,99,,,,,,77,,
+all-time-actors-actresses,person,Mickey Rooney,Mickey_Rooney,,,,99,,,,,,74,,
+all-time-actors-actresses,person,Michael Douglas,Michael_Douglas,,,,99,,,,,,83,,
+all-time-actors-actresses,person,Liza Minnelli,Liza_Minnelli,,,,99,,,,,,69,,
+all-time-actors-actresses,person,Sidney Poitier,Sidney_Poitier,,,,99,,,,,,89,,
+all-time-actors-actresses,person,Humphrey Bogart,Humphrey_Bogart,,,,99,,,,,,84,,
+all-time-actors-actresses,person,Doris Day,Doris_Day,,,,99,,,,,,82,,
+all-time-actors-actresses,person,James Earl Jones,James_Earl_Jones,,,,,93,,,,,,80,
+all-time-actors-actresses,person,Christian Bale,Christian_Bale,,,,,93,,,,,,68,
+all-time-actors-actresses,person,Danny Glover,Danny_Glover,,,,,92,,,,,,72,
+all-time-actors-actresses,person,David Schwimmer,David_Schwimmer,,,,,92,,,,,,55,
+all-time-actors-actresses,person,Liam Neeson,Liam_Neeson,,,,,92,,,,,,74,
+all-time-actors-actresses,person,Gwyneth Paltrow,Gwyneth_Paltrow,,,,,91,,,,,,59,
+all-time-actors-actresses,person,Anne Hathaway,Anne_Hathaway,,,,,,93,,,,,,71
+all-time-actors-actresses,person,Hilary Duff,Hilary_Duff,,,,,,91,,,,,,54
+all-time-actors-actresses,person,Matthew Perry,Matthew_Perry,,,,,,91,,,,,,63
+all-time-actors-actresses,person,Channing Tatum,Channing_Tatum,,,,,,90,,,,,,60
+all-time-sports-personalities,person,Michael Jordan,Michael_Jordan,94,94,94,97,95,93,72,71,73,75,75,67
+all-time-sports-personalities,person,Muhammad Ali,Muhammad_Ali,93,91,97,99,94,93,72,71,75,77,75,69
+all-time-sports-personalities,person,Kobe Bryant,Kobe_Bryant,92,91,96,97,94,90,67,65,64,66,69,64
+all-time-sports-personalities,person,Mike Tyson,Mike_Tyson,92,90,96,97,93,92,55,57,56,45,63,47
+all-time-sports-personalities,person,Shaquille O'Neal,Shaquille_ONeal,92,91,97,97,94,90,72,66,76,76,74,69
+all-time-sports-personalities,person,Serena Williams,Serena_Williams,92,91,94,96,93,91,62,62,58,59,62,63
+all-time-sports-personalities,person,LeBron James,LeBron_James,92,93,92,96,94,89,55,60,47,53,57,53
+all-time-sports-personalities,person,Babe Ruth,Babe_Ruth,90,89,98,97,90,89,67,60,80,84,66,69
+all-time-sports-personalities,person,Tiger Woods,Tiger_Woods,90,93,94,97,95,84,40,46,34,40,52,28
+all-time-sports-personalities,person,John Cena,John_Cena,89,91,88,82,93,86,61,69,53,45,65,57
+all-time-sports-personalities,person,Tom Brady,Tom_Brady,89,90,92,95,92,86,50,44,47,51,55,44
+all-time-sports-personalities,person,Magic Johnson,Magic_Johnson,89,88,94,97,93,84,62,58,69,73,67,57
+all-time-sports-personalities,person,Michael Phelps,Michael_Phelps,85,82,89,91,91,80,59,52,58,61,67,52
+all-time-sports-personalities,person,Jackie Robinson,Jackie_Robinson,85,82,83,93,87,83,69,64,70,82,73,65
+all-time-sports-personalities,person,Peyton Manning,Peyton_Manning,84,83,92,95,88,79,54,49,61,64,60,48
+all-time-sports-personalities,person,Travis Kelce,Travis_Kelce,83,76,83,89,87,79,45,42,39,48,48,42
+all-time-sports-personalities,person,Dennis Rodman,Dennis_Rodman,82,79,92,95,89,75,36,38,35,30,45,27
+all-time-sports-personalities,person,David Beckham,David_Beckham,82,86,88,87,87,76,50,52,50,52,55,44
+all-time-sports-personalities,person,Simone Biles,Simone_Biles,82,83,82,85,86,77,61,65,59,64,62,61
+all-time-sports-personalities,person,Charles Barkley,Charles_Barkley,82,82,90,91,87,75,56,56,59,61,63,48
+all-time-sports-personalities,person,George Foreman,George_Foreman,81,79,93,95,84,77,57,52,66,68,63,49
+all-time-sports-personalities,person,Floyd Mayweather Jr.,Floyd_Mayweather_Jr,81,84,88,84,89,73,46,47,48,43,53,39
+all-time-sports-personalities,person,Colin Kaepernick,Colin_Kaepernick,80,80,83,85,84,75,43,48,34,36,44,41
+all-time-sports-personalities,person,Lance Armstrong,Lance_Armstrong,80,76,89,95,86,74,35,34,35,35,39,32
+all-time-sports-personalities,person,Stephen Curry,Stephen_Curry,80,81,78,,87,72,54,57,50,,59,49
+all-time-sports-personalities,person,Venus Williams,Venus_Williams,80,79,90,91,83,76,56,51,58,64,57,56
+all-time-sports-personalities,person,Arnold Palmer,Arnold_Palmer,80,76,80,96,84,76,50,47,47,65,57,43
+all-time-sports-personalities,person,Larry Bird,Larry_Bird,79,75,91,89,88,70,57,56,63,68,65,48
+all-time-sports-personalities,person,Kareem Abdul-Jabbar,Kareem_Abdul_Jabbar,79,79,88,93,84,74,57,56,65,71,62,53
+all-time-sports-personalities,person,Eli Manning,Eli_Manning,79,77,89,91,85,72,51,44,55,61,58,44
+all-time-sports-personalities,person,Tonya Harding,Tonya_Harding,79,78,87,92,80,77,28,34,20,20,31,24
+all-time-sports-personalities,person,Dale Earnhardt,Dale_Earnhardt,79,75,87,93,84,72,53,46,56,62,61,45
+all-time-sports-personalities,person,Sugar Ray Robinson,Sugar_Ray_Robinson,78,74,88,95,84,73,55,52,63,72,65,45
+all-time-sports-personalities,person,Derek Jeter,Derek_Jeter,77,78,83,86,82,72,48,42,47,57,52,43
+all-time-sports-personalities,person,"Dale Earnhardt, Jr.",Dale_Earnhardt_Jr,77,77,87,94,82,71,46,42,51,58,49,43
+all-time-sports-personalities,person,Danica Patrick,Danica_Patrick,77,73,82,,84,71,46,41,45,,50,41
+all-time-sports-personalities,person,Patrick Mahomes,Patrick_Mahomes,77,76,,83,83,71,48,49,,55,55,40
+all-time-sports-personalities,person,John Madden,John_Madden,77,70,86,92,86,68,51,46,54,61,63,40
+all-time-sports-personalities,person,Sugar Ray Leonard,Sugar_Ray_Leonard,76,,87,95,86,66,51,,60,70,58,43
+all-time-sports-personalities,person,Joe Montana,Joe_Montana,76,,86,95,85,68,52,,57,69,62,42
+all-time-sports-personalities,person,Joe DiMaggio,Joe_DiMaggio,76,72,89,97,83,69,56,51,65,81,64,46
+all-time-sports-personalities,person,Mickey Mantle,Mickey_Mantle,76,70,87,96,82,69,57,47,66,78,63,49
+all-time-sports-personalities,person,Wayne Gretzky,Wayne_Gretzky,75,70,84,85,84,67,52,46,60,65,61,44
+all-time-sports-personalities,person,Brett Favre,Brett_Favre,75,81,82,86,82,68,42,43,41,44,52,33
+all-time-sports-personalities,person,Willie Mays,Willie_Mays,75,69,88,96,80,70,58,49,69,86,64,51
+all-time-sports-personalities,person,Oscar De La Hoya,Oscar_De_La_Hoya,75,72,82,83,80,69,45,40,46,49,50,40
+all-time-sports-personalities,person,Jake Paul,Jake_Paul-Sports_Personality,74,79,,,83,65,28,30,,,33,23
+all-time-sports-personalities,person,Jason Kelce,Jason_Kelce,74,76,,,80,68,43,39,,,47,39
+all-time-sports-personalities,person,Barry Bonds,Barry_Bonds,74,75,75,83,84,63,43,44,40,46,50,36
+all-time-sports-personalities,person,Wilt Chamberlain,Wilt_Chamberlain,74,70,81,92,84,64,53,46,57,72,63,44
+all-time-sports-personalities,person,Aaron Rodgers,Aaron_Rodgers,74,75,,,82,66,41,42,,,46,36
+all-time-sports-personalities,person,Usain Bolt,Usain_Bolt,73,79,,,84,61,53,56,,,60,46
+all-time-sports-personalities,person,Jesse Owens,Jesse_Owens,73,,,85,84,63,57,,,71,66,48
+all-time-sports-personalities,person,Caitlin Clark,Caitlin_Clark,73,69,,82,81,67,50,49,,59,61,41
+all-time-sports-personalities,person,Lou Gehrig,Lou_Gehrig,73,71,85,91,80,66,56,49,65,78,62,49
+all-time-sports-personalities,person,Lionel Messi,Lionel_Messi,73,77,,,83,62,46,48,,,56,35
+all-time-sports-personalities,person,Sammy Sosa,Sammy_Sosa,73,80,81,84,82,63,46,53,47,52,52,39
+all-time-sports-personalities,person,Terry Bradshaw,Terry_Bradshaw,73,71,78,93,82,64,47,45,50,65,56,38
+all-time-sports-personalities,person,Kevin Durant,Kevin_Durant,73,77,,,83,63,42,45,,,50,34
+all-time-sports-personalities,person,Hank Aaron,Hank_Aaron,73,,82,93,80,66,58,,70,85,65,52
+all-time-sports-personalities,person,Troy Aikman,Troy_Aikman,73,,82,84,82,63,47,,48,51,57,36
+all-time-sports-personalities,person,Scottie Pippen,Scottie_Pippen,72,73,80,,81,64,48,49,50,,58,39
+all-time-sports-personalities,person,Vince Lombardi,Vince_Lombardi,72,69,77,90,79,66,49,43,45,65,56,42
+all-time-sports-personalities,person,Ronda Rousey,Ronda_Rousey,72,81,78,,81,63,43,49,44,,51,34
+all-time-sports-personalities,person,Conor McGregor,Conor_McGregor,72,79,,,83,,35,39,,,41,
+all-time-sports-personalities,person,Yogi Berra,Yogi_Berra,72,,82,91,,65,51,,58,71,,41
+all-time-sports-personalities,person,Evel Knievel,Evel_Knievel,72,,80,91,81,,48,,58,58,57,
+all-time-sports-personalities,person,Dan Marino,Dan_Marino,71,70,84,86,79,64,46,43,49,54,56,36
+all-time-sports-personalities,person,Billie Jean King,Billie_Jean_King,71,,78,96,,66,47,,50,66,,44
+all-time-sports-personalities,person,"Ken Griffey, Jr.",Ken_Griffey_Jr,71,71,78,,81,62,47,48,49,,56,39
+all-time-sports-personalities,person,Deion Sanders,Deion_Sanders,71,68,82,,79,63,43,43,47,,47,39
+all-time-sports-personalities,person,Reggie Jackson,Reggie_Jackson,71,,84,92,81,,47,,56,67,54,
+all-time-sports-personalities,person,Cristiano Ronaldo,Cristiano_Ronaldo,70,77,,,,63,45,53,,,,39
+all-time-sports-personalities,person,Joe Namath,Joe_Namath,70,,83,95,,63,47,,47,73,,40
+all-time-sports-personalities,person,Evander Holyfield,Evander_Holyfield,70,,84,89,79,,44,,47,56,54,
+all-time-sports-personalities,person,Tim Tebow,Tim_Tebow,70,72,76,81,,62,40,42,41,46,,34
+all-time-sports-personalities,person,Pelé,Pele,70,,,81,,62,51,,,63,,45
+all-time-sports-personalities,person,Ronaldo,Ronaldo,70,,,,,63,44,,,,,37
+all-time-sports-personalities,person,Joe Frazier,Joe_Frazier,70,,,90,82,,48,,,62,60,
+all-time-sports-personalities,person,Randy Savage,Randy_Savage,70,70,79,,79,,39,44,40,,48,
+all-time-sports-personalities,person,Ric Flair,Ric_Flair,,76,75,,,,,47,43,,,
+all-time-sports-personalities,person,Alex Rodriguez,Alex_Rodriguez,,74,,,,61,,39,,,,29
+all-time-sports-personalities,person,Shaun White,Shaun_White,,73,,,,,,46,,,,
+all-time-sports-personalities,person,Manny Pacquiáo,Manny_Pacquiao,,73,,,,,,48,,,,
+all-time-sports-personalities,person,Michael Vick,Michael_Vick,,72,79,,,63,,34,25,,,26
+all-time-sports-personalities,person,Allen Iverson,Allen_Iverson,,71,,,,,,49,,,,
+all-time-sports-personalities,person,Dwyane Wade,Dwyane_Wade,,71,,,,,,48,,,,
+all-time-sports-personalities,person,Jeff Gordon,Jeff_Gordon,,71,,,,,,43,,,,
+all-time-sports-personalities,person,The Undertaker - Mark William Calaway,The_Undertaker_Mark_William_Calaway,,71,,,,,,49,,,,
+all-time-sports-personalities,person,Bill Belichick,Bill_Belichick,,71,,,,62,,34,,,,26
+all-time-sports-personalities,person,Drew Brees,Drew_Brees,,70,,,,,,43,,,,
+all-time-sports-personalities,person,Lamar Odom,Lamar_Odom,,70,,,,,,41,,,,
+all-time-sports-personalities,person,Triple H,Triple_H,,70,,,,,,40,,,,
+all-time-sports-personalities,person,Lindsey Vonn,Lindsey_Vonn,,69,,,,61,,49,,,,38
+all-time-sports-personalities,person,Pete Rose,Pete_Rose,,,83,93,,,,,43,52,,
+all-time-sports-personalities,person,Jack Nicklaus,Jack_Nicklaus,,,82,94,79,,,,50,65,55,
+all-time-sports-personalities,person,Andre Agassi,Andre_Agassi,,,82,84,,62,,,50,50,,38
+all-time-sports-personalities,person,Emmitt Smith,Emmitt_Smith,,,80,,79,,,,49,,57,
+all-time-sports-personalities,person,Nolan Ryan,Nolan_Ryan,,,79,82,,,,,51,64,,
+all-time-sports-personalities,person,Tony Romo,Tony_Romo,,,79,,80,,,,31,,40,
+all-time-sports-personalities,person,Walter Payton,Walter_Payton,,,77,,,,,,56,,,
+all-time-sports-personalities,person,John McEnroe,John_McEnroe,,,77,92,,,,,36,42,,
+all-time-sports-personalities,person,Richard Petty,Richard_Petty,,,76,87,,,,,48,57,,
+all-time-sports-personalities,person,Carl Lewis,Carl_Lewis,,,75,,,,,,53,,,
+all-time-sports-personalities,person,"Cal Ripken, Jr.",Cal_Ripken_Jr,,,75,,,,,,49,,,
+all-time-sports-personalities,person,Mike Ditka,Mike_Ditka,,,75,,,,,,44,,,
+all-time-sports-personalities,person,Martina Navratilova,Martina_Navratilova,,,,88,,,,,,61,,
+all-time-sports-personalities,person,Chris Evert,Chris_Evert,,,,87,,,,,,63,,
+all-time-sports-personalities,person,Ty Cobb,Ty_Cobb,,,,86,80,,,,,60,53,
+all-time-sports-personalities,person,Herschel Walker,Herschel_Walker,,,,86,,,,,,44,,
+all-time-sports-personalities,person,Rocky Marciano,Rocky_Marciano,,,,84,,,,,,54,,
+all-time-sports-personalities,person,Johnny Unitas,Johnny_Unitas,,,,82,,,,,,58,,
+all-time-sports-personalities,person,Meadowlark Lemon,Meadowlark_Lemon,,,,82,,,,,,69,,
+all-time-sports-personalities,person,Patrick Ewing,Patrick_Ewing,,,,82,79,,,,,52,56,
+all-time-sports-personalities,person,Cathy Rigby,Cathy_Rigby,,,,81,,,,,,53,,
+all-time-sports-personalities,person,Roger Staubach,Roger_Staubach,,,,81,,,,,,53,,
+all-time-sports-personalities,person,John Elway,John_Elway,,,,,80,,,,,,53,
+all-time-sports-personalities,person,Bo Jackson,Bo_Jackson,,,,,79,,,,,,55,
+all-time-sports-personalities,person,Kristi Yamaguchi,Kristi_Yamaguchi,,,,,,62,,,,,,45
+fiction-books,book,The Lord of the Rings,The_Lord_of_the_Rings-Fiction_Book,95,91,95,98,96,93,63,65,59,55,71,54
+fiction-books,book,To Kill a Mockingbird,To_Kill_a_Mockingbird-Fiction_Book,91,85,96,96,92,91,70,61,77,82,73,67
+fiction-books,book,Moby Dick,Moby_Dick,91,89,92,94,91,90,59,54,58,69,64,54
+fiction-books,book,Jurassic Park,Jurassic_Park-Fiction_Book,90,92,90,94,93,88,66,73,59,62,71,62
+fiction-books,book,The Great Gatsby,The_Great_Gatsby,90,88,85,96,89,92,62,60,52,63,59,66
+fiction-books,book,The Hunger Games,The_Hunger_Games,89,88,91,90,88,90,56,56,52,47,56,55
+fiction-books,book,Jaws,Jaws-Fiction_Book,89,89,90,94,87,91,58,53,63,69,61,56
+fiction-books,book,Little House on the Prairie,Little_House_on_the_Prairie-Fiction_Book,88,84,92,97,87,89,53,46,56,63,47,59
+fiction-books,book,The Silence of the Lambs,The_Silence_of_the_Lambs-Fiction_Book,88,85,92,93,91,85,57,52,69,58,62,53
+fiction-books,book,Frankenstein,Frankenstein,88,88,86,90,89,88,63,67,58,59,64,62
+fiction-books,book,The Wonderful Wizard of Oz,The_Wonderful_Wizard_of_Oz,88,87,91,91,86,90,67,62,59,74,64,70
+fiction-books,book,Dracula,Dracula,87,87,84,89,88,85,60,66,57,54,66,54
+fiction-books,book,The Hobbit,The_Hobbit,86,87,86,90,85,86,59,63,59,60,61,56
+fiction-books,book,Fifty Shades of Grey,Fifty_Shades_of_Grey,85,93,83,94,85,85,42,49,39,27,40,43
+fiction-books,book,The Da Vinci Code,The_Da_Vinci_Code,85,85,91,95,86,83,55,56,55,63,56,54
+fiction-books,book,The Godfather,The_Godfather-Fiction_Book,84,80,90,97,85,84,60,56,63,78,63,56
+fiction-books,book,The Adventures of Sherlock Holmes,The_Adventures_of_Sherlock_Holmes,84,79,85,93,85,83,60,55,57,73,60,59
+fiction-books,book,A Game of Thrones,A_Game_of_Thrones,84,83,83,85,85,82,49,49,46,35,52,45
+fiction-books,book,A Christmas Carol,A_Christmas_Carol,83,80,92,93,82,85,65,62,76,78,63,67
+fiction-books,book,Gone with the Wind,Gone_with_the_Wind-Fiction_Book,83,85,94,96,82,84,54,56,54,71,54,55
+fiction-books,book,Of Mice and Men,Of_Mice_and_Men,83,84,81,89,84,82,59,54,61,63,62,56
+fiction-books,book,The Catcher in the Rye,The_Catcher_in_the_Rye,82,77,78,89,86,78,48,43,43,60,50,47
+fiction-books,book,Lord of the Flies,Lord_of_the_Flies-Fiction_Book,82,79,78,83,82,82,53,60,46,50,55,52
+fiction-books,book,The Three Musketeers,The_Three_Musketeers,82,79,87,93,84,80,52,49,56,61,59,47
+fiction-books,book,Pride and Prejudice,Pride_and_Prejudice,81,74,90,87,78,84,50,47,51,58,45,55
+fiction-books,book,The Shining,The_Shining,81,73,86,93,85,76,55,44,60,62,58,50
+fiction-books,book,It,It,81,89,89,,85,77,51,57,56,,52,51
+fiction-books,book,Oliver Twist,Oliver_Twist,81,77,85,93,84,77,56,46,63,73,60,52
+fiction-books,book,Les Misérables,Les_Miserables-Fiction_Book,80,79,87,87,78,82,46,43,51,55,44,48
+fiction-books,book,One Flew Over the Cuckoo's Nest,One_Flew_Over_the_Cuckoos_Nest-Fiction_Book,80,80,81,95,79,81,55,53,55,75,58,53
+fiction-books,book,Gulliver's Travels,Gullivers_Travels,79,72,83,94,83,75,49,46,50,70,53,45
+fiction-books,book,Twenty Thousand Leagues Under the Sea,Twenty_Thousand_Leagues_Under_the_Sea,79,72,86,88,82,76,54,46,59,70,57,50
+fiction-books,book,The Handmaid's Tale,The_Handmaids_Tale,79,80,75,,80,78,48,45,44,,45,50
+fiction-books,book,War and Peace,War_and_Peace-Fiction_Book,78,72,80,90,81,75,42,35,42,52,44,41
+fiction-books,book,Little Women,Little_Women,78,72,84,87,72,85,51,45,51,56,42,60
+fiction-books,book,The Notebook,The_Notebook-Fiction_Book,78,83,79,79,,87,45,50,48,51,,57
+fiction-books,book,The Grapes of Wrath,The_Grapes_of_Wrath,78,73,76,86,81,75,55,51,53,64,61,50
+fiction-books,book,The Color Purple,The_Color_Purple-Fiction_Book,78,73,87,89,76,79,49,42,54,62,46,53
+fiction-books,book,The Scarlet Letter,The_Scarlet_Letter,77,74,81,90,72,83,49,43,50,60,45,53
+fiction-books,book,The Green Mile,The_Green_Mile-Fiction_Book,77,82,84,84,79,74,59,59,65,66,62,56
+fiction-books,book,Treasure Island,Treasure_Island,77,76,85,88,79,74,54,55,55,66,58,49
+fiction-books,book,Journey to the Center of the Earth,Journey_to_the_Center_of_the_Earth-Fiction_Book,76,78,77,86,84,69,54,51,52,62,62,47
+fiction-books,book,The Hunt for Red October,The_Hunt_for_Red_October,76,,86,90,81,71,52,,58,69,57,47
+fiction-books,book,Murder on the Orient Express,Murder_on_the_Orient_Express,76,68,80,94,75,76,51,43,53,69,54,48
+fiction-books,book,2001: A Space Odyssey,2001_A_Space_Odyssey-Fiction_Book,75,73,79,85,78,73,48,44,52,55,53,42
+fiction-books,book,Fahrenheit 451,Fahrenheit_451,75,73,,,83,67,49,52,,,54,44
+fiction-books,book,The Count of Monte Cristo,The_Count_of_Monte_Cristo,75,75,79,83,83,65,55,51,54,60,62,46
+fiction-books,book,The Swiss Family Robinson,The_Swiss_Family_Robinson,75,67,81,97,76,74,48,37,51,69,51,45
+fiction-books,book,Pet Sematary,Pet_Sematary,75,72,87,83,76,73,46,49,53,43,50,42
+fiction-books,book,Wuthering Heights,Wuthering_Heights-Fiction_Book,75,,,83,76,74,45,,,48,44,46
+fiction-books,book,The Bourne Supremacy,The_Bourne_Supremacy-Fiction_Book,74,74,78,82,83,65,50,54,48,50,61,37
+fiction-books,book,Robinson Crusoe,Robinson_Crusoe,74,72,80,91,77,72,51,39,56,70,55,47
+fiction-books,book,The Strange Case of Dr Jekyll and Mr Hyde,The_Strange_Case_of_Dr_Jekyll_and_Mr_Hyde,74,78,82,83,76,73,52,57,58,55,57,48
+fiction-books,book,A Tale of Two Cities,A_Tale_of_Two_Cities,74,,80,88,78,70,48,,50,67,52,43
+fiction-books,book,The Princess Diaries,The_Princess_Diaries-Fiction_Book,74,74,78,79,,80,40,42,33,40,,49
+fiction-books,book,The Girl with the Dragon Tattoo,The_Girl_with_the_Dragon_Tattoo-Fiction_Book,74,82,77,76,73,75,47,54,37,45,49,45
+fiction-books,book,Great Expectations,Great_Expectations,73,68,75,75,73,73,49,42,45,52,48,50
+fiction-books,book,Around the World in Eighty Days,Around_the_World_in_Eighty_Days,73,74,74,86,77,69,47,46,43,56,48,47
+fiction-books,book,Black Beauty,Black_Beauty,72,,79,89,76,69,50,,52,62,51,49
+fiction-books,book,The War of the Worlds,The_War_of_the_Worlds,72,69,74,84,83,,52,54,47,61,62,
+fiction-books,book,Sense and Sensibility,Sense_and_Sensibility,71,69,70,76,,73,44,42,34,46,,45
+fiction-books,book,The Fellowship of the Ring,The_Fellowship_of_the_Ring,71,75,71,,79,64,49,56,51,,56,41
+fiction-books,book,Animal Farm,Animal_Farm,71,75,,,76,67,49,46,,,57,42
+fiction-books,book,The Hitchhiker's Guide to the Galaxy,The_Hitchhikers_Guide_to_the_Galaxy,71,72,73,,77,66,50,55,49,,58,43
+fiction-books,book,Cujo,Cujo,71,,81,77,73,67,41,,52,44,41,41
+fiction-books,book,Interview with the Vampire,Interview_with_the_Vampire,70,73,85,,71,70,43,46,48,,44,42
+fiction-books,book,Dune,Dune,70,68,,75,73,66,47,49,,37,52,40
+fiction-books,book,"I, Robot",I_Robot-Fiction_Book,70,74,68,,72,67,47,52,40,,53,40
+fiction-books,book,A Clockwork Orange,A_Clockwork_Orange-Fiction_Book,69,,,82,77,,43,,,47,52,
+fiction-books,book,David Copperfield,David_Copperfield,69,,74,90,71,67,43,,43,58,46,38
+fiction-books,book,The Pelican Brief,The_Pelican_Brief,69,,80,83,73,65,49,,54,61,50,47
+fiction-books,book,Bridget Jones's Diary,Bridget_Joness_Diary-Fiction_Book,69,,81,,,71,36,,34,,,41
+fiction-books,book,Carrie,Carrie-Fiction_Book,68,,77,77,,68,42,,44,52,,42
+fiction-books,book,Misery,Misery-Fiction_Book,68,68,85,,71,64,44,40,62,,48,40
+fiction-books,book,Uncle Tom's Cabin,Uncle_Toms_Cabin,67,,72,90,,69,39,,42,54,,40
+fiction-books,book,Crime and Punishment,Crime_and_Punishment,67,67,,,71,64,42,42,,,44,40
+fiction-books,book,Gone Girl,Gone_Girl-Fiction_Book,67,76,,,,71,43,52,,,,44
+fiction-books,book,The Old Man and the Sea,The_Old_Man_and_the_Sea,67,70,,87,74,,45,46,,64,52,
+fiction-books,book,The Red Badge of Courage,The_Red_Badge_of_Courage,67,,,79,78,,45,,,53,56,
+fiction-books,book,The Talented Mr. Ripley,The_Talented_Mr_Ripley-Fiction_Book,66,69,72,75,71,,39,43,39,41,41,
+fiction-books,book,Catch-22,Catch_22,,72,,76,,64,,47,,51,,39
+fiction-books,book,V for Vendetta,V_for_Vendetta-Fiction_Book,,70,72,,,,,51,51,,,
+fiction-books,book,Divergent,Divergent-Fiction_Book,,70,,,,,,40,,,,
+fiction-books,book,Mockingjay,Mockingjay,,70,,,,,,42,,,,
+fiction-books,book,Salem's Lot,Salems_Lot-Fiction_Book,,70,70,,,,,47,46,,,
+fiction-books,book,Jane Eyre,Jane_Eyre,,69,,75,,68,,41,,46,,46
+fiction-books,book,Where the Crawdads Sing,Where_the_Crawdads_Sing,,69,,,,,,43,,,,
+fiction-books,book,1984 (Signet Classics),1984_Signet_Classics,,69,,,72,,,52,,,53,
+fiction-books,book,Memoirs of a Geisha,Memoirs_of_a_Geisha-Fiction_Book,,67,,,,,,47,,,,
+fiction-books,book,Project Hail Mary,Project_Hail_Mary,,67,,,,,,44,,,,
+fiction-books,book,The Return of the King,The_Return_of_the_King,,67,,,,,,49,,,,
+fiction-books,book,The Help,The_Help-Fiction_Book,,66,,,,68,,40,,,,53
+fiction-books,book,Patriot Games,Patriot_Games-Fiction_Book,,,72,78,,,,,44,53,,
+fiction-books,book,Clear and Present Danger,Clear_and_Present_Danger,,,70,80,71,,,,45,59,51,
+fiction-books,book,Dr. Zhivago,Dr_Zhivago,,,70,89,72,,,,38,60,46,
+fiction-books,book,Christine,Christine-Fiction_Book,,,70,,,,,,45,,,
+fiction-books,book,Roots: The Saga of an American Family,Roots_The_Saga_of_an_American_Family,,,69,80,,66,,,43,59,,44
+fiction-books,book,All the King's Men,All_the_Kings_Men,,,69,78,,,,,39,51,,
+fiction-books,book,A Time to Kill,A_Time_to_Kill,,,68,,,,,,46,,,
+fiction-books,book,For Whom the Bell Tolls,For_Whom_the_Bell_Tolls-Fiction_Book,,,,85,71,,,,,60,50,
+fiction-books,book,The Call of the Wild,The_Call_of_the_Wild,,,,84,70,,,,,66,53,
+fiction-books,book,The Hound of the Baskervilles,The_Hound_of_the_Baskervilles,,,,78,,,,,,50,,
+fiction-books,book,The Thorn Birds,The_Thorn_Birds-Fiction_Book,,,,78,,,,,,46,,
+fiction-books,book,The Guns of Navarone,The_Guns_of_Navarone-Fiction_Book,,,,76,70,,,,,44,49,
+fiction-books,book,Ulysses,Ulysses,,,,,70,,,,,,50,
+fiction-books,book,The Time Traveler's Wife,The_Time_Travelers_Wife-Fiction_Book,,,,,,64,,,,,,37
+radio-programs-podcasts,podcast,The Howard Stern Show,The_Howard_Stern_Show,79,77,93,95,83,74,34,43,30,22,42,24
+radio-programs-podcasts,podcast,The Joe Rogan Experience,The_Joe_Rogan_Experience,79,82,77,75,89,67,38,39,33,20,47,27
+radio-programs-podcasts,podcast,The Ben Shapiro Show,The_Ben_Shapiro_Show,71,81,68,49,79,62,30,41,23,19,32,27
+radio-programs-podcasts,podcast,The Steve Harvey Morning Show,The_Steve_Harvey_Morning_Show,71,74,64,71,71,70,38,42,28,32,36,40
+radio-programs-podcasts,podcast,PBS NewsHour (audio),PBS_NewsHour_audio,70,69,65,64,74,65,44,44,38,37,50,38
+radio-programs-podcasts,podcast,The Sean Hannity Show,The_Sean_Hannity_Show,69,66,76,80,77,60,29,24,21,29,35,23
+radio-programs-podcasts,podcast,Weekend Edition,Weekend_Edition,64,63,65,60,72,55,38,38,31,31,44,32
+radio-programs-podcasts,podcast,MSNBC Rachel Maddow (audio),MSNBC_Rachel_Maddow_audio,62,64,64,71,70,55,36,42,32,36,39,32
+radio-programs-podcasts,podcast,The Laura Ingraham Show,The_Laura_Ingraham_Show,60,57,56,68,73,48,26,26,18,21,30,21
+radio-programs-podcasts,podcast,The Glen Beck Program,The_Glen_Beck_Program,60,59,64,62,71,48,26,26,23,21,31,21
+radio-programs-podcasts,podcast,The Dave Ramsey Show,The_Dave_Ramsey_Show,59,65,58,53,65,52,28,35,25,18,31,26
+radio-programs-podcasts,podcast,Joel Osteen Podcast,Joel_Osteen_Podcast,59,61,68,68,60,58,20,25,17,13,22,18
+radio-programs-podcasts,podcast,The Alex Jones Show,The_Alex_Jones_Show,59,60,59,44,72,42,22,25,13,6,27,15
+radio-programs-podcasts,podcast,Star Talk Radio with Neil DeGrasse Tyson,Star_Talk_Radio_with_Neil_DeGrasse_Tyson,59,61,51,41,71,43,41,47,30,23,52,28
+radio-programs-podcasts,podcast,The Dr. Drew Podcast,The_Dr_Drew_Podcast,57,63,65,53,61,53,28,32,25,14,29,27
+radio-programs-podcasts,podcast,TEDTalks (audio),TEDTalks_audio,56,64,49,42,59,52,35,43,30,24,40,30
+radio-programs-podcasts,podcast,Reuters: Top News,Reuters_Top_News,55,50,60,54,62,48,32,36,26,30,36,27
+radio-programs-podcasts,podcast,Dr. Laura,Dr_Laura,54,48,53,61,57,50,27,27,17,24,30,25
+radio-programs-podcasts,podcast,The Adam Carolla Show,The_Adam_Carolla_Show-Radio_Program,54,57,53,38,67,40,26,32,17,16,31,20
+radio-programs-podcasts,podcast,Keepin' It Real with Al Sharpton,Keepin_It_Real_with_Al_Sharpton,52,50,46,53,58,46,27,30,14,14,31,23
+radio-programs-podcasts,podcast,CBS Sports Fantasy Football Today,CBS_Sports_Fantasy_Football_Today,50,61,50,36,58,42,29,38,21,8,37,19
+radio-programs-podcasts,podcast,Duolingo Spanish Podcast,Duolingo_Spanish_Podcast,50,59,27,21,56,43,28,39,14,5,34,22
+radio-programs-podcasts,podcast,Car Talk,Car_Talk,49,54,34,45,54,42,34,39,15,26,38,28
+radio-programs-podcasts,podcast,Morning Edition,Morning_Edition,48,57,40,41,56,40,29,32,23,20,34,24
+radio-programs-podcasts,podcast,All Things Considered,All_Things_Considered,48,50,42,39,57,40,30,34,23,25,36,23
+radio-programs-podcasts,podcast,Delilah,Delilah,48,55,41,34,48,48,32,37,25,18,34,30
+radio-programs-podcasts,podcast,The Dan Patrick Show,The_Dan_Patrick_Show,48,46,45,44,58,38,27,31,19,15,32,22
+radio-programs-podcasts,podcast,TED radio Hour,TED_radio_Hour,47,51,29,39,56,38,29,34,17,16,35,23
+radio-programs-podcasts,podcast,Truth and Lies: Jeffrey Epstein,Truth_and_Lies_Jeffrey_Epstein,46,52,32,34,51,41,25,32,12,12,32,19
+radio-programs-podcasts,podcast,The Writer's Almanac,The_Writers_Almanac,46,49,36,22,55,38,27,31,15,9,30,24
+radio-programs-podcasts,podcast,The Mark Levin Show,The_Mark_Levin_Show,46,46,38,41,59,32,26,28,13,19,30,21
+radio-programs-podcasts,podcast,Stay Free with Russell Brand,Stay_Free_with_Russell_Brand,46,50,39,30,54,38,24,29,14,8,28,20
+radio-programs-podcasts,podcast,A Prairie Home Companion,A_Prairie_Home_Companion,46,49,38,47,52,38,28,32,15,25,32,24
+radio-programs-podcasts,podcast,The Daily,The_Daily-Radio_Program,44,55,42,31,47,41,29,40,25,15,34,24
+radio-programs-podcasts,podcast,BBC World Service - Witness History,BBC_World_Service_Witness_History,44,51,30,28,50,35,29,35,18,17,34,24
+radio-programs-podcasts,podcast,This American Life,This_American_Life,43,51,34,27,55,33,27,32,20,14,36,19
+radio-programs-podcasts,podcast,Marketplace,Marketplace,43,47,39,36,47,38,26,28,24,22,26,26
+radio-programs-podcasts,podcast,Planet Money,Planet_Money,43,49,30,22,49,36,28,30,16,9,32,24
+radio-programs-podcasts,podcast,Bill Gates and Rashida Jones Ask Big Questions,Bill_Gates_and_Rashida_Jones_Ask_Big_Questions,42,54,29,34,49,36,19,26,11,12,22,17
+radio-programs-podcasts,podcast,American Family Radio,American_Family_Radio,42,45,30,26,48,37,24,20,19,12,26,21
+radio-programs-podcasts,podcast,The Dennis Praeger Show,The_Dennis_Praeger_Show,42,47,32,29,53,,21,25,13,9,27,
+radio-programs-podcasts,podcast,Mike and Mike in the Morning,Mike_and_Mike_in_the_Morning,42,,35,37,48,36,24,,16,16,28,21
+radio-programs-podcasts,podcast,Pod Save America,Pod_Save_America,42,53,32,21,51,34,26,36,13,9,29,24
+radio-programs-podcasts,podcast,Wait Wait!... Don't Tell Me,Wait_Wait_Dont_Tell_Me,42,53,27,23,48,36,28,35,18,14,34,21
+radio-programs-podcasts,podcast,WTF with Marc Maron,WTF_with_Marc_Maron,42,51,32,22,46,37,27,33,18,6,31,23
+radio-programs-podcasts,podcast,Call Her Daddy,Call_Her_Daddy,42,52,39,24,,42,19,23,13,6,,21
+radio-programs-podcasts,podcast,Fresh Air,Fresh_Air,42,49,34,24,49,34,29,32,21,13,33,25
+radio-programs-podcasts,podcast,Science Friday,Science_Friday,41,50,,24,50,33,28,29,,15,33,22
+radio-programs-podcasts,podcast,Kilmeade & Friends,Kilmeade_Friends,41,46,30,33,51,31,21,23,9,12,27,17
+radio-programs-podcasts,podcast,The Savage Nation,The_Savage_Nation,41,,40,30,50,32,21,,11,9,26,16
+radio-programs-podcasts,podcast,The Big Podcast with Shaq,The_Big_Podcast_with_Shaq,41,45,37,31,45,36,21,30,14,12,24,18
+radio-programs-podcasts,podcast,The Doug Gottlieb Show,The_Doug_Gottlieb_Show,40,,,19,50,,25,,,5,31,
+radio-programs-podcasts,podcast,Stuff You Should Know,Stuff_You_Should_Know,40,,32,23,47,34,25,,13,10,30,20
+radio-programs-podcasts,podcast,PRI's The World,PRIs_The_World,40,,27,21,47,33,21,,7,5,26,17
+radio-programs-podcasts,podcast,B. B. King's Bluesville,B_B_Kings_Bluesville,40,,30,41,,36,29,,22,29,,24
+radio-programs-podcasts,podcast,Bob and Tom in the Morning,Bob_and_Tom_in_the_Morning,40,48,29,26,45,35,22,27,15,9,23,21
+radio-programs-podcasts,podcast,Radiolab,Radiolab,40,,29,19,49,,29,,15,8,37,
+radio-programs-podcasts,podcast,The Dr. John Delony Show,The_Dr_John_Delony_Show,40,,,,46,33,23,,,,27,18
+radio-programs-podcasts,podcast,Bookclub,Bookclub,39,45,29,29,,38,26,32,12,13,,26
+radio-programs-podcasts,podcast,Here & Now,Here_Now,39,,28,19,,34,27,,15,8,,23
+radio-programs-podcasts,podcast,The Howie Carr Show,The_Howie_Carr_Show,39,,,,45,33,23,,,,25,21
+radio-programs-podcasts,podcast,Mixed Up,Mixed_Up,39,51,,,,33,26,35,,,,23
+radio-programs-podcasts,podcast,Pod Save the People,Pod_Save_the_People,39,48,28,20,,35,24,28,13,11,,22
+radio-programs-podcasts,podcast,To Live and Die in LA,To_Live_and_Die_in_LA,39,45,34,30,48,,21,26,14,13,27,
+radio-programs-podcasts,podcast,Jordan B. Peterson Podcast,Jordan_B_Peterson_Podcast,39,48,25,19,50,,21,25,11,10,27,
+radio-programs-podcasts,podcast,Truth and Justice,Truth_and_Justice,39,,28,22,46,,26,,12,11,32,
+radio-programs-podcasts,podcast,How Did This Get Made?,How_Did_This_Get_Made,38,47,,18,,33,28,34,,7,,22
+radio-programs-podcasts,podcast,The Kim Komando Show,The_Kim_Komando_Show,38,49,32,25,44,32,22,29,13,12,25,20
+radio-programs-podcasts,podcast,Revolutions Podcast,Revolutions_Podcast,38,46,28,,48,,26,29,13,,33,
+radio-programs-podcasts,podcast,Criminal,Criminal,38,,26,,,31,27,,17,,,21
+radio-programs-podcasts,podcast,Hidden Brain,Hidden_Brain,38,47,,,,32,24,28,,,,15
+radio-programs-podcasts,podcast,Elvis Duran and the Morning Show,Elvis_Duran_and_the_Morning_Show,38,53,28,,,33,21,31,12,,,17
+radio-programs-podcasts,podcast,60 Second Science,60_Second_Science,38,44,30,,,34,23,32,15,,,21
+radio-programs-podcasts,podcast,This is Your Life,This_is_Your_Life,38,,31,31,,34,20,,13,12,,18
+radio-programs-podcasts,podcast,The Drive Armchair Expert w/Dax Shepard,The_Drive_Armchair_Expert_w_Dax_Shepard,38,,26,24,,,22,,11,11,,
+radio-programs-podcasts,podcast,Code Switch,Code_Switch,38,,,,46,,22,,,,27,
+radio-programs-podcasts,podcast,Classical 24,Classical_24,38,,,,,33,22,,,,,21
+radio-programs-podcasts,podcast,Fashion No Filter,Fashion_No_Filter,37,,,,,32,21,,,,,17
+radio-programs-podcasts,podcast,Freakonomics Radio,Freakonomics_Radio,37,,32,,45,,21,,17,,26,
+radio-programs-podcasts,podcast,New Heights,New_Heights-Radio_Program,37,45,29,,,,23,29,15,,,
+radio-programs-podcasts,podcast,On the Media,On_the_Media,,49,,,,,,31,,,,
+radio-programs-podcasts,podcast,Something You Should Know,Something_You_Should_Know,,49,,,,,,34,,,,
+radio-programs-podcasts,podcast,Serial,Serial,,48,,,,,,29,,,,
+radio-programs-podcasts,podcast,The Daily Stoic,The_Daily_Stoic,,48,29,,,,,31,15,,,
+radio-programs-podcasts,podcast,Welcome to Night Vale,Welcome_to_Night_Vale,,48,,,,,,27,,,,
+radio-programs-podcasts,podcast,The Rich Roll Podcast,The_Rich_Roll_Podcast,,47,,,,,,35,,,,
+radio-programs-podcasts,podcast,Big D & Bubba,Big_D_Bubba,,47,,,45,,,28,,,24,
+radio-programs-podcasts,podcast,How To Do Everything,How_To_Do_Everything,,47,,21,,,,34,,8,,
+radio-programs-podcasts,podcast,The Diversity Gap,The_Diversity_Gap,,46,,,,,,28,,,,
+radio-programs-podcasts,podcast,The Bill Simmons Podcast,The_Bill_Simmons_Podcast,,46,27,,,,,26,12,,,
+radio-programs-podcasts,podcast,On Purpose with Jay Shetty,On_Purpose_with_Jay_Shetty,,46,,,,,,29,,,,
+radio-programs-podcasts,podcast,The Nerdist,The_Nerdist,,46,,,45,,,22,,,27,
+radio-programs-podcasts,podcast,Honestly with Bari Weiss,Honestly_with_Bari_Weiss,,46,30,20,44,,,27,12,5,25,
+radio-programs-podcasts,podcast,Invest Like the Best,Invest_Like_the_Best,,45,25,,,,,25,12,,,
+radio-programs-podcasts,podcast,Another Round,Another_Round,,45,,,,31,,33,,,,19
+radio-programs-podcasts,podcast,USA Today TalkingTech,USA_Today_TalkingTech,,45,,24,46,,,26,,6,25,
+radio-programs-podcasts,podcast,Stuff You Missed in History Class,Stuff_You_Missed_in_History_Class,,45,,,,35,,29,,,,22
+radio-programs-podcasts,podcast,Real Radio,Real_Radio,,45,,23,,33,,27,,8,,18
+radio-programs-podcasts,podcast,Coast to Coast AM,Coast_to_Coast_AM,,,34,22,47,,,,22,8,30,
+radio-programs-podcasts,podcast,Katherine Ryan: Telling Everybody Everything,Katherine_Ryan_Telling_Everybody_Everything,,,29,,,,,,15,,,
+radio-programs-podcasts,podcast,Savage Lovecast,Savage_Lovecast,,,27,,,,,,6,,,
+radio-programs-podcasts,podcast,Comedy Bang Bang,Comedy_Bang_Bang-Radio_Program,,,26,19,,,,,12,7,,
+radio-programs-podcasts,podcast,Day 6,Day_6,,,26,,,,,,12,,,
+radio-programs-podcasts,podcast,The Splendid Table,The_Splendid_Table,,,25,,,,,,13,,,
+radio-programs-podcasts,podcast,The Clark Howard Show,The_Clark_Howard_Show,,,,23,47,,,,,8,30,
+radio-programs-podcasts,podcast,Irish & Celtic Music Podcast,Irish_Celtic_Music_Podcast,,,,22,,37,,,,12,,24
+radio-programs-podcasts,podcast,The Bill Bennett Show,The_Bill_Bennett_Show,,,,22,,,,,,5,,
+radio-programs-podcasts,podcast,The Moth,The_Moth,,,,22,,35,,,,8,,19
+radio-programs-podcasts,podcast,Stuff They Don't Want You to Know,Stuff_They_Dont_Want_You_to_Know,,,,22,,,,,,11,,
+radio-programs-podcasts,podcast,History of the Crusades,History_of_the_Crusades,,,,19,,,,,,8,,
+radio-programs-podcasts,podcast,Tapestry,Tapestry,,,,19,,,,,,5,,
+radio-programs-podcasts,podcast,The Truth About Money with Ric Edelman,The_Truth_About_Money_with_Ric_Edelman,,,,,47,,,,,,32,
+radio-programs-podcasts,podcast,Chanel Connects,Chanel_Connects,,,,,47,,,,,,26,
+radio-programs-podcasts,podcast,Best of the Left,Best_of_the_Left,,,,,47,,,,,,32,
+radio-programs-podcasts,podcast,Grounded with Louis Theroux,Grounded_with_Louis_Theroux,,,,,46,,,,,,30,
+radio-programs-podcasts,podcast,Limetown,Limetown,,,,,46,,,,,,29,
+radio-programs-podcasts,podcast,The Truth Podcast,The_Truth_Podcast,,,,,46,,,,,,25,
+radio-programs-podcasts,podcast,Jocko Podcast,Jocko_Podcast,,,,,45,,,,,,27,
+radio-programs-podcasts,podcast,Pop Culture Happy Hour,Pop_Culture_Happy_Hour,,,,,45,,,,,,25,
+radio-programs-podcasts,podcast,Awards Chatter,Awards_Chatter,,,,,45,,,,,,29,
+radio-programs-podcasts,podcast,Undisclosed,Undisclosed,,,,,45,,,,,,31,
+radio-programs-podcasts,podcast,Revisionist History,Revisionist_History,,,,,,33,,,,,,18
+radio-programs-podcasts,podcast,Windows Weekly,Windows_Weekly,,,,,,32,,,,,,20
+radio-programs-podcasts,podcast,Doughboys,Doughboys,,,,,,31,,,,,,16
+radio-programs-podcasts,podcast,People's Pharmacy,Peoples_Pharmacy,,,,,,31,,,,,,16
+radio-programs-podcasts,podcast,FanBros,FanBros,,,,,,31,,,,,,18
+radio-programs-podcasts,podcast,Nutrition Diva,Nutrition_Diva,,,,,,31,,,,,,21
