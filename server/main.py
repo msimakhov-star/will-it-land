@@ -1,9 +1,11 @@
 """HTTP API + static frontend. Run locally: uvicorn server.main:app --reload"""
 from __future__ import annotations
 
+import json
 import os
 import time
 from contextlib import asynccontextmanager
+from functools import lru_cache
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -50,6 +52,12 @@ def options():
     return {"ages": pipeline.AUDIENCE_AGES, "genders": ["male", "female"], "types": pipeline.TYPES}
 
 
+@lru_cache(maxsize=256)
+def _check_cached(text: str, age: str | None, gender: str | None, location: str | None, swaps: bool) -> str:
+    # ponytail: process-local memo so repeated demos of the same text are instant; the Qloo layer has its own cache
+    return json.dumps(pipeline.check(text, pipeline.Audience(age, gender, location), swaps=swaps))
+
+
 @app.post("/api/check")
 def check(req: CheckRequest):
     if req.age and req.age not in pipeline.AUDIENCE_AGES:
@@ -58,7 +66,7 @@ def check(req: CheckRequest):
         raise HTTPException(400, "bad gender")
     t0 = time.time()
     try:
-        out = pipeline.check(req.text, pipeline.Audience(req.age, req.gender, (req.location or "").strip() or None), swaps=req.swaps)
+        out = json.loads(_check_cached(req.text, req.age, req.gender, (req.location or "").strip() or None, req.swaps))
     except qloo.QlooError as ex:
         raise HTTPException(502, str(ex))
     out["took_s"] = round(time.time() - t0, 1)
@@ -69,11 +77,16 @@ class SwapsRequest(CheckRequest):
     references: list[dict]
 
 
+@lru_cache(maxsize=256)
+def _swaps_cached(text: str, age: str | None, gender: str | None, location: str | None, references: str) -> str:
+    return json.dumps(pipeline.swaps_for(text, pipeline.Audience(age, gender, location), json.loads(references)))
+
+
 @app.post("/api/swaps")
 def swaps(req: SwapsRequest):
     """Second phase of a check: stand-ins for the weak references. Split out so the UI shows scores first."""
     try:
-        refs = pipeline.swaps_for(req.text, pipeline.Audience(req.age, req.gender, (req.location or "").strip() or None), req.references)
+        refs = json.loads(_swaps_cached(req.text, req.age, req.gender, (req.location or "").strip() or None, json.dumps(req.references, sort_keys=True)))
     except qloo.QlooError as ex:
         raise HTTPException(502, str(ex))
     return {"references": refs}

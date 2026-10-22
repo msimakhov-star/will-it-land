@@ -105,6 +105,10 @@ class Reference:
     swaps: list[Swap] = field(default_factory=list)
 
 
+def _ordinal(n: int) -> str:
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
 def _similar(a: str, b: str) -> bool:
     import difflib
 
@@ -262,7 +266,7 @@ def score(refs: list[Reference], audience: Audience) -> None:
         r.affinity = aff.get(r.entity_id)
         r.score = round(land_score(r.popularity, a, g, loc), 1)
         r.verdict = verdict_for(r.score)
-        bits = [f"popularity {int(100 * (r.popularity or 0))}th pct"]
+        bits = [f"known at the {_ordinal(int(100 * (r.popularity or 0)))} percentile"]
         if audience.age and r.age_skew:
             bits.append(f"{'over' if a >= 0 else 'under'}-indexes with {audience.age.replace('_', ' ')} ({a:+.2f})")
         if loc is not None:

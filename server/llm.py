@@ -37,12 +37,12 @@ def _gemini():
 def complete(system: str, user: str, max_tokens: int = 4000, temperature: float = 0.2, fast: bool = False) -> str:
     model = FAST_MODEL if fast else MODEL
     if PROVIDER == "anthropic":
-        msg = _anthropic().messages.create(
-            model=model,
-            max_tokens=max_tokens,
-            system=system,
-            messages=[{"role": "user", "content": user}],
-        )
+        kw = dict(model=model, max_tokens=max_tokens, system=system, messages=[{"role": "user", "content": user}])
+        try:
+            # Claude 5 models think by default; these calls are short structured tasks, so turn it off for latency.
+            msg = _anthropic().messages.create(thinking={"type": "between_tools"}, **kw)
+        except Exception:
+            msg = _anthropic().messages.create(**kw)
         return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
     from google.genai import types
 
