@@ -320,6 +320,13 @@ def propose_swaps(text: str, refs: list[Reference], audience: Audience, max_refs
         list(ex.map(one, weak))
 
 
+def swaps_for(text: str, audience: Audience, references: list[dict]) -> list[dict]:
+    """Second phase: given scored references (as returned by check(..., swaps=False)), find stand-ins."""
+    refs = [Reference(**{k: v for k, v in r.items() if k != "swaps"}) for r in references]
+    propose_swaps(text, refs, audience)
+    return [asdict(r) for r in refs]
+
+
 def check(text: str, audience: Audience, swaps: bool = True) -> dict:
     import time
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import time
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -11,8 +12,19 @@ from pydantic import BaseModel, Field
 
 from . import pipeline, qloo
 from .examples import EXAMPLES
+from .mcp_server import http_app, mcp
 
-app = FastAPI(title="Will It Land", version="0.1.0")
+mcp_app = http_app()
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    async with mcp.session_manager.run():
+        yield
+
+
+app = FastAPI(title="Will It Land", version="0.1.0", lifespan=lifespan)
+app.mount("/mcp", mcp_app)
 
 
 class CheckRequest(BaseModel):
@@ -51,6 +63,20 @@ def check(req: CheckRequest):
         raise HTTPException(502, str(ex))
     out["took_s"] = round(time.time() - t0, 1)
     return out
+
+
+class SwapsRequest(CheckRequest):
+    references: list[dict]
+
+
+@app.post("/api/swaps")
+def swaps(req: SwapsRequest):
+    """Second phase of a check: stand-ins for the weak references. Split out so the UI shows scores first."""
+    try:
+        refs = pipeline.swaps_for(req.text, pipeline.Audience(req.age, req.gender, (req.location or "").strip() or None), req.references)
+    except qloo.QlooError as ex:
+        raise HTTPException(502, str(ex))
+    return {"references": refs}
 
 
 DIST = os.path.join(os.path.dirname(__file__), "..", "web", "dist")

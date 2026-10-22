@@ -81,6 +81,23 @@ def qloo_side(rows: list[dict]) -> None:
 
 
 def llm_side(rows: list[dict]) -> None:
+    """LLM guesses are cached in eval/out/llm_guesses.json so the Qloo run later does not repeat them."""
+    cache_path = os.path.join(OUT, "llm_guesses.json")
+    cache = json.load(open(cache_path)) if os.path.exists(cache_path) else {}
+    todo = [r for r in rows if f"{r['group']}/{r['slug']}" not in cache]
+    _llm_guess(todo)
+    for r in todo:
+        if r.get("llm_millennials") is not None:
+            cache[f"{r['group']}/{r['slug']}"] = {g: r[f"llm_{g}"] for g in GEN_BUCKETS}
+    os.makedirs(OUT, exist_ok=True)
+    json.dump(cache, open(cache_path, "w"))
+    for r in rows:
+        c = cache.get(f"{r['group']}/{r['slug']}")
+        for g in GEN_BUCKETS:
+            r[f"llm_{g}"] = c[g] if c else None
+
+
+def _llm_guess(rows: list[dict]) -> None:
     system = ("For each named thing, estimate the percentage of US adults in each generation who have HEARD OF it "
               "(fame, not liking). Generations: millennials (born 1981-1996), generationx (1965-1980), babyboomers (1946-1964). "
               'Return {"items": [{"name": ..., "millennials": <0-100>, "generationx": <0-100>, "babyboomers": <0-100>}, ...]} in the same order.')
@@ -119,15 +136,22 @@ def main():
     ap.add_argument("--n", type=int, default=300)
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--skip-llm", action="store_true")
+    ap.add_argument("--skip-qloo", action="store_true", help="only compute and cache the LLM baseline")
     a = ap.parse_args()
     rows = load(a.n, a.seed)
-    qloo_side(rows)
+    if not a.skip_qloo:
+        qloo_side(rows)
     if not a.skip_llm:
         llm_side(rows)
     os.makedirs(OUT, exist_ok=True)
     with open(os.path.join(OUT, "kill_test_rows.json"), "w") as f:
         json.dump(rows, f, indent=1)
-    rep = report(rows) if not a.skip_llm else f"resolved {sum(1 for r in rows if r.get('qloo_id'))}/{len(rows)}"
+    if a.skip_qloo:
+        rep = f"llm guesses cached for {sum(1 for r in rows if r.get('llm_millennials') is not None)}/{len(rows)}"
+    elif a.skip_llm:
+        rep = f"resolved {sum(1 for r in rows if r.get('qloo_id'))}/{len(rows)}"
+    else:
+        rep = report(rows)
     open(os.path.join(OUT, "kill_test.md"), "w").write(rep)
     print(rep)
 

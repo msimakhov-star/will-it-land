@@ -29,6 +29,7 @@ export default function App() {
   const [result, setResult] = useState<Result | null>(null)
   const [checkedText, setCheckedText] = useState('')
   const [busy, setBusy] = useState(false)
+  const [swapping, setSwapping] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [active, setActive] = useState<number | null>(null)
   const [compare, setCompare] = useState(false)
@@ -44,11 +45,19 @@ export default function App() {
     const l = overrides?.location !== undefined ? overrides.location : location
     if (!text.trim()) return
     setBusy(true); setError(null); setActive(null)
+    const body = { text, age: a, gender: g, location: l || null }
     try {
-      const r = await fetch('/api/check', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text, age: a, gender: g, location: l || null }) })
+      const r = await fetch('/api/check', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...body, swaps: false }) })
       if (!r.ok) throw new Error((await r.json()).detail || r.statusText)
-      setResult(await r.json()); setCheckedText(text)
-    } catch (e: unknown) { setError(e instanceof Error ? e.message : String(e)) } finally { setBusy(false) }
+      const first: Result = await r.json()
+      setResult(first); setCheckedText(text); setBusy(false)
+      if (first.references.some(x => x.verdict === 'risky' || x.verdict === 'misses')) {
+        setSwapping(true)
+        const r2 = await fetch('/api/swaps', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...body, references: first.references }) })
+        if (r2.ok) { const { references } = await r2.json(); setResult(res => res ? { ...res, references } : res) }
+        setSwapping(false)
+      }
+    } catch (e: unknown) { setError(e instanceof Error ? e.message : String(e)); setBusy(false); setSwapping(false) }
   }
 
   function loadExample(ex: Example) {
@@ -109,7 +118,7 @@ export default function App() {
               <Summary r={result} compare={compare} onCompare={setCompare} audience={label(age, gender, location)} />
               {weakFirst.map(({ r, i }) => (
                 <div key={i} ref={el => { cards.current[i] = el }}>
-                  <Card r={r} active={active === i} compare={compare} age={age} onHover={() => setActive(i)} onApply={s => applySwap(r, s)} />
+                  <Card r={r} active={active === i} compare={compare} age={age} swapping={swapping} onHover={() => setActive(i)} onApply={s => applySwap(r, s)} />
                 </div>
               ))}
             </>
@@ -193,8 +202,9 @@ function Pill(p: { color: string; n: number; label: string }) {
   return <span className={`rounded-full px-2.5 py-1 text-${p.color} bg-${p.color}/10 font-medium`}>{p.n} {p.label}</span>
 }
 
-function Card(p: { r: Ref; active: boolean; compare: boolean; age: string | null; onHover: () => void; onApply: (s: Swap) => void }) {
+function Card(p: { r: Ref; active: boolean; compare: boolean; age: string | null; swapping: boolean; onHover: () => void; onApply: (s: Swap) => void }) {
   const r = p.r
+  const weak = r.verdict === 'risky' || r.verdict === 'misses'
   return (
     <div onMouseEnter={p.onHover} className={`rounded-2xl border bg-white p-4 shadow-sm transition ${p.active ? 'border-ink' : 'border-line'}`}>
       <div className="flex items-start justify-between gap-3">
@@ -219,6 +229,7 @@ function Card(p: { r: Ref; active: boolean; compare: boolean; age: string | null
           {Math.abs(r.llm_guess - r.score) >= 25 && <div className="mt-1 text-xs text-muted">The model guessed {r.llm_guess > r.score ? 'higher' : 'lower'} than the data says.</div>}
         </div>
       )}
+      {weak && p.swapping && r.swaps.length === 0 && <div className="mt-3 border-t border-line pt-3 text-sm text-muted pulse">Finding stand-ins that play the same role...</div>}
       {r.swaps.length > 0 && (
         <div className="mt-3 border-t border-line pt-3">
           <div className="text-xs uppercase tracking-wide text-muted mb-2">Stand-ins that play the same role</div>
