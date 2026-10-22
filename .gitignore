@@ -10,3 +10,4 @@ cache/
 *.sqlite
 .DS_Store
 eval/out/
+.private/
