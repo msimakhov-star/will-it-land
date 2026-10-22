@@ -21,6 +21,7 @@ mcp_app = http_app()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    pipeline.llm.warm()
     async with mcp.session_manager.run():
         yield
 

@@ -23,6 +23,9 @@ AGE_BUCKETS = ["24_and_younger", "25_to_29", "30_to_34", "35_to_44", "45_to_54",
 
 _lock = threading.Lock()
 _db: sqlite3.Connection | None = None
+# One shared client: a fresh httpx.Client per call re-runs macOS proxy discovery and SSL setup, measured at
+# 2 to 80 s on this machine. trust_env=False skips the proxy lookup entirely.
+_http = httpx.Client(trust_env=False, timeout=30)
 
 
 class QlooError(RuntimeError):
@@ -53,7 +56,7 @@ def get(path: str, params: dict, ttl: float = 7 * 86400) -> dict:
     api_key = os.environ.get("QLOO_API_KEY")
     if not api_key:
         raise QlooError("QLOO_API_KEY is not set")
-    r = httpx.get(BASE_URL + path, params=clean, headers={"X-Api-Key": api_key}, timeout=30)
+    r = _http.get(BASE_URL + path, params=clean, headers={"X-Api-Key": api_key})
     if r.status_code == 401:
         raise QlooError("Qloo rejected the key (401). Check QLOO_API_KEY and that QLOO_BASE_URL is the hackathon host.")
     if r.status_code == 429:

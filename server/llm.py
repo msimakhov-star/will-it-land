@@ -21,7 +21,10 @@ def _anthropic():
     if _client is None:
         import anthropic
 
-        _client = anthropic.Anthropic(timeout=45.0, max_retries=2)  # a stuck call must not stall a demo
+        import httpx2  # the anthropic SDK (2.x) ships its own httpx fork
+
+        # trust_env=False: macOS proxy auto-discovery inside httpx was measured at up to 80 s on first use
+        _client = anthropic.Anthropic(timeout=45.0, max_retries=2, http_client=httpx2.Client(trust_env=False, timeout=45.0))
     return _client
 
 
@@ -30,6 +33,7 @@ def _gemini():
     if _client is None:
         from google import genai
 
+        os.environ.setdefault("no_proxy", "localhost,127.0.0.1")  # same macOS proxy-discovery stall, see _anthropic
         _client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     return _client
 
@@ -51,6 +55,15 @@ def complete(system: str, user: str, max_tokens: int = 4000, temperature: float 
         config=types.GenerateContentConfig(system_instruction=system, temperature=temperature, max_output_tokens=max_tokens),
     )
     return r.text or ""
+
+
+def warm() -> None:
+    """Build the client and make one tiny call on the main thread at startup. The first call from a
+    server worker thread was measured at 35 to 70 s on macOS; after a warm-up every call is 2 to 8 s."""
+    try:
+        complete("Reply with the word ok.", "ok", max_tokens=5, fast=True)
+    except Exception as ex:  # no key, no network: the first real request will report it properly
+        print("llm warm-up skipped:", ex, flush=True)
 
 
 def complete_json(system: str, user: str, max_tokens: int = 4000, fast: bool = False):
