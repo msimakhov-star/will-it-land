@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 import time
 from contextlib import asynccontextmanager
 from functools import lru_cache
@@ -19,9 +20,24 @@ from .mcp_server import http_app, mcp
 mcp_app = http_app()
 
 
+def _prewarm_examples():
+    """Run the bundled examples once per process so a judge's first click is instant and the Qloo cache is populated."""
+    if not os.environ.get("QLOO_API_KEY") and not os.environ.get("QLOO_MOCK"):
+        return
+    for ex in EXAMPLES:
+        try:
+            a = ex["audience"]
+            first = json.loads(_check_cached(ex["text"], a["age"], a["gender"], a["location"], False))
+            _swaps_cached(ex["text"], a["age"], a["gender"], a["location"], json.dumps(first["references"], sort_keys=True))
+        except Exception as ex_:  # pre-warming is best effort
+            print("prewarm failed:", ex_, flush=True)
+    print("prewarm done", flush=True)
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     pipeline.llm.warm()
+    threading.Thread(target=_prewarm_examples, daemon=True).start()
     async with mcp.session_manager.run():
         yield
 
