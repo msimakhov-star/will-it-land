@@ -1,0 +1,312 @@
+[
+ {
+  "model": "claude",
+  "format": "standup",
+  "room": {
+   "name": "under 25s in London",
+   "age": "24_and_younger",
+   "location": "London"
+  },
+  "text": "Evening, London! I'm 24 and back living in Zone 6, where my mum tracks my phone like I'm a Deliveroo order and still asks why I'm taking so long.\n\nI left a £1,100 room in Peckham where the landlord wanted a deposit, a guarantor and, I think, a kidney.\n\nNow I'm in my"
+ },
+ {
+  "model": "claude",
+  "format": "standup",
+  "room": {
+   "name": "25 to 29 year olds in Atlanta",
+   "age": "25_to_29",
+   "location": "Atlanta"
+  },
+  "text": "I'm 27 and back in my childhood bedroom in Marietta, where a Hannah Montana poster watches me like a disappointed ancestor.\n\nMy dad said \"rent is free,\" which is true the same way Waffle House is \"just a quick stop\" at 3 a.m.\n\nI left Midtown because my studio cost $2,400 a month and was roughly the size of a Chick-fil-A drive-thru lane.\n\nNow I have a master's degree and a curfew, because my mom tracks me on Life360 like I'm a lost AirPod.\n\nI sit in I-285"
+ },
+ {
+  "model": "claude",
+  "format": "standup",
+  "room": {
+   "name": "35 to 44 year olds in Glasgow",
+   "age": "35_to_44",
+   "location": "Glasgow"
+  },
+  "text": "I'm 39 and I've moved back in with my parents, and my mum's kept my room exactly as it was: Oasis poster, Pokémon cards, and a Tamagotchi that's still more emotionally stable than me.\n\nMy dad treats the central heating"
+ },
+ {
+  "model": "claude",
+  "format": "standup",
+  "room": {
+   "name": "45 to 54 year olds in Texas",
+   "age": "45_to_54",
+   "location": "Texas"
+  },
+  "text": "I'm 51 and I moved back in with my parents, and my mom kept my room exactly the way I left it: Troy Aikman poster, Atari in the closet,"
+ },
+ {
+  "model": "claude",
+  "format": "ad",
+  "room": {
+   "name": "under 25s in London",
+   "age": "24_and_younger",
+   "location": "London"
+  },
+  "text": "**\"THE ESCAPE\"**\n*30 seconds*\n\n**SFX:** Tube doors beeping. Packed carriage murmur. Tinny Dua Lipa leaking from someone's phone.\n\n**GIRL (deadpan, muttering):** Central line. Stranger's armpit. Again. Honestly? Not very Love Island.\n\n**SFX:** Phone *ping*.\n\n**GIRL:** Oh. Skybound just dropped flights to Lisbon. Nineteen quid.\n\n**SFX:** Record scratch. Beat drops, upbeat.\n\n**GUY (hyped):** Nineteen quid? That's two Greggs meals and a bus fare to Peckham!\n\n**GIRL:** Pack light. Main character energy only.\n\n**ANNOUNCER (fast, fun):** Skybound. Flights from £19. Fly further than your overdraft should allow. Book now at flyskybound.com. Terms apply. Vibes guaranteed.\n\n**SF"
+ },
+ {
+  "model": "claude",
+  "format": "ad",
+  "room": {
+   "name": "people aged 55 and over in Toronto",
+   "age": "55_and_older",
+   "location": "Toronto"
+  },
+  "text": "**30-SECOND RADIO SCRIPT: LOONIE AIR**\n\n**SFX:** Gentle acoustic guitar, with a Gordon Lightfoot-style folk strum.\n\n**ANNOUNCER (warm, upbeat):** You waited for the Eaton"
+ },
+ {
+  "model": "claude",
+  "format": "toast",
+  "room": {
+   "name": "under 25s in London",
+   "age": "24_and_younger",
+   "location": "London"
+  },
+  "text": "Ladies and gentlemen, I've known Jake since Year 7, when his biggest flex was a FIFA Ultimate Team pack and a Greggs sausage roll he refused to share.\n\nHe's survived Tube strikes, a situationship straight out of Love Island, and a 4am Nando's order that ended with him crying along to Stormzy.\n\nThen Priya arrived: a woman who beats him at Wordle, out-dances him to Dua Lipa, and somehow gets him out of Peckham before midnight.\n\nPriya, you've turned a man who swore he was \"not a relationship person\" into someone who says \"we\" in the group chat and shares a Spotify Wrapped with you.\n\nSo raise your glasses to Jake and Priya: may your love be stronger than Tube Wi-Fi, and may you never see a Deliveroo surge fee!"
+ },
+ {
+  "model": "claude",
+  "format": "toast",
+  "room": {
+   "name": "25 to 29 year olds in Atlanta",
+   "age": "25_to_29",
+   "location": "Atlanta"
+  },
+  "text": "Jake has put Waffle House at 3 a.m. above everything since college, but tonight he's proved there's something better than scattered, smothered, and covered, and her name is Emma.\n\nHe swore he'd never settle down, then Emma showed up, he deleted Hinge, and he's been more loyal than Atlanta was to the Braves in 2021, when he cried harder than he did at the Season 1 finale of *Atlanta*.\n\nMarriage is basically Mario Kart: someone's going to throw a blue shell, but Emma's the one person who'll still share the Beltline-sized snack stash with you afterward.\n\nEmma, thank you for making him a better man, or at least one who now owns a vacuum, cloth napkins, and a Chick-fil-A app he actually uses for more than the nuggets.\n\nSo everybody raise a glass to Jake and Emma: may your love be forever so fresh and so clean, like OutKast said, and may you never run out of sweet tea!"
+ },
+ {
+  "model": "claude",
+  "format": "toast",
+  "room": {
+   "name": "30 to 34 year olds in Mumbai",
+   "age": "30_to_34",
+   "location": "Mumbai"
+  },
+  "text": "Rohan, we've been friends since Snake on the Nokia 1100 and Orkut scraps, and somehow you're the first of us to settle down before our EMIs did.\n\nYou watched DDLJ one too many times and believed that if you were meant to find love, she'd turn around at Bandstand, and, bhai, Priya actually did.\n\nThis man has survived the Andheri fast local at 9:12, Maggi at 2 a.m. in Powai, and our \"Zindagi Na Milegi Dobara\" Goa trip that never left the group chat.\n\nPriya, thank you for upgrading his life from Cutting chai and Arijit Singh breakup playlists to someone who actually replies on time.\n\nSo raise your glasses, Mumbai: to Rohan and Priya, may your love be like Marine Drive at sunset, and may your Wi-Fi be stronger than our Jio signal at the Wankhede!"
+ },
+ {
+  "model": "claude",
+  "format": "toast",
+  "room": {
+   "name": "35 to 44 year olds in Glasgow",
+   "age": "35_to_44",
+   "location": "Glasgow"
+  },
+  "text": "Ladies and gentlemen, I've known this man since we were cheating at GoldenEye on the N64 and living off Irn-Bru and Tunnock's caramel wafers, so believe me when I say that today he has finally outdone himself.\n\nHe's gone from queuing outside the Barrowland in a Franz Ferdinand T-shirt to a Byres Road flat that somehow always smells of Greggs, and I'm told that's what sold her on him.\n\nShe is smarter, kinder and far better-looking than Rab C. Nesbitt, which is exactly why it's baffling that she looked at him and thought, \"Aye, he'll do.\"\n\nMy advice, pal: from now on, \"Yes, hen\" is not just a phrase, it's a lifestyle, and the Subway will always be quicker than any argument you try to win.\n\nSo please raise your glasses to the happy couple, who'll still be a better double act than Jack and Victor, and who will be happy long after Still Game's last \"Ya dancer!\""
+ },
+ {
+  "model": "claude",
+  "format": "toast",
+  "room": {
+   "name": "45 to 54 year olds in Texas",
+   "age": "45_to_54",
+   "location": "Texas"
+  },
+  "text": "Y'all, I've known this man since we were trying to survive dysentery on The Oregon Trail and thought a Whataburger at midnight counted as a food group.\nHe's got the cool-under-pressure of Troy Aikman in '93, and tonight he still somehow looks better in a tux than JR Ewing did in a ten-gallon hat.\nThen he met his bride, who proved that love really does beat bad decisions, bad perms, and even his playlist of nothing but George Strait.\nMarriage, brother, is a lot like Friday Night Lights: clear eyes, full hearts, and a wife who will always be smarter than the playbook.\nSo raise your Dr Pepper, your Shiner, or whatever's in your boots, and here's to the happy couple. Can't lose!"
+ },
+ {
+  "model": "claude",
+  "format": "toast",
+  "room": {
+   "name": "people aged 55 and over in Toronto",
+   "age": "55_and_older",
+   "location": "Toronto"
+  },
+  "text": "Friends, family, and fellow survivors of Honest Ed's and the Eaton's catalogue: I've known the groom since we were flipping through records at Sam the Record Man, and he still owes me for that Gordon Lightfoot album.\n\nHe waited longer to find the right woman than the Leafs have waited for a Cup since 1967, but unlike the Leafs, he finally delivered!\n\nMarriage, I've learned, is like Canadian Tire money: you save it up for years, it's worth more than it looks, and you'd better remember where you put it.\n\nMay your home be as welcoming as Mr."
+ },
+ {
+  "model": "gemini",
+  "format": "standup",
+  "room": {
+   "name": "under 25s in London",
+   "age": "24_and_younger",
+   "location": "London"
+  },
+  "text": "I just gave up a £1,200 box room in Peckham to move back in with my parents, which is great for my Monzo but fatal for my sex life.\nHonestly, my independence died faster than Jacob Elordi in *Saltburn*.\nI’m 23, sitting in my childhood bedroom under a *Central Cee* poster, getting yelled at for leaving the big light on.\nMy mum now tracks my location on *BeReal* like she’s running an undercover operation in *Top Boy*.\nI went from raving until 5 AM to *Fred again..* to negotiating a bedtime like I’m twelve years old.\nLast night I tried sneaking in late and my dad met me at the stairs looking like a bouncer outside Drumshed."
+ },
+ {
+  "model": "gemini",
+  "format": "standup",
+  "room": {
+   "name": "25 to 29 year olds in Atlanta",
+   "age": "25_to_29",
+   "location": "Atlanta"
+  },
+  "text": "At 27, I officially moved back in with my parents, which really torpedoes your confidence on Hinge.\nI went from getting day-drunk on the BeltLine to having a 10 p.m. curfew enforced by my dad.\nLast night I tried sneaking out for late-night lemon pepper wet wings, and he intercepted me like a boss in Fortnite.\nNow my Fridays consist of explaining to my mom that Lil Baby is an artist, not an endangered toddler.\nMy sex life is so dead that the closest I get to action is the cashier flirting with me at Trader Joe's.\nBut hey, at least I’m saving enough money to eventually afford a broom closet in Buckhead."
+ },
+ {
+  "model": "gemini",
+  "format": "standup",
+  "room": {
+   "name": "30 to 34 year olds in Mumbai",
+   "age": "30_to_34",
+   "location": "Mumbai"
+  },
+  "text": "At 32, I finally gave up paying crazy Bandra rent and moved back into my parents' flat in Dadar.\nMy independence died the moment my mom replaced my black coffee with warm Bournvita.\nI used to sneak out to Toto’s Garage, but now my dad tracks my location like he’s ACP Pradyuman from *CID*.\nMy mom walks into my Zoom calls like *Sarabhai vs Sarabhai*, loudly complaining that my WFH outfit is \"too middle class.\"\nI booted up *GTA Vice City* to escape reality, and my dad walked in and said, \"At your age, Shah Rukh Khan owned Mannat.\"\nHonestly, my adult life is so ruined here that my mom just asked the Swiggy guy for his kundali."
+ },
+ {
+  "model": "gemini",
+  "format": "standup",
+  "room": {
+   "name": "35 to 44 year olds in Glasgow",
+   "age": "35_to_44",
+   "location": "Glasgow"
+  },
+  "text": "At thirty-nine, I’ve officially surrendered to the rent crisis and moved back into my childhood bedroom in Shawlands.\nIt’s deeply humbling being nearly forty and hiding a hangover from your mum like you’ve just staggered in from a 2004 night out at The Arches.\nMy room hasn't changed since school—I’m sleeping right under a faded *Trainspotting* poster while my dad complains about the price of gas.\nI tried bringing a date back last weekend, but nothing kills the romantic tension faster than whispering past my mum’s *River City* boxsets in the hallway.\nI sat on the bus yesterday listening to Biffy Clyro, genuinely wondering at what exact point my entire adult life went completely off the rails.\nThen I walked into the local for a pint of Tennent's, and the barman asked if I was home from uni for the Easter break."
+ },
+ {
+  "model": "gemini",
+  "format": "standup",
+  "room": {
+   "name": "45 to 54 year olds in Texas",
+   "age": "45_to_54",
+   "location": "Texas"
+  },
+  "text": "How y’all doing tonight? At forty-eight years old, I finally made it: I moved back in with my parents.\nI went from paying a mortgage to getting an official H-E-B chore list and a mandatory 10 PM curfew.\nMy dad stares at me with pure Hank Hill disappointment every single time I fail to start the weedwhacker.\nMy childhood bedroom hasn't changed since 1993, so I’m currently sleeping under a faded George Strait poster on a squeaky twin bed.\nLast night I tried sneaking a Whataburger into the house, and my mom hit me with a strict, \"Alright, alright, alright... where do you think *you're* going?\"\nBut the ultimate hit to my dignity isn't losing my freedom; it's knowing my parents are out making midnight Buc-ee's runs while I'm fast asleep by nine."
+ },
+ {
+  "model": "gemini",
+  "format": "standup",
+  "room": {
+   "name": "people aged 55 and over in Toronto",
+   "age": "55_and_older",
+   "location": "Toronto"
+  },
+  "text": "Good evening Toronto! At my age, moving back in with my parents feels less like saving money and more like a tragic historical reenactment.\nMy childhood bedroom hasn't changed at all—it still has a faded Gordon Lightfoot poster and a closet full of old BiWay clothes.\nEvery morning my mom wakes me up at dawn to complain that Zellers had much better quality toilet paper than Shoppers Drug Mart.\nI tried setting boundaries, but Dad just shook his head and asked if Al Waxman ever whined like this on *King of Kensington*.\nThey’re treating me like a bad tenant now, threatening to sublet my room to someone who actually misses Honest Ed’s.\nHonestly, paying my rent in chores is fine, as long as I can survive listening to CHUM-FM at top volume all day."
+ },
+ {
+  "model": "gemini",
+  "format": "ad",
+  "room": {
+   "name": "under 25s in London",
+   "age": "24_and_younger",
+   "location": "London"
+  },
+  "text": "[SFX: Heavy London rain, fast-paced UK garage beat kicks in]\n\nVO (Energetic, young London accent): \nTired of paying ten quid for a pint in Shoreditch? It's time to swap a freezing night at Drumsheds for the beaches of Ibiza. \n\nWith JetHop, flights across Europe start from just nineteen pounds—literally cheaper than a new drop from Corteiz. \n\nSell that hoodie on Depop, grab your besties, and go find your own Love Island romance this weekend. \n\nSearch JetHop.com now. Fly cheap, live big. \n\n[SFX: Plane takeoff sound into bass drop]"
+ },
+ {
+  "model": "gemini",
+  "format": "ad",
+  "room": {
+   "name": "25 to 29 year olds in Atlanta",
+   "age": "25_to_29",
+   "location": "Atlanta"
+  },
+  "text": "[Upbeat music fades in]\n\nAUDIO: Look, we love strolling the BeltLine and grabbing lemon pepper wet wings as much as the next person, but your camera roll needs a serious upgrade. Channeling big Latto energy this weekend? Pack your Telfar bag and ditch the humidity. Fly SkyJet from ATL to Miami, New York, or Cancun starting at just forty-nine dollars! Stop re-watching *Atlanta* on Hulu and go write your own storyline. Book today at SkyJet.com. \n\n[SFX: Jet engine flyby]"
+ },
+ {
+  "model": "gemini",
+  "format": "ad",
+  "room": {
+   "name": "30 to 34 year olds in Mumbai",
+   "age": "30_to_34",
+   "location": "Mumbai"
+  },
+  "text": "[SFX: Blaring Mumbai traffic noise instantly cuts to relaxing ocean waves]\n\nVOICEOVER (Energetic, relatable): \nStuck on the Sea Link again? Still waiting for that *Dil Chahta Hai* trip to finally leave your dead WhatsApp group? \n\nStop sitting at Marine Drive staring at the waves while blasting Lucky Ali on loop. It’s time to actually take off! \n\nWith JetFly, get flight fares so ridiculously cheap, even Maya Sarabhai would call them a total steal. \n\nDitch the city grind this weekend. Visit JetFly.in now and fly anywhere in India for less!\n\n[SFX: Jet engine chime]\n\nVOICEOVER: JetFly. Less cash, more travel."
+ },
+ {
+  "model": "gemini",
+  "format": "ad",
+  "room": {
+   "name": "35 to 44 year olds in Glasgow",
+   "age": "35_to_44",
+   "location": "Glasgow"
+  },
+  "text": "[SFX: Heavy Scottish rain and windscreen wipers]\n\n[VO VOICE - Warm, relatable Glaswegian accent]: \nDrizzling on Sauchiehall Street again? *Gonnae no dae that!*\n\n[SFX: Record scratch, up-tempo beach vibe music fades in]\n\nTrade the grey skies for guaranteed sunshine with FlyLow. Grab dirt-cheap flights straight from Glasgow Airport to Europe’s top hotspots. \n\nPicture it: blasting Paolo Nutini on a sunbed with an ice-cold Irn-Bru in hand. Proper *taps aff* weather! \n\nIt’s cheaper than a night out at the Barrowlands, and a whole lot warmer.\n\nDon’t sit there chewin’ the fat—book today at FlyLow.co.uk. FlyLow: Gie it laldy in the sun!"
+ },
+ {
+  "model": "gemini",
+  "format": "ad",
+  "room": {
+   "name": "45 to 54 year olds in Texas",
+   "age": "45_to_54",
+   "location": "Texas"
+  },
+  "text": "You’ve loaded the truck, grabbed Beaver Nuggets at Buc-ee’s, and blasted Willie Nelson on repeat. But isn't it time to trade the highway for the sky? With Lone Star Air, you don't need Ocean Front Property in Arizona to get a great deal. We’ve got unbeatable nonstops that’ll leave you feeling alright, alright, alright. So grab a Whataburger for the drive to the airport and book now at LoneStarAir.com. Low fares, big Texas freedom."
+ },
+ {
+  "model": "gemini",
+  "format": "ad",
+  "room": {
+   "name": "people aged 55 and over in Toronto",
+   "age": "55_and_older",
+   "location": "Toronto"
+  },
+  "text": "[SFX: Gentle acoustic guitar strumming into a jet engine swoosh]\n\nVO: Remember snagging unbeatable bargains at Honest Ed’s? Or hunting for vinyl under the bright neon lights of Sam the Record Man? \n\nAt MapleAir, we’re bringing those legendary Toronto deals back! \n\nYou don’t have to be the King of Kensington to travel like royalty. Hit your own Carefree Highway and trade the cold for sunny Florida beaches with flights starting at just ninety-nine dollars. \n\nVisit MapleAir.ca today. Fly smart, save big."
+ },
+ {
+  "model": "gemini",
+  "format": "toast",
+  "room": {
+   "name": "under 25s in London",
+   "age": "24_and_younger",
+   "location": "London"
+  },
+  "text": "From matching on Hinge to endlessly splitting the Uber home on Monzo, I knew [Groom] was properly smitten.\nHonestly, your love story is sweeter than a Chicken Shop Date and somehow more chaotic than Love Island.\n[Bride] deserves a medal for surviving his kitchen disasters and his tragic attempts to dance like Fred again..\nYou’ve officially traded late nights in Peckham for romantic weekends and decent sleep.\nEveryone raise a glass to [Bride] and [Groom]—to a lifetime of love, laughter, and zero toxic vibes!"
+ },
+ {
+  "model": "gemini",
+  "format": "toast",
+  "room": {
+   "name": "25 to 29 year olds in Atlanta",
+   "age": "25_to_29",
+   "location": "Atlanta"
+  },
+  "text": "From matching on Hinge to day-drinking on the BeltLine, [Groom] knew instantly that [Bride] was his person.\nHe traded late nights playing Fortnite for dates at Ponce City Market, and we’re all amazed by the glow-up.\nMetro Boomin himself couldn't have produced a better beat for a love story than the one you two share.\nMay your marriage be as iconic as Outkast, and may every late-night run to Waffle House hit just right.\nEveryone raise a glass to the happy couple—so fresh, so clean, and made for each other!"
+ },
+ {
+  "model": "gemini",
+  "format": "toast",
+  "room": {
+   "name": "30 to 34 year olds in Mumbai",
+   "age": "30_to_34",
+   "location": "Mumbai"
+  },
+  "text": "From drinking Old Monk at Marine Drive to endlessly quoting *Dil Chahta Hai*, our groom was always a hopeless romantic.\nWe honestly thought he’d spend his thirties playing *EA Cricket 07* and overanalyzing his life at Prithvi Cafe.\nBut then his bride walked in looking like a dream straight out of a *Lucky Ali* music video, and everything changed.\nShe somehow turned the guy who used to get thrown out of *Toto’s Garage* into the ultimate devoted husband.\nTo the newlyweds—may your love story be as hits-packed as 90s *A.R. Rahman* and as smooth as the Sea Link at midnight!"
+ },
+ {
+  "model": "gemini",
+  "format": "toast",
+  "room": {
+   "name": "35 to 44 year olds in Glasgow",
+   "age": "35_to_44",
+   "location": "Glasgow"
+  },
+  "text": "From messy 2am nights at The Arches to surviving the next morning on cold Irn-Bru, [Groom] has been my partner in crime for decades.\nThen he met [Bride], trading his dodgy MD 20/20 days for proper date nights at King Tut’s.\nWatching them together brings more warmth than a Sunday afternoon Still Game marathon.\nThey fit together perfectly, like Biffy Clyro playing a sold-out gig at the Barrowlands.\nRaise your Tennent’s high, everyone: to [Bride] and [Groom]—mon the happy couple!"
+ },
+ {
+  "model": "gemini",
+  "format": "toast",
+  "room": {
+   "name": "45 to 54 year olds in Texas",
+   "age": "45_to_54",
+   "location": "Texas"
+  },
+  "text": "From our high school days cruising around and blasting George Strait cassette tapes, I always knew [Groom] was a true romantic.\nHe survived the 90s, questionable fashion choices, and endless Texas road trips powered purely by Dr Pepper and Buc-ee's.\nBut standing next to [Bride] tonight, he’s officially reached peak Matthew McConaughey—just pure \"alright, alright, alright.\"\nMay your marriage be smoother than a cold Shiner Bock and brighter than the Friday Night Lights on an autumn evening.\nY'all raise a glass to the newlyweds—cheers to a lifetime of love, laughter, and Texas-sized happiness!"
+ },
+ {
+  "model": "gemini",
+  "format": "toast",
+  "room": {
+   "name": "people aged 55 and over in Toronto",
+   "age": "55_and_older",
+   "location": "Toronto"
+  },
+  "text": "Looking at these two tonight brings back better memories than a concert at the El Mocambo.  \nBack in the day, he thought he was the King of Kensington, blasting Rush out of his car window.  \nThen she came along, brighter than the neon sign at Sam the Record Man, and swept him right off his feet.  \nTheir bond is smoother than Gordon Lightfoot and built to last longer than Honest Ed’s bargains.  \nRaise your glasses to a couple more iconic than the CN Tower—to the bride and groom!"
+ },
+ {
+  "model": "claude",
+  "format": "standup",
+  "room": {
+   "name": "people aged 55 and over in Toronto",
+   "age": "55_and_older",
+   "location": "Toronto"
+  },
+  "text": "I moved back in with my parents at 58, and the house looks like Honest Ed's, because nothing has been thrown out since 1974.\n\nMom still keeps a drawer of Canadian Tire money, which she insists will be worth something the day the Leafs win the Cup.\n\nDad watches Hockey Night in Canada in the basement, yelling at the TV like he's personally been traded.\n\nEvery night at six, Mom puts on Gordon Lightfoot, and every night the Edmund Fitzgerald goes down again during dinner.\n\nDad calls driving twenty minutes to Tim Hortons \"going out,\" and honestly, it's the best social life I've had since Studio 54"
+ }
+]
