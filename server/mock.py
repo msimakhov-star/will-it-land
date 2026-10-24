@@ -46,7 +46,36 @@ def _pop(name: str) -> float:
 AMBIGUOUS = {"friends": "Friends (2011 film)", "chelsea": "Chelsea (person)", "manhattan": "Manhattan (1979 film)"}
 
 
+def _faults() -> dict[str, float]:
+    """QLOO_MOCK_FAULTS=429:0.15,timeout:0.05,empty:0.1 injects failures so the degraded paths run offline."""
+    import os
+
+    out = {}
+    for part in (os.environ.get("QLOO_MOCK_FAULTS") or "").split(","):
+        k, _, v = part.partition(":")
+        if k and v:
+            out[k.strip()] = float(v)
+    return out
+
+
 def respond(path: str, params: dict) -> dict:
+    import random
+
+    f = _faults()
+    if f:
+        from .qloo import QlooError
+
+        roll = random.random()
+        if roll < f.get("429", 0):
+            raise QlooError("Qloo rate limit (429). Try again shortly.")
+        if roll < f.get("429", 0) + f.get("timeout", 0):
+            raise QlooError("Qloo unreachable: ReadTimeout")
+        if roll < f.get("429", 0) + f.get("timeout", 0) + f.get("empty", 0):
+            return {"success": True, "results": [] if path == "/search" else {}}
+    return _respond(path, params)
+
+
+def _respond(path: str, params: dict) -> dict:
     if path == "/search":
         q = params["query"]
         t = (params.get("types") or "urn:entity:tv_show").split(",")[0]
