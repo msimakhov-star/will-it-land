@@ -1,10 +1,42 @@
-"""Original demo texts (no real monologues: copyright, and nobody gets mocked). Each has references that split by age."""
+"""Original demo texts (no real monologues: copyright, and nobody gets mocked) and audience presets.
+Each example has references that split by age and place, so switching rooms visibly changes the result."""
+
+TWO_ROOMS = [
+    {"name": "Under 25s in London", "age": "24_and_younger", "gender": None, "location": "London"},
+    {"name": "55+ in St. Louis", "age": "55_and_older", "gender": None, "location": "St. Louis"},
+]
+
+MARKETS = [
+    {"name": "US, under 25", "age": "24_and_younger", "gender": None, "location": "United States"},
+    {"name": "US, 55+", "age": "55_and_older", "gender": None, "location": "United States"},
+    {"name": "UK, 45 to 54", "age": "45_to_54", "gender": None, "location": "United Kingdom"},
+    {"name": "Texas, 35 to 44", "age": "35_to_44", "gender": None, "location": "Texas"},
+    {"name": "India, 25 to 29", "age": "25_to_29", "gender": None, "location": "India"},
+    {"name": "Brazil, 30 to 34", "age": "30_to_34", "gender": None, "location": "Brazil"},
+]
+
+TOUR = [
+    {"name": "Leeds", "age": "25_to_29", "gender": None, "location": "Leeds"},
+    {"name": "Glasgow", "age": "25_to_29", "gender": None, "location": "Glasgow"},
+    {"name": "New York", "age": "25_to_29", "gender": None, "location": "New York"},
+    {"name": "Atlanta", "age": "25_to_29", "gender": None, "location": "Atlanta"},
+    {"name": "Austin", "age": "25_to_29", "gender": None, "location": "Austin"},
+    {"name": "Toronto", "age": "25_to_29", "gender": None, "location": "Toronto"},
+]
+
+PRESETS = {
+    "two_rooms": {"title": "Two rooms", "audiences": TWO_ROOMS},
+    "markets": {"title": "Six markets", "audiences": MARKETS},
+    "tour": {"title": "Tour: six cities, 25 to 29", "audiences": TOUR},
+}
 
 EXAMPLES = [
     {
         "id": "standup",
         "title": "Stand-up bit: moving back home",
+        "kind": "comedy",
         "audience": {"age": "24_and_younger", "gender": None, "location": "London"},
+        "matrix": TWO_ROOMS,
         "text": (
             "So I moved back in with my parents. Their Wi-Fi password is still the name of the dog that died when I was nine.\n"
             "My dad watches Seinfeld every night like it's the news. He laughs before the joke, like he's reminding the TV how it goes.\n"
@@ -17,7 +49,9 @@ EXAMPLES = [
     {
         "id": "ad",
         "title": "Ad script: budget airline, 30 seconds",
+        "kind": "ad",
         "audience": {"age": "45_to_54", "gender": None, "location": "Texas"},
+        "matrix": MARKETS,
         "text": (
             "You remember when flying felt like a Taylor Swift tour: expensive, loud, and somehow still sold out.\n"
             "We think flying should feel more like Minecraft. You build the trip you want, block by block.\n"
@@ -28,6 +62,7 @@ EXAMPLES = [
     {
         "id": "speech",
         "title": "Toast: best man speech",
+        "kind": "speech",
         "audience": {"age": "55_and_older", "gender": None, "location": None},
         "text": (
             "I met Dan in 2009. He was wearing a Hollister hoodie and quoting The Hangover like scripture.\n"

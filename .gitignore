@@ -11,3 +11,4 @@ cache/
 .DS_Store
 eval/out/
 .private/
+.research/
