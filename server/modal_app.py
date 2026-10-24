@@ -8,13 +8,14 @@ image = (
     .pip_install("fastapi==0.159.1", "uvicorn", "httpx==0.28.1", "httpx2==2.16.0", "anthropic==2.1.0", "google-genai==2.32.0", "mcp==2.3.0", "pydantic==2.14.1", "modal")
     .add_local_dir("server", remote_path="/root/server")
     .add_local_dir("web/dist", remote_path="/root/web/dist")
+    .add_local_file("eval/data/survey_items.json", remote_path="/root/eval/data/survey_items.json")
 )
 app = modal.App("will-it-land", image=image)
 vol = modal.Volume.from_name("will-it-land-cache", create_if_missing=True)
 
 
 @app.function(
-    secrets=[modal.Secret.from_name("qloo"), modal.Secret.from_name("llm")],
+    secrets=[modal.Secret.from_name("qloo"), modal.Secret.from_name("llm"), modal.Secret.from_name("survey")],
     volumes={"/cache": vol},
     min_containers=1,
     max_containers=1,  # one sqlite writer on the Volume, and a hard ceiling on LLM spend

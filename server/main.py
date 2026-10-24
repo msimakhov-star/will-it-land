@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import pipeline, qloo
+from . import pipeline, qloo, survey
 from .examples import EXAMPLES, PRESETS
 from .mcp_server import http_app, mcp
 
@@ -301,6 +301,40 @@ def localise(req: LocaliseRequest, request: Request):
     _guard(request)
     a = req.audience.to()
     return _run(lambda: LOCALISED.get_or(("loc", req.text, _aud_key([a])), lambda: pipeline.localise(req.text, a)), f"localise [{a.label()}]")
+
+
+# ---- recognition survey (anonymous ground truth for the youngest room) ------------------------------------
+
+
+class SurveyIn(BaseModel):
+    age: str
+    city: str | None = Field(default=None, max_length=40)
+    answers: dict[str, bool]
+
+
+@app.get("/api/survey")
+def survey_items():
+    return {"items": survey.items(), "ages": survey.AGES}
+
+
+@app.post("/api/survey")
+def survey_submit(s: SurveyIn, request: Request):
+    _guard(request)
+    try:
+        n = survey.save(s.age, s.city or "", s.answers)
+    except ValueError as ex:
+        raise HTTPException(400, str(ex))
+    threading.Thread(target=_persist_volume, daemon=True).start()
+    return {"ok": True, "responses": n}
+
+
+@app.get("/api/survey/export")
+def survey_export(token: str = ""):
+    """Aggregate export for eval/survey_report.py; protected by a token from the environment."""
+    want = os.environ.get("SURVEY_TOKEN")
+    if not want or token != want:
+        raise HTTPException(404, "not found")
+    return {"items": survey.items(), "responses": survey.responses()}
 
 
 # ---- shareable reports ------------------------------------------------------------------------------------

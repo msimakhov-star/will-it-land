@@ -27,3 +27,8 @@ The language-model baseline is Claude Sonnet, asked for each generation's "% who
 
 ## Not claimed
 Fame is "heard of", not "will laugh". No claim is made about whether a joke is funnier, and no claim about any individual.
+
+## Survey: under-25 recognition (added 24 Oct 2026, before any response was collected)
+YouGov publishes no under-25 breakdown, so the youngest room gets its own ground truth: an anonymous page in the app (`/survey`) asks for an age band, a city, and "have you heard of this?" for 49 items (`eval/data/survey_items.json`: the references in the demo texts, the references Claude and Gemini chose when asked to write "for under 25s in London", and 8 YouGov items with large generation gaps as a sanity check). No names, contact details or IP addresses are stored.
+
+Metric: Spearman between each item's recognition rate among 18 to 24 year old respondents (items with at least 5 answers) and (a) the Will It Land score for the room "under 25 [+ city]", (b) the language model's unaided guess for the same room. Also reported: the references the models chose for under-25s that fewer than half of under-25 respondents recognised. With a small n, the numbers are reported with n and no claims beyond them.
