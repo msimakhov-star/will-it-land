@@ -5,7 +5,7 @@ import modal
 
 image = (
     modal.Image.debian_slim(python_version="3.12")
-    .pip_install("fastapi>=0.115", "httpx>=0.27", "anthropic>=0.40", "google-genai>=1.0", "mcp>=1.2", "pydantic>=2.7")
+    .pip_install("fastapi==0.159.1", "uvicorn", "httpx==0.28.1", "httpx2==2.16.0", "anthropic==2.1.0", "google-genai==2.32.0", "mcp==2.3.0", "pydantic==2.14.1", "modal")
     .add_local_dir("server", remote_path="/root/server")
     .add_local_dir("web/dist", remote_path="/root/web/dist")
 )
@@ -27,6 +27,8 @@ def web():
     import sys
 
     os.environ.setdefault("QLOO_CACHE", "/cache/qloo.sqlite")
+    os.environ.setdefault("WIL_VOLUME", "will-it-land-cache")
+    os.environ.setdefault("WIL_VOLUME", "will-it-land-cache")
     sys.path.insert(0, "/root")
     from server.main import app as fastapi_app
 

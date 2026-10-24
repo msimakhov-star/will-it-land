@@ -49,6 +49,12 @@ def start_ledger() -> list:
     return calls
 
 
+def degraded() -> bool:
+    """True if any Qloo call in the current request failed. Results built from a degraded request must not be memoised,
+    or a brief 429 would show as 'not in Qloo' until the process restarts."""
+    return any(c["source"] == "error" for c in (_ledger.get() or []))
+
+
 def pmap(fn, items, workers: int = 8) -> list:
     """ThreadPoolExecutor.map that carries the current context (so ledger entries from worker threads land in the request's ledger)."""
     items = list(items)
@@ -64,7 +70,8 @@ def _cache() -> sqlite3.Connection:
     if _db is None:
         os.makedirs(os.path.dirname(os.path.abspath(CACHE_PATH)), exist_ok=True)
         _db = sqlite3.connect(CACHE_PATH, check_same_thread=False, timeout=30)
-        _db.execute("pragma journal_mode=wal")
+        # WAL needs shared memory, which network volumes (Modal) do not reliably provide; use the default journal there
+        _db.execute("pragma journal_mode=" + ("delete" if os.environ.get("MODAL_TASK_ID") else "wal"))
         _db.execute("create table if not exists q (k text primary key, v text, t real)")
     return _db
 
@@ -88,10 +95,19 @@ def get(path: str, params: dict, ttl: float = 30 * 86400) -> dict:
     if os.environ.get("QLOO_MOCK"):
         from . import mock
 
+        try:
+            data = mock.respond(path, clean)
+        except QlooError as ex:  # mirror the live path: a /search miss is an empty answer, anything else is a recorded error
+            if path == "/search" and "no result" in str(ex).lower():
+                _record(path, clean, "mock", (time.time() - t0) * 1000)
+                return {"results": []}
+            _record(path, clean, "error", (time.time() - t0) * 1000)
+            raise
         _record(path, clean, "mock", (time.time() - t0) * 1000)
-        return mock.respond(path, clean)
+        return data
     api_key = os.environ.get("QLOO_API_KEY")
     if not api_key:
+        _record(path, clean, "error", 0)
         raise QlooError("QLOO_API_KEY is not set")
     try:
         data = _fetch(path, clean, api_key)
@@ -99,6 +115,7 @@ def get(path: str, params: dict, ttl: float = 30 * 86400) -> dict:
         if row:  # stale-on-error: an expired cached answer beats a failed demo
             _record(path, clean, "stale", (time.time() - t0) * 1000)
             return json.loads(row[0])
+        _record(path, clean, "error", (time.time() - t0) * 1000)
         raise
     with _lock:
         _cache().execute("insert or replace into q values (?,?,?)", (key, json.dumps(data), time.time()))
@@ -123,6 +140,8 @@ def _fetch(path: str, clean: dict, api_key: str) -> dict:
             time.sleep(min(float(retry), 5.0) if retry and retry.replace(".", "", 1).isdigit() else 1.5 * (attempt + 1))
             continue
         break
+    if r.status_code == 404 and path == "/search" and "no result" in r.text.lower():
+        return {"results": []}  # documented: /search answers 404 "No results" for a miss; cache it as empty
     if r.status_code == 401:
         raise QlooError("Qloo rejected the key (401). Check QLOO_API_KEY and that QLOO_BASE_URL is the hackathon host.")
     if r.status_code == 429:

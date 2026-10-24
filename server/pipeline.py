@@ -17,6 +17,7 @@ import copy
 import datetime as dt
 import hashlib
 import json
+import os
 import threading
 from collections import OrderedDict
 from dataclasses import asdict, dataclass, field
@@ -27,20 +28,23 @@ AUDIENCE_AGES = qloo.AGE_BUCKETS
 AGE_LABELS = {"24_and_younger": "under 25", "25_to_29": "25 to 29", "30_to_34": "30 to 34", "35_to_44": "35 to 44", "45_to_54": "45 to 54", "55_and_older": "55+"}
 TYPES = qloo.INSIGHT_TYPES
 MAX_REFS = 30  # per text: bounds Qloo and LLM work per request
+STANDIN_MIN_POP = float(os.environ.get("STANDIN_MIN_POP", "0.99"))  # Qloo popularity floor for Qloo-found stand-ins (tune on key day)
+PREFER_QLOO_WITHIN = 5.0  # points: Fix prefers a Qloo-found stand-in that scores within this of the best one
 
 # Fixed anchors per type so every location rank call contains two known points (one near-universal, one niche):
 # location affinity is expressed relative to them, which keeps it comparable across calls.
-ANCHORS = {
-    "tv_show": ["Friends", "Twin Peaks"],
-    "movie": ["Titanic", "Primer"],
-    "artist": ["Taylor Swift", "Boards of Canada"],
-    "brand": ["Coca-Cola", "Allbirds"],
-    "person": ["Barack Obama", "Werner Herzog"],
-    "book": ["Harry Potter and the Philosopher's Stone", "Infinite Jest"],
-    "videogame": ["Minecraft", "Disco Elysium"],
-    "podcast": ["The Joe Rogan Experience", "Reply All"],
-    "place": ["Times Square", "Sultan Ahmed Mosque"],
+ANCHORS = {  # per type, from mainstream to niche, so a location's affinity can be placed among known points
+    "tv_show": ["Friends", "The Simpsons", "Breaking Bad", "The Office", "Stranger Things", "Twin Peaks", "The Wire", "Fleabag"],
+    "movie": ["Titanic", "Toy Story", "The Godfather", "Jurassic Park", "Inception", "Amelie", "Primer", "Paddington"],
+    "artist": ["Taylor Swift", "The Beatles", "Drake", "Adele", "Coldplay", "Radiohead", "Bad Bunny", "Boards of Canada"],
+    "brand": ["Coca-Cola", "Nike", "McDonald's", "Apple", "IKEA", "Patagonia", "Allbirds", "Greggs"],
+    "person": ["Barack Obama", "Oprah Winfrey", "Elon Musk", "Beyonce", "David Beckham", "Greta Thunberg", "Werner Herzog", "Mary Berry"],
+    "book": ["Harry Potter and the Philosopher's Stone", "To Kill a Mockingbird", "The Hunger Games", "Nineteen Eighty-Four", "Gone Girl", "Normal People", "Infinite Jest", "The Secret History"],
+    "videogame": ["Minecraft", "Fortnite", "Grand Theft Auto V", "The Sims", "Animal Crossing", "Stardew Valley", "Hades", "Disco Elysium"],
+    "podcast": ["The Joe Rogan Experience", "Serial", "Call Her Daddy", "Crime Junkie", "The Daily", "Radiolab", "No Such Thing as a Fish", "Reply All"],
+    "place": ["Times Square", "Eiffel Tower", "Central Park", "Big Ben", "Golden Gate Bridge", "Sagrada Familia", "Sultan Ahmed Mosque", "Angkor Wat"],
 }
+MIN_ANCHORS = 4
 
 EXTRACT_SYSTEM = """You find cultural references in text for a reference-checker.
 A cultural reference is a named thing an audience has to recognise for the line to work: TV shows, films, musicians or bands,
@@ -80,6 +84,17 @@ class Audience:
     gender: str | None = None  # male | female | None
     location: str | None = None  # free text locality, e.g. "London", "Texas", "United Kingdom"
     name: str | None = None  # optional display name, e.g. "Tour stop: Leeds"
+
+    def __post_init__(self):
+        self.age = (self.age or "").strip().lower() or None
+        g = (self.gender or "").strip().lower()
+        self.gender = {"men": "male", "man": "male", "women": "female", "woman": "female"}.get(g, g) or None
+        self.location = (self.location or "").strip()[:80] or None
+        self.name = (self.name or "").strip()[:60] or None
+        if self.age is not None and self.age not in AUDIENCE_AGES:
+            raise ValueError(f"age must be one of {', '.join(AUDIENCE_AGES)}")
+        if self.gender is not None and self.gender not in ("male", "female"):
+            raise ValueError("gender must be male or female")
 
     def label(self) -> str:
         if self.name:
@@ -140,16 +155,16 @@ def _similar(a: str, b: str) -> bool:
 
 
 def _locate(text: str, surface: str, used: list[tuple[int, int]]) -> tuple[int, int] | None:
-    pos = 0
-    while True:
-        i = text.find(surface, pos)
-        if i < 0:
-            return None
-        span = (i, i + len(surface))
-        if not any(a < span[1] and span[0] < b for a, b in used):
-            used.append(span)
-            return span
-        pos = i + 1
+    """First unused occurrence, preferring whole-word matches (so 'Friends' does not match inside 'Friendship')."""
+    import re
+
+    free = lambda sp: not any(a < sp[1] and sp[0] < b for a, b in used)  # noqa: E731
+    whole = [m.span() for m in re.finditer(rf"(?<!\w){re.escape(surface)}(?!\w)", text)]
+    loose = [m.span() for m in re.finditer(re.escape(surface), text)]
+    for span in [sp for sp in whole if free(sp)] or [sp for sp in loose if free(sp)]:
+        used.append(span)
+        return span
+    return None
 
 
 def _line_of(text: str, start: int, end: int) -> str:
@@ -205,7 +220,7 @@ def resolve(text: str, refs: list[Reference]) -> None:
     def one(ref: Reference):
         hits = by_query.get((ref.query, ref.type))
         if isinstance(hits, Exception):
-            ref.why = str(hits)
+            ref.why = "Qloo lookup failed, try again" if "404" not in str(hits) else "not in Qloo"
             return
         ref.candidates = hits or []
         if not ref.candidates:
@@ -273,6 +288,8 @@ def prepare(text: str) -> list[Reference]:
     refs = extract(text)
     resolve(text, refs)
     enrich(refs)
+    if qloo.degraded():
+        return refs  # a Qloo call failed: serve this result but do not remember it
     with _prep_lock:
         _prep_cache[key] = [asdict(r) for r in refs]
         while len(_prep_cache) > 256:
@@ -322,7 +339,7 @@ def anchors_for(entity_type: str) -> list[str]:
             hit = next((h for h in hits if _similar(n, h.get("name", ""))), None)
             if hit and qloo.eid(hit):
                 ids.append(qloo.eid(hit))
-        if len(ids) < 2:
+        if len(ids) < MIN_ANCHORS:
             return ids  # do not memoise a failure (no key yet, transient error)
         _anchor_ids[entity_type] = ids
     return _anchor_ids[entity_type]
@@ -338,16 +355,18 @@ def score_entities(items: list[dict], audience: Audience) -> dict[str, dict]:
         def per_type(t):
             ids = sorted({i["entity_id"] for i in items if i["type"] == t})
             anc = anchors_for(t)
-            if len(anc) < 2:
+            if len(anc) < MIN_ANCHORS:
                 return {}, {}
             try:
-                res = qloo.rank_for_audience(ids + anc, t, audience.age, audience.gender, audience.location)
+                res = qloo.rank_for_audience(ids + anc, t, location=audience.location)  # place only: age and gender enter once, via urn:demographics
             except qloo.QlooError:
                 return {}, {}
-            lo, hi = sorted([res.get(anc[0]), res.get(anc[1])], key=lambda v: (v is None, v))
-            if lo is None or hi is None or hi <= lo:
+            ref_vals = sorted(res[a] for a in anc if a in res)
+            if len(ref_vals) < MIN_ANCHORS or ref_vals[0] == ref_vals[-1]:
                 return {k: v for k, v in res.items() if k in ids}, {}
-            return {k: v for k, v in res.items() if k in ids}, {k: max(-0.5, min(0.5, (v - lo) / (hi - lo) - 0.5)) for k, v in res.items() if k in ids}
+            # where the entity sits among the anchors in this place, as -0.5 (below all) .. +0.5 (above all)
+            rel = {k: sum(v > x for x in ref_vals) / len(ref_vals) - 0.5 for k, v in res.items() if k in ids}
+            return {k: v for k, v in res.items() if k in ids}, rel
 
         for a, l in qloo.pmap(per_type, sorted({i["type"] for i in items})):
             affs.update(a)
@@ -414,7 +433,7 @@ def candidate_pool(text: str, ref: Reference, audiences: list[Audience], context
             return []
         seeds = [ref.entity_id] + [i for i in (context_ids or []) if i and i != ref.entity_id][:3]
         try:
-            ents = qloo.recommend(ref.type, signal_entities=seeds, signal_tags=[t["tag_id"] for t in picked], age=audience.age, gender=audience.gender, location=audience.location, min_popularity=0.5, take=12)
+            ents = qloo.recommend(ref.type, signal_entities=seeds, signal_tags=[t["tag_id"] for t in picked], age=audience.age, gender=audience.gender, location=audience.location, min_popularity=STANDIN_MIN_POP, take=12)
         except qloo.QlooError:
             return []
         ents = [e for e in ents if qloo.eid(e) and qloo.eid(e) != ref.entity_id and e.get("name")]
@@ -624,36 +643,76 @@ def apply_swaps(text: str, picks: list[tuple[Reference, Swap]]) -> str:
     return text
 
 
+def pick_swap(swaps: list[Swap]) -> Swap | None:
+    """The stand-in Fix applies: the best scorer, unless a Qloo-found one is within PREFER_QLOO_WITHIN points of it."""
+    if not swaps:
+        return None
+    best = max(swaps, key=lambda s: s.score)
+    q = max((s for s in swaps if s.source == "qloo"), key=lambda s: s.score, default=None)
+    return q if q and best.score - q.score <= PREFER_QLOO_WITHIN else best
+
+
+def _bad(s: dict) -> int:
+    return 2 * s["misses"] + s["risky"]
+
+
 def localise(text: str, audience: Audience, rounds: int = 2) -> dict:
-    """The agent loop, made visible: check, apply the best stand-in per weak line, re-check, repeat."""
+    """The agent loop, made visible: check, apply the chosen stand-in per weak line, re-check, keep only improvements."""
     steps = []
     first = check(text, audience, swaps=True)
     before = first["summary"]
     current, result = text, first
+    applied = []
     for n in range(rounds):
         refs = [Reference(**{k: v for k, v in r.items() if k in Reference.__dataclass_fields__ and k != "swaps"}) for r in result["references"]]
         for r, rd in zip(refs, result["references"]):
-            r.swaps = [Swap(**s) for s in rd.get("swaps", [])]
-        picks = [(r, r.swaps[0]) for r in refs if r.swaps]
+            r.swaps = [Swap(**sw) for sw in rd.get("swaps", [])]
+        picks = [(r, pick_swap(r.swaps)) for r in refs if r.swaps]
+        picks = [(r, sw) for r, sw in picks if sw]
         if not picks:
             steps.append({"round": n + 1, "action": "stop", "detail": "no weak reference has a stand-in that scores higher"})
             break
         new_text = apply_swaps(current, picks)
-        steps.append({"round": n + 1, "action": "swap", "swaps": [{"from": r.name or r.surface, "to": s.name, "score_from": r.score, "score_to": s.score, "source": s.source} for r, s in picks]})
+        steps.append({"round": n + 1, "action": "swap", "swaps": [{"from": r.name or r.surface, "to": sw.name, "score_from": r.score, "score_to": sw.score, "source": sw.source, "why": sw.why} for r, sw in picks]})
         nxt = check(new_text, audience, swaps=(n + 1 < rounds))
         steps.append({"round": n + 1, "action": "recheck", "summary": nxt["summary"]})
-
-        def bad(s):
-            return 2 * s["misses"] + s["risky"]
-
-        if bad(nxt["summary"]) >= bad(result["summary"]):
+        if _bad(nxt["summary"]) >= _bad(result["summary"]):
             steps.append({"round": n + 1, "action": "stop", "detail": "the rewrite did not improve on the previous version, so it was not kept"})
             break
+        applied += [sw.source for _, sw in picks]
         current, result = new_text, nxt
-        if bad(result["summary"]) == 0:
+        if _bad(result["summary"]) == 0:
             steps.append({"round": n + 1, "action": "stop", "detail": "every checked reference lands"})
             break
-    return {"audience": asdict(audience) | {"label": audience.label()}, "original": text, "text": current, "before": before, "after": result["summary"], "steps": steps, "references": result["references"]}
+    return {"audience": asdict(audience) | {"label": audience.label()}, "original": text, "text": current, "before": before, "after": result["summary"], "steps": steps,
+            "references": result["references"], "applied": {"total": len(applied), "from_qloo": applied.count("qloo")}}
+
+
+def localise_all(text: str, audiences: list[Audience]) -> dict:
+    """Make it land in every room: for each reference that is weak in any room, apply the stand-in whose worst room
+    scores best (common_standin), then re-score every room. Keeps the rewrite only if the worst room improved."""
+    before = matrix(text, audiences)
+    refs = before["references"]
+    weak = [i for i, row in enumerate(before["cells"]) if any(c and c["verdict"] in ("risky", "misses") for c in row)]
+    results = qloo.pmap(lambda i: (i, common_standin(text, refs, refs[i]["start"], audiences)), weak, workers=4)
+    picks, chosen = [], []
+    for i, res in results:
+        b = res.get("best")
+        if b:
+            r = Reference(**{k: v for k, v in refs[i].items() if k in Reference.__dataclass_fields__ and k != "swaps"})
+            picks.append((r, Swap(b["name"], b["entity_id"], b["min"], b["source"], b["why"], b.get("line"))))
+            chosen.append({"from": refs[i]["name"] or refs[i]["surface"], "to": b["name"], "source": b["source"], "why": b["why"], "scores_from": res["reference"]["scores"], "scores_to": b["scores"]})
+    if not picks:
+        return {"original": text, "text": text, "before": before, "after": before, "swaps": [], "kept": False, "detail": "no stand-in beats the original in every room"}
+    new_text = apply_swaps(text, picks)
+    after = matrix(new_text, audiences)
+
+    def worst(m):
+        return sum(_bad(s) for s in m["summaries"])
+
+    kept = worst(after) < worst(before)
+    return {"original": text, "text": new_text if kept else text, "before": before, "after": after if kept else before, "swaps": chosen, "kept": kept,
+            "applied": {"total": len(picks), "from_qloo": sum(1 for _, sw in picks if sw.source == "qloo")}}
 
 
 if __name__ == "__main__":

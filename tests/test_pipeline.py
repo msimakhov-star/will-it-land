@@ -142,6 +142,53 @@ def test_matrix_matches_single_checks(monkeypatch):
         assert m["cells"][0][j]["llm_guess"] == 50 + 10 * j
 
 
+@pytest.fixture
+def strict_qloo(monkeypatch):
+    """Real-API failure contract: /search 404 'No results' for unknown names, 400 for an unknown place."""
+    from server import mock, qloo
+
+    orig = mock.respond
+
+    def strict(path, params):
+        if path == "/search" and params["query"].lower().startswith("zz"):
+            raise qloo.QlooError('Qloo 404: {"error":"No results"}')
+        if params.get("signal.location.query", "").lower() == "atlantis":
+            raise qloo.QlooError("Qloo 400: no locality found")
+        return orig(path, params)
+
+    monkeypatch.setattr(mock, "respond", strict)
+
+
+def test_failure_contract(monkeypatch, strict_qloo):
+    from server import pipeline, qloo
+
+    refs = REFS[:1] + [{"surface": "Zzyzx", "type": "brand", "query": "Zzyzx", "role": "", "era": None}]
+    fake_llm(monkeypatch, refs)
+    calls = qloo.start_ledger()
+    out = pipeline.check("My dad watches Seinfeld. We drove past Zzyzx.", pipeline.Audience("24_and_younger", None, "Atlantis"), swaps=False)
+    unknown = [r for r in out["references"] if r["surface"] == "Zzyzx"][0]
+    assert unknown["entity_id"] is None and unknown["why"] == "not in Qloo"
+    assert out["location_recognised"] is False
+    assert qloo.degraded()  # the failed location call is recorded, so the response layer will not memoise this result
+    assert any(c["source"] == "error" and "signal.location.query" in c["params"] for c in calls)
+
+
+def test_audience_validation():
+    from server import pipeline
+
+    assert pipeline.Audience(" 24_AND_YOUNGER ", "Women", " Leeds ").label() == "under 25, women, Leeds"
+    for bad in ({"age": "teen"}, {"gender": "x"}):
+        with pytest.raises(ValueError):
+            pipeline.Audience(**bad)
+
+
+def test_locate_prefers_whole_words():
+    from server.pipeline import _locate
+
+    used = []
+    assert _locate("Friendship with Friends", "Friends", used) == (16, 23)
+
+
 def test_reference_cap(monkeypatch):
     from server import pipeline
 
@@ -172,6 +219,29 @@ def test_localise_improves_or_stops(monkeypatch):
         assert "Blockbuster" not in out["text"] or bad(out["after"]) < bad(out["before"])
 
 
+def test_pick_swap_prefers_qloo_within_margin():
+    from server.pipeline import PREFER_QLOO_WITHIN, Swap, pick_swap
+
+    ai, q = Swap("A", "a", 80, "ai"), Swap("Q", "q", 80 - PREFER_QLOO_WITHIN + 1, "qloo")
+    assert pick_swap([ai, q]).name == "Q"
+    assert pick_swap([ai, Swap("Q", "q", 80 - PREFER_QLOO_WITHIN - 5, "qloo")]).name == "A"
+    assert pick_swap([]) is None
+
+
+def test_localise_all(monkeypatch):
+    from server import pipeline
+
+    fake_llm(monkeypatch, REFS[:2])
+    auds = [pipeline.Audience("24_and_younger", None, "London"), pipeline.Audience("55_and_older", None, "St. Louis")]
+    out = pipeline.localise_all(TEXT, auds)
+    worst = lambda m: sum(2 * s["misses"] + s["risky"] for s in m["summaries"])
+    assert worst(out["after"]) <= worst(out["before"])
+    if out["kept"]:
+        assert out["text"] != TEXT and worst(out["after"]) < worst(out["before"])
+        for sw in out["swaps"]:
+            assert min(sw["scores_to"]) > min(sw["scores_from"])
+
+
 def test_apply_swaps_one_per_line():
     from server.pipeline import Reference, Swap, apply_swaps
 
@@ -198,8 +268,8 @@ def test_api(monkeypatch):
     monkeypatch.setattr(llm, "warm", lambda: None)
     monkeypatch.setattr(main, "_prewarm_examples", lambda: None)
     fake_llm(monkeypatch, REFS[:2])
-    for f in (main._check_cached, main._matrix_cached, main._localise_cached, main._swaps_cached):
-        f.cache_clear()
+    for m in main.MEMOS:
+        m.clear()
     with TestClient(main.app) as c:
         assert c.post("/api/check", json={"text": "x", "age": "teen"}).status_code == 400
         assert c.post("/api/check", json={"text": "", "age": None}).status_code == 422
@@ -219,11 +289,18 @@ def test_api(monkeypatch):
         if b:
             assert b["min"] == min(b["scores"]) and b["min"] > min(st.json()["reference"]["scores"])
         loc = c.post("/api/localise", json={"text": TEXT, "audience": {"age": "24_and_younger"}})
-        assert loc.status_code == 200 and "text" in loc.json()
+        assert loc.status_code == 200 and "text" in loc.json() and "applied" in loc.json()
+        la = c.post("/api/localise_all", json={"text": TEXT, "audiences": [{"age": "24_and_younger", "location": "London"}, {"age": "55_and_older"}]})
+        assert la.status_code == 200 and "kept" in la.json()
         rep = c.post("/api/report", json={"kind": "matrix", "payload": m.json()})
         assert rep.status_code == 200
         got = c.get(f"/api/report/{rep.json()['id']}")
         assert got.status_code == 200 and got.json()["payload"]["cells"] == m.json()["cells"]
         assert c.get("/api/report/nope").status_code == 404
+        # security: the SPA fallback never serves files outside web/dist
+        for bad in ("/%2Fetc%2Fhosts", "/..%2F..%2Fserver%2Fmain.py", "/../../pyproject.toml"):
+            r = c.get(bad)
+            assert "fastapi" not in r.text and "localhost" not in r.text.lower()[:200] or r.headers.get("content-type", "").startswith("text/html")
+        assert c.post("/mcp", json={"jsonrpc": "2.0", "id": 9, "method": "tools/list"}, headers={"accept": "application/json, text/event-stream"}).status_code == 200
         tools = c.post("/mcp/", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"}, headers={"accept": "application/json, text/event-stream"})
-        assert tools.status_code == 200 and {t["name"] for t in tools.json()["result"]["tools"]} >= {"check_references", "check_matrix", "localise", "audience_options"}
+        assert tools.status_code == 200 and {t["name"] for t in tools.json()["result"]["tools"]} >= {"check_references", "check_matrix", "localise", "localise_for_all", "audience_options"}

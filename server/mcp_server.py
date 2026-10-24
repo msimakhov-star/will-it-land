@@ -57,6 +57,15 @@ def localise(text: str, age: str | None = None, gender: str | None = None, locat
 
 
 @mcp.tool()
+def localise_for_all(text: str, audiences: list[dict]) -> str:
+    """Rewrite `text` so it lands in every given audience at once (up to 8): each weak reference is replaced by the
+    Qloo-scored stand-in whose worst audience scores best. Returns the new text, before/after matrices and the swaps."""
+    from . import pipeline
+
+    return json.dumps(pipeline.localise_all(text, [_aud(a) for a in audiences[:8]]))
+
+
+@mcp.tool()
 def audience_options() -> str:
     """The audience values the other tools accept, plus ready-made presets."""
     from . import pipeline

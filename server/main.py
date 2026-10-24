@@ -5,11 +5,11 @@ import json
 import os
 import secrets
 import sqlite3
+import sys
 import threading
 import time
-from collections import defaultdict, deque
+from collections import OrderedDict, defaultdict, deque
 from contextlib import asynccontextmanager
-from functools import lru_cache
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
@@ -24,43 +24,110 @@ mcp_app = http_app()
 MAX_AUDIENCES = 8
 
 
+# ---- memo that never remembers a degraded result ------------------------------------------------------
+class Memo:
+    """Process-local memo for whole responses. A result built while any Qloo call failed is returned but not stored,
+    so a brief rate limit cannot pin 'not in Qloo' on a reference for the rest of the process."""
+
+    def __init__(self, maxsize: int):
+        self.maxsize, self.data, self.lock = maxsize, OrderedDict(), threading.Lock()
+
+    def get_or(self, key, fn):
+        with self.lock:
+            if key in self.data:
+                self.data.move_to_end(key)
+                return self.data[key]
+        calls = qloo.start_ledger()
+        out = fn()
+        out["ledger"] = _ledger_summary(calls)
+        body = json.dumps(out)
+        if not qloo.degraded():
+            with self.lock:
+                self.data[key] = body
+                while len(self.data) > self.maxsize:
+                    self.data.popitem(last=False)
+        return body
+
+    def clear(self):
+        with self.lock:
+            self.data.clear()
+
+
+CHECKS, SWAPS, MATRICES, GUESSES, STANDINS, LOCALISED, LOCALISED_ALL = (Memo(n) for n in (256, 256, 128, 128, 128, 128, 64))
+MEMOS = (CHECKS, SWAPS, MATRICES, GUESSES, STANDINS, LOCALISED, LOCALISED_ALL)
+
+
+def _aud_key(auds) -> str:
+    return json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
+
+
+def _check_body(text: str, a: pipeline.Audience, swaps: bool) -> str:
+    return CHECKS.get_or(("check", text, a.age, a.gender, a.location, swaps), lambda: pipeline.check(text, a, swaps=swaps))
+
+
+def _swaps_body(text: str, a: pipeline.Audience) -> str:
+    """Stand-ins are computed from the server's own scored check (never from client-sent references), so the prewarm
+    and a browser request share one cache entry."""
+    def run():
+        first = json.loads(_check_body(text, a, False))
+        return {"references": pipeline.swaps_for(text, a, first["references"])}
+
+    return SWAPS.get_or(("swaps", text, a.age, a.gender, a.location), run)
+
+
+def _matrix_body(text: str, auds: list[pipeline.Audience]) -> str:
+    return MATRICES.get_or(("matrix", text, _aud_key(auds)), lambda: pipeline.matrix(text, auds))
+
+
 def _prewarm_examples():
     """Run the bundled examples once per process so a judge's first click is instant and the Qloo cache is populated."""
     if not os.environ.get("QLOO_API_KEY") and not os.environ.get("QLOO_MOCK"):
         return
     for ex in EXAMPLES:
         try:
-            a = ex["audience"]
-            first = json.loads(_check_cached(ex["text"], a["age"], a["gender"], a["location"], False))
-            _swaps_cached(ex["text"], a["age"], a["gender"], a["location"], json.dumps(first["references"], sort_keys=True))
+            a = pipeline.Audience(**{k: v for k, v in ex["audience"].items() if k in ("age", "gender", "location")})
+            _check_body(ex["text"], a, False)
+            _swaps_body(ex["text"], a)
             if ex.get("matrix"):
-                _matrix_cached(ex["text"], json.dumps(ex["matrix"], sort_keys=True))
+                auds = [pipeline.Audience(x.get("age"), x.get("gender"), x.get("location"), x.get("name")) for x in ex["matrix"]]
+                _matrix_body(ex["text"], auds)
         except Exception as ex_:  # pre-warming is best effort
-            print("prewarm failed:", ex_, flush=True)
+            print("prewarm failed:", type(ex_).__name__, ex_, flush=True)
     print("prewarm done", flush=True)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    pipeline.llm.warm()
+    if sys.platform == "darwin":  # the first-call stall is a macOS proxy-discovery issue; Linux containers skip the warm-up
+        pipeline.llm.warm()
     threading.Thread(target=_prewarm_examples, daemon=True).start()
     async with mcp.session_manager.run():
         yield
 
 
-app = FastAPI(title="Will It Land", version="0.2.0", lifespan=lifespan)
+app = FastAPI(title="Will It Land", version="0.3.0", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def mcp_without_slash(request: Request, call_next):
+    if request.scope["path"] == "/mcp":
+        request.scope["path"] = "/mcp/"
+    return await call_next(request)
+
+
 app.mount("/mcp", mcp_app)
 
 
 # ---- abuse guard: the public endpoints spend LLM and Qloo quota -------------------------------------
 _hits: dict[str, deque] = defaultdict(deque)
 _hits_lock = threading.Lock()
-RATE = int(os.environ.get("RATE_PER_10MIN", "40"))
+RATE = int(os.environ.get("RATE_PER_10MIN", "60"))
 
 
 def _guard(request: Request) -> None:
-    # ponytail: in-process sliding window per client IP; fine for one warm container, use a shared store if scaled out
-    ip = (request.headers.get("x-forwarded-for") or (request.client.host if request.client else "?")).split(",")[0].strip()
+    # ponytail: in-process sliding window keyed on the address the platform supplies (headers are spoofable);
+    # fine for the single warm container this app runs in, use a shared store if it is ever scaled out
+    ip = request.client.host if request.client else "?"
     now = time.time()
     with _hits_lock:
         q = _hits[ip]
@@ -78,14 +145,22 @@ def _ledger_summary(calls: list) -> dict:
     return {
         "total": len(calls),
         "live": sum(c["source"] == "live" for c in calls),
-        "cache": sum(c["source"] == "cache" for c in calls),
+        "cache": sum(c["source"] in ("cache", "stale") for c in calls),
         "mock": sum(c["source"] == "mock" for c in calls),
+        "errors": sum(c["source"] == "error" for c in calls),
         "by_endpoint": dict(by_endpoint),
         "calls": calls[:400],
     }
 
 
 # ---- models --------------------------------------------------------------------------------------------
+
+
+def _audience(age=None, gender=None, location=None, name=None) -> pipeline.Audience:
+    try:
+        return pipeline.Audience(age, gender, location, name)
+    except ValueError as ex:
+        raise HTTPException(400, str(ex))
 
 
 class AudienceIn(BaseModel):
@@ -95,11 +170,7 @@ class AudienceIn(BaseModel):
     name: str | None = Field(default=None, max_length=60)
 
     def to(self) -> pipeline.Audience:
-        if self.age and self.age not in pipeline.AUDIENCE_AGES:
-            raise HTTPException(400, "bad age bucket")
-        if self.gender and self.gender not in ("male", "female"):
-            raise HTTPException(400, "bad gender")
-        return pipeline.Audience(self.age or None, self.gender or None, (self.location or "").strip() or None, (self.name or "").strip() or None)
+        return _audience(self.age, self.gender, self.location, self.name)
 
 
 class CheckRequest(BaseModel):
@@ -111,7 +182,7 @@ class CheckRequest(BaseModel):
 
 
 class SwapsRequest(CheckRequest):
-    references: list[dict] = Field(max_length=80)
+    references: list[dict] | None = Field(default=None, max_length=80)  # accepted for compatibility, ignored
 
 
 class MatrixRequest(BaseModel):
@@ -119,65 +190,18 @@ class MatrixRequest(BaseModel):
     audiences: list[AudienceIn] = Field(min_length=1, max_length=MAX_AUDIENCES)
 
 
+class StandinRequest(MatrixRequest):
+    ref_start: int
+
+
 class LocaliseRequest(BaseModel):
     text: str = Field(min_length=1, max_length=8000)
     audience: AudienceIn
 
 
-class StandinRequest(BaseModel):
-    text: str = Field(min_length=1, max_length=8000)
-    audiences: list[AudienceIn] = Field(min_length=1, max_length=MAX_AUDIENCES)
-    references: list[dict] = Field(max_length=80)
-    ref_start: int
-
-
 class ReportIn(BaseModel):
-    kind: str = Field(pattern="^(check|matrix|localise)$")
+    kind: str = Field(pattern="^(check|matrix|localise|localise_all)$")
     payload: dict
-
-
-# ---- memoised work (the Qloo layer has its own on-disk cache underneath) --------------------------------
-
-
-def _with_ledger(fn):
-    calls = qloo.start_ledger()
-    out = fn()
-    out["ledger"] = _ledger_summary(calls)
-    return out
-
-
-@lru_cache(maxsize=256)
-def _check_cached(text: str, age: str | None, gender: str | None, location: str | None, swaps: bool) -> str:
-    return json.dumps(_with_ledger(lambda: pipeline.check(text, pipeline.Audience(age, gender, location), swaps=swaps)))
-
-
-@lru_cache(maxsize=256)
-def _swaps_cached(text: str, age: str | None, gender: str | None, location: str | None, references: str) -> str:
-    return json.dumps(_with_ledger(lambda: {"references": pipeline.swaps_for(text, pipeline.Audience(age, gender, location), json.loads(references))}))
-
-
-@lru_cache(maxsize=128)
-def _matrix_cached(text: str, audiences: str) -> str:
-    auds = [pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")) for a in json.loads(audiences)]
-    return json.dumps(_with_ledger(lambda: pipeline.matrix(text, auds)))
-
-
-@lru_cache(maxsize=128)
-def _guesses_cached(text: str, audiences: str) -> str:
-    auds = [pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")) for a in json.loads(audiences)]
-    return json.dumps({"guesses": pipeline.matrix_guesses(text, auds)})
-
-
-@lru_cache(maxsize=128)
-def _standin_cached(text: str, audiences: str, references: str, ref_start: int) -> str:
-    auds = [pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")) for a in json.loads(audiences)]
-    return json.dumps(_with_ledger(lambda: pipeline.common_standin(text, json.loads(references), ref_start, auds)))
-
-
-@lru_cache(maxsize=128)
-def _localise_cached(text: str, audience: str) -> str:
-    a = json.loads(audience)
-    return json.dumps(_with_ledger(lambda: pipeline.localise(text, pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")))))
 
 
 def _run(fn, label: str):
@@ -188,11 +212,14 @@ def _run(fn, label: str):
         raise HTTPException(502, str(ex))
     except HTTPException:
         raise
+    except ValueError as ex:
+        raise HTTPException(400, str(ex))
     except Exception as ex:  # an LLM outage must read as a clear error, not a blank screen
         print(f"{label} failed: {type(ex).__name__}: {ex}", flush=True)
         raise HTTPException(503, "The language model did not answer in time. Please try again.")
     out["took_s"] = round(time.time() - t0, 1)
-    print(f"{label} took={out['took_s']}s timings={out.get('timings')} qloo_calls={out.get('ledger', {}).get('total')}", flush=True)
+    led = out.get("ledger", {})
+    print(f"{label} took={out['took_s']}s timings={out.get('timings')} qloo_calls={led.get('total')} errors={led.get('errors')}", flush=True)
     return out
 
 
@@ -201,7 +228,7 @@ def _run(fn, label: str):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "qloo_key": bool(os.environ.get("QLOO_API_KEY")), "mock": bool(os.environ.get("QLOO_MOCK")), "llm": f"{pipeline.llm.PROVIDER}:{pipeline.llm.MODEL}"}
+    return {"ok": True, "qloo_key": bool(os.environ.get("QLOO_API_KEY")), "mock": bool(os.environ.get("QLOO_MOCK")), "llm": f"{pipeline.llm.PROVIDER}:{pipeline.llm.MODEL}", "model": pipeline.scoring.P.get("source")}
 
 
 @app.get("/api/examples")
@@ -216,40 +243,36 @@ def presets():
 
 @app.get("/api/options")
 def options():
-    return {"ages": [{"value": a, "label": pipeline.AGE_LABELS[a]} for a in pipeline.AUDIENCE_AGES], "genders": ["male", "female"], "types": pipeline.TYPES, "max_audiences": MAX_AUDIENCES}
+    return {"ages": [{"value": a, "label": pipeline.AGE_LABELS[a]} for a in pipeline.AUDIENCE_AGES], "genders": ["male", "female"], "types": pipeline.TYPES, "max_audiences": MAX_AUDIENCES,
+            "location_weight": pipeline.scoring.P.get("k_loc"), "calibrated": pipeline.scoring.P.get("calibrated")}
 
 
 @app.post("/api/check")
 def check(req: CheckRequest, request: Request):
-    a = AudienceIn(age=req.age, gender=req.gender, location=req.location).to()
+    a = _audience(req.age, req.gender, req.location)
     _guard(request)
-    return _run(lambda: _check_cached(req.text, a.age, a.gender, a.location, req.swaps), f"check {len(req.text)}ch [{a.label()}]")
+    return _run(lambda: _check_body(req.text, a, req.swaps), f"check {len(req.text)}ch [{a.label()}]")
 
 
 @app.post("/api/swaps")
 def swaps(req: SwapsRequest, request: Request):
     """Second phase of a check: stand-ins for the weak references. Split out so the UI shows scores first."""
-    a = AudienceIn(age=req.age, gender=req.gender, location=req.location).to()
-    return _run(lambda: _swaps_cached(req.text, a.age, a.gender, a.location, json.dumps(req.references, sort_keys=True)), f"swaps [{a.label()}]")
+    a = _audience(req.age, req.gender, req.location)
+    return _run(lambda: _swaps_body(req.text, a), f"swaps [{a.label()}]")
 
 
 @app.post("/api/matrix")
 def matrix(req: MatrixRequest, request: Request):
     _guard(request)
     auds = [x.to() for x in req.audiences]
-    key = json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
-    return _run(lambda: _matrix_cached(req.text, key), f"matrix {len(req.text)}ch x{len(auds)}")
-
-
-def _aud_key(auds) -> str:
-    return json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
+    return _run(lambda: _matrix_body(req.text, auds), f"matrix {len(req.text)}ch x{len(auds)}")
 
 
 @app.post("/api/guesses")
 def matrix_guesses(req: MatrixRequest, request: Request):
     """What the language model alone guesses for each reference x audience (no data). Fetched after the Qloo matrix paints."""
     auds = [x.to() for x in req.audiences]
-    return _run(lambda: _guesses_cached(req.text, _aud_key(auds)), f"guesses x{len(auds)}")
+    return _run(lambda: GUESSES.get_or(("guesses", req.text, _aud_key(auds)), lambda: {"guesses": pipeline.matrix_guesses(req.text, auds)}), f"guesses x{len(auds)}")
 
 
 @app.post("/api/standin")
@@ -257,15 +280,27 @@ def standin(req: StandinRequest, request: Request):
     """One stand-in for every room: the candidate whose worst room scores highest."""
     _guard(request)
     auds = [x.to() for x in req.audiences]
-    return _run(lambda: _standin_cached(req.text, _aud_key(auds), json.dumps(req.references, sort_keys=True), req.ref_start), f"standin x{len(auds)}")
+
+    def run():
+        refs = json.loads(_matrix_body(req.text, auds))["references"]
+        return pipeline.common_standin(req.text, refs, req.ref_start, auds)
+
+    return _run(lambda: STANDINS.get_or(("standin", req.text, _aud_key(auds), req.ref_start), run), f"standin x{len(auds)}")
+
+
+@app.post("/api/localise_all")
+def localise_all(req: MatrixRequest, request: Request):
+    """Make it land in every room: one stand-in per weak reference, chosen so its worst room scores best."""
+    _guard(request)
+    auds = [x.to() for x in req.audiences]
+    return _run(lambda: LOCALISED_ALL.get_or(("lall", req.text, _aud_key(auds)), lambda: pipeline.localise_all(req.text, auds)), f"localise_all x{len(auds)}")
 
 
 @app.post("/api/localise")
 def localise(req: LocaliseRequest, request: Request):
     _guard(request)
     a = req.audience.to()
-    key = json.dumps({"age": a.age, "gender": a.gender, "location": a.location, "name": a.name}, sort_keys=True)
-    return _run(lambda: _localise_cached(req.text, key), f"localise [{a.label()}]")
+    return _run(lambda: LOCALISED.get_or(("loc", req.text, _aud_key([a])), lambda: pipeline.localise(req.text, a)), f"localise [{a.label()}]")
 
 
 # ---- shareable reports ------------------------------------------------------------------------------------
@@ -280,6 +315,19 @@ def _reports() -> sqlite3.Connection:
     return db
 
 
+def _persist_volume():
+    """On Modal, flush the cache/report volume so a saved report survives a container restart (best effort)."""
+    name = os.environ.get("WIL_VOLUME")
+    if not name:
+        return
+    try:
+        import modal
+
+        modal.Volume.from_name(name).commit()
+    except Exception as ex:
+        print("volume commit skipped:", type(ex).__name__, ex, flush=True)
+
+
 @app.post("/api/report")
 def save_report(rep: ReportIn, request: Request):
     _guard(request)
@@ -292,6 +340,7 @@ def save_report(rep: ReportIn, request: Request):
         db.execute("insert into r values (?,?,?,?)", (rid, rep.kind, body, time.time()))
         db.commit()
         db.close()
+    threading.Thread(target=_persist_volume, daemon=True).start()
     return {"id": rid, "url": f"/r/{rid}"}
 
 
@@ -306,11 +355,12 @@ def get_report(rid: str):
     return {"id": rid, "kind": row[0], "payload": json.loads(row[1]), "created": row[2]}
 
 
-DIST = os.path.join(os.path.dirname(__file__), "..", "web", "dist")
+DIST = os.path.realpath(os.path.join(os.path.dirname(__file__), "..", "web", "dist"))
 if os.path.isdir(DIST):
     app.mount("/assets", StaticFiles(directory=os.path.join(DIST, "assets")), name="assets")
 
     @app.get("/{path:path}")
     def spa(path: str):
-        f = os.path.join(DIST, path)
-        return FileResponse(f if path and os.path.isfile(f) else os.path.join(DIST, "index.html"))
+        f = os.path.realpath(os.path.join(DIST, path))
+        ok = bool(path) and f.startswith(DIST + os.sep) and os.path.isfile(f)  # never serve anything outside web/dist
+        return FileResponse(f if ok else os.path.join(DIST, "index.html"))
