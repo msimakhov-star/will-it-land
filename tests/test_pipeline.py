@@ -133,13 +133,31 @@ def test_matrix_matches_single_checks(monkeypatch):
 
     fake_llm(monkeypatch, REFS[:2])
     auds = [pipeline.Audience("24_and_younger", None, "London", "Young London"), pipeline.Audience("55_and_older", None, "St. Louis")]
-    m = pipeline.matrix(TEXT, auds)
+    m = pipeline.matrix(TEXT, auds, with_guesses=True)
     assert len(m["audiences"]) == 2 and m["audiences"][0]["label"] == "Young London"
     assert len(m["cells"]) == len(m["references"]) == 2
     for j, a in enumerate(auds):
         single = pipeline.check(TEXT, a, swaps=False)["references"]
         assert [round(m["cells"][i][j]["score"], 1) for i in range(2)] == [r["score"] for r in single]
         assert m["cells"][0][j]["llm_guess"] == 50 + 10 * j
+
+
+def test_reference_cap(monkeypatch):
+    from server import pipeline
+
+    many = "\n".join(f"Line {i} mentions Seinfeld." for i in range(40))
+    fake_llm(monkeypatch, [{"surface": "Seinfeld", "type": "tv_show", "query": "Seinfeld", "role": "", "era": None}] * 40)
+    assert len(pipeline.extract(many)) == pipeline.MAX_REFS
+
+
+def test_unknown_place_flag(monkeypatch):
+    from server import pipeline
+
+    fake_llm(monkeypatch, REFS[:2])
+    monkeypatch.setattr(pipeline.qloo, "rank_for_audience", lambda *a, **k: {})
+    out = pipeline.check(TEXT, pipeline.Audience("24_and_younger", None, "Atlantis"), swaps=False)
+    assert out["location_recognised"] is False
+    assert pipeline.check(TEXT, pipeline.Audience("24_and_younger"), swaps=False)["location_recognised"] is None
 
 
 def test_localise_improves_or_stops(monkeypatch):
@@ -192,6 +210,14 @@ def test_api(monkeypatch):
         m = c.post("/api/matrix", json={"text": TEXT, "audiences": [{"age": "24_and_younger", "location": "London"}, {"age": "55_and_older"}]})
         assert m.status_code == 200 and len(m.json()["cells"][0]) == 2
         assert c.post("/api/matrix", json={"text": TEXT, "audiences": [{"age": "x"}]}).status_code == 400
+        g = c.post("/api/guesses", json={"text": TEXT, "audiences": [{"age": "24_and_younger"}, {"age": "55_and_older"}]})
+        assert g.status_code == 200 and len(g.json()["guesses"]) == 2 and len(g.json()["guesses"][0]) == 2
+        refs = m.json()["references"]
+        st = c.post("/api/standin", json={"text": TEXT, "audiences": [{"age": "24_and_younger", "location": "London"}, {"age": "55_and_older"}], "references": refs, "ref_start": refs[1]["start"]})
+        assert st.status_code == 200
+        b = st.json()["best"]
+        if b:
+            assert b["min"] == min(b["scores"]) and b["min"] > min(st.json()["reference"]["scores"])
         loc = c.post("/api/localise", json={"text": TEXT, "audience": {"age": "24_and_younger"}})
         assert loc.status_code == 200 and "text" in loc.json()
         rep = c.post("/api/report", json={"kind": "matrix", "payload": m.json()})

@@ -26,6 +26,7 @@ from . import llm, qloo, scoring
 AUDIENCE_AGES = qloo.AGE_BUCKETS
 AGE_LABELS = {"24_and_younger": "under 25", "25_to_29": "25 to 29", "30_to_34": "30 to 34", "35_to_44": "35 to 44", "45_to_54": "45 to 54", "55_and_older": "55+"}
 TYPES = qloo.INSIGHT_TYPES
+MAX_REFS = 30  # per text: bounds Qloo and LLM work per request
 
 # Fixed anchors per type so every location rank call contains two known points (one near-universal, one niche):
 # location affinity is expressed relative to them, which keeps it comparable across calls.
@@ -174,7 +175,7 @@ def extract(text: str) -> list[Reference]:
         if not span:
             continue
         refs.append(Reference(surface=r["surface"], start=span[0], end=span[1], type=r["type"], query=r.get("query") or r["surface"], role=r.get("role") or "", era=r.get("era")))
-    return sorted(refs, key=lambda r: r.start)
+    return sorted(refs, key=lambda r: r.start)[:MAX_REFS]
 
 
 def _summ(e: dict) -> dict:
@@ -232,7 +233,10 @@ def enrich(refs: list[Reference]) -> None:
     live = [r for r in refs if r.entity_id]
     if not live:
         return
-    demo = qloo.demographics([r.entity_id for r in live])
+    try:
+        demo = qloo.demographics([r.entity_id for r in live])
+    except qloo.QlooError:
+        demo = {}
     end = dt.date.today()
     start = end - dt.timedelta(days=180)
     trends: dict[str, dict] = {}
@@ -376,6 +380,14 @@ def cells_for(refs: list[Reference], audience: Audience) -> list[dict | None]:
     return [scored.get(r.entity_id) if r.entity_id else None for r in refs]
 
 
+def location_recognised(audience: Audience, cells: list[dict | None]) -> bool | None:
+    """None when no place was given; False when Qloo returned no location signal for any reference (unknown place)."""
+    if not audience.location:
+        return None
+    live = [c for c in cells if c]
+    return any(c.get("location") is not None for c in live) if live else None
+
+
 def _summary(cells: list[dict | None], total: int) -> dict:
     live = [c for c in cells if c]
     return {"found": total, "checked": len(live), "not_in_qloo": total - len(live), "lands": sum(c["verdict"] == "lands" for c in live), "risky": sum(c["verdict"] == "risky" for c in live), "misses": sum(c["verdict"] == "misses" for c in live)}
@@ -384,12 +396,15 @@ def _summary(cells: list[dict | None], total: int) -> dict:
 # ---- stand-ins -------------------------------------------------------------------------------------
 
 
-def propose_swaps(text: str, ref: Reference, audience: Audience, current: float | None) -> list[Swap]:
-    """Stand-ins for one weak reference, from Qloo (tags -> audience insights) and from the model (role), all scored the same way."""
+def candidate_pool(text: str, ref: Reference, audiences: list[Audience], context_ids: list[str] | None = None) -> dict[str, tuple[dict, str, str]]:
+    """Stand-in candidates for one reference: {entity_id: (entity, source, why)}.
+    Qloo: the reference's characterising tags + the room's demographics and place -> entities of the same type the room
+    over-indexes on (seeded with the original and with references that already land, when given), filtered by the model
+    for role fit. Model: role-based ideas, each resolved to a real Qloo entity."""
     line = _line_of(text, ref.start, ref.end)
-    pool: dict[str, tuple[dict, str, str]] = {}  # entity_id -> (entity, source, why)
+    who = "; ".join(a.describe() for a in audiences)
 
-    def from_qloo():
+    def from_qloo(audience: Audience):
         try:
             tags = qloo.entity_tags([ref.entity_id], take=8)
         except qloo.QlooError:
@@ -397,8 +412,9 @@ def propose_swaps(text: str, ref: Reference, audience: Audience, current: float 
         picked = [t for t in tags if t["type"] and "keyword" not in (t["type"] or "")][:3] or tags[:3]
         if not picked:
             return []
+        seeds = [ref.entity_id] + [i for i in (context_ids or []) if i and i != ref.entity_id][:3]
         try:
-            ents = qloo.recommend(ref.type, signal_tags=[t["tag_id"] for t in picked], age=audience.age, gender=audience.gender, location=audience.location, min_popularity=0.5, take=12)
+            ents = qloo.recommend(ref.type, signal_entities=seeds, signal_tags=[t["tag_id"] for t in picked], age=audience.age, gender=audience.gender, location=audience.location, min_popularity=0.5, take=12)
         except qloo.QlooError:
             return []
         ents = [e for e in ents if qloo.eid(e) and qloo.eid(e) != ref.entity_id and e.get("name")]
@@ -409,12 +425,12 @@ def propose_swaps(text: str, ref: Reference, audience: Audience, current: float 
         except Exception:
             keep = []
         by_name = {e["name"]: e for e in ents}
-        why = "found by Qloo from its tags " + ", ".join(t["name"] for t in picked)
+        why = "found in Qloo's graph via its tags " + ", ".join(t["name"] for t in picked)
         return [(by_name[n], "qloo", why) for n in keep if n in by_name][:4]
 
     def from_ai():
         try:
-            names = llm.complete_json(SWAP_SYSTEM, json.dumps({"audience": audience.describe(), "line": line, "reference": ref.surface, "type": ref.type, "role": ref.role})).get("candidates", [])
+            names = llm.complete_json(SWAP_SYSTEM, json.dumps({"audience": who, "line": line, "reference": ref.surface, "type": ref.type, "role": ref.role})).get("candidates", [])
         except Exception:
             return []
 
@@ -424,20 +440,43 @@ def propose_swaps(text: str, ref: Reference, audience: Audience, current: float 
             except qloo.QlooError:
                 return None
             if hits and qloo.eid(hits[0]) != ref.entity_id and _similar(n, hits[0].get("name", "")):
-                return (hits[0], "ai", "suggested by the model, checked by Qloo")
+                return (hits[0], "ai", "model idea, checked by Qloo")
             return None
 
-        return [x for x in qloo.pmap(res, names[:6]) if x]
+        return [x for x in qloo.pmap(res, [n for n in names[:6] if isinstance(n, str)]) if x]
 
-    for found in qloo.pmap(lambda f: f(), [from_qloo, from_ai], workers=2):
+    pool: dict[str, tuple[dict, str, str]] = {}
+    jobs = [lambda a=a: from_qloo(a) for a in audiences[:3]] + [from_ai]
+    for found in qloo.pmap(lambda f: f(), jobs, workers=4):
         for e, src, why in found:
             pool.setdefault(qloo.eid(e), (e, src, why))
-    if not pool:
-        return []
-    demo = qloo.demographics(list(pool))
+    return pool
+
+
+def _pool_items(ref: Reference, pool: dict) -> list[dict]:
+    demo = qloo.demographics(list(pool)) if pool else {}
     items = [{"entity_id": ref.entity_id, "type": ref.type, "popularity": ref.popularity, "age_skew": ref.age_skew, "gender_skew": ref.gender_skew}]
     items += [{"entity_id": k, "type": ref.type, "popularity": e.get("popularity"), "age_skew": (demo.get(k) or {}).get("age"), "gender_skew": (demo.get(k) or {}).get("gender")} for k, (e, _, _) in pool.items()]
-    scored = score_entities(items, audience)  # the original is re-scored in the same calls, so the comparison is like for like
+    return items
+
+
+def _rewrite(text: str, ref: Reference, swaps: list[Swap]) -> None:
+    if not swaps:
+        return
+    try:
+        lines = llm.complete_json(REWRITE_SYSTEM, json.dumps({"line": _line_of(text, ref.start, ref.end), "replace": ref.surface, "with": [s.name for s in swaps]}), fast=True).get("lines", [])
+        for s, l in zip(swaps, lines):
+            s.line = l if isinstance(l, str) else None
+    except Exception:
+        pass
+
+
+def propose_swaps(text: str, ref: Reference, audience: Audience, current: float | None, context_ids: list[str] | None = None) -> list[Swap]:
+    """Up to three stand-ins for one weak reference that score higher for this room, all scored the same way as the original."""
+    pool = candidate_pool(text, ref, [audience], context_ids)
+    if not pool:
+        return []
+    scored = score_entities(_pool_items(ref, pool), audience)  # the original is re-scored in the same calls: like for like
     base = scored.get(ref.entity_id, {}).get("score", current or 0)
     ranked = sorted(((scored[k]["score"], k) for k in pool if k in scored and scored[k]["score"] > base), reverse=True)
     chosen: list[str] = [k for _, k in ranked[:3]]
@@ -447,14 +486,36 @@ def propose_swaps(text: str, ref: Reference, audience: Audience, current: float 
         if q:
             chosen = chosen[:2] + [q]
     swaps = [Swap(pool[k][0]["name"], k, scored[k]["score"], pool[k][1], pool[k][2]) for k in chosen]
-    if swaps:
-        try:
-            lines = llm.complete_json(REWRITE_SYSTEM, json.dumps({"line": line, "replace": ref.surface, "with": [s.name for s in swaps]}), fast=True).get("lines", [])
-            for s, l in zip(swaps, lines):
-                s.line = l if isinstance(l, str) else None
-        except Exception:
-            pass
+    _rewrite(text, ref, swaps)
     return swaps
+
+
+def common_standin(text: str, references: list[dict], ref_start: int, audiences: list[Audience]) -> dict:
+    """One stand-in for every room: score each candidate in every room and pick the one whose worst room is best."""
+    refs = [Reference(**{k: v for k, v in r.items() if k in Reference.__dataclass_fields__ and k != "swaps"}) for r in references]
+    ref = next((r for r in refs if r.start == ref_start and r.entity_id), None)
+    if ref is None:
+        return {"candidates": [], "best": None}
+    landing = [r.entity_id for r in refs if r.entity_id and r.entity_id != ref.entity_id]
+    pool = candidate_pool(text, ref, audiences, landing)
+    if not pool:
+        return {"candidates": [], "best": None}
+    items = _pool_items(ref, pool)
+    cols = qloo.pmap(lambda a: score_entities(items, a), audiences, workers=8)
+    orig = [c.get(ref.entity_id, {}).get("score") for c in cols]
+    cands = []
+    for k, (e, src, why) in pool.items():
+        scores = [c.get(k, {}).get("score") for c in cols]
+        if any(v is None for v in scores):
+            continue
+        cands.append({"name": e["name"], "entity_id": k, "source": src, "why": why, "scores": scores, "min": min(scores)})
+    cands.sort(key=lambda c: -c["min"])
+    best = cands[0] if cands and cands[0]["min"] > min(v for v in orig if v is not None) else None
+    if best:
+        sw = Swap(best["name"], best["entity_id"], best["min"], best["source"], best["why"])
+        _rewrite(text, ref, [sw])
+        best = dict(best, line=sw.line)
+    return {"reference": {"name": ref.name, "start": ref.start, "end": ref.end, "scores": orig}, "candidates": cands[:6], "best": best}
 
 
 def _weak(refs: list[Reference], cells: list[dict | None], limit: int = 8) -> list[tuple[Reference, dict]]:
@@ -467,7 +528,8 @@ def swaps_for(text: str, audience: Audience, references: list[dict]) -> list[dic
     refs = [Reference(**{k: v for k, v in r.items() if k in Reference.__dataclass_fields__ and k != "swaps"}) for r in references]
     cells = [{"score": r.score, "verdict": r.verdict} if r.entity_id and r.score is not None else None for r in refs]
     weak = _weak(refs, cells)
-    results = qloo.pmap(lambda p: propose_swaps(text, p[0], audience, p[1]["score"]), weak, workers=4)
+    landing = [r.entity_id for r in refs if r.entity_id and r.verdict == "lands"]
+    results = qloo.pmap(lambda p: propose_swaps(text, p[0], audience, p[1]["score"], landing), weak, workers=4)
     by_start = {p[0].start: s for p, s in zip(weak, results)}
     for r in refs:
         r.swaps = by_start.get(r.start, [])
@@ -502,13 +564,15 @@ def check(text: str, audience: Audience, swaps: bool = True) -> dict:
             r.score, r.verdict, r.why, r.affinity, r.llm_guess = c["score"], c["verdict"], c["why"], c["affinity"], c["llm_guess"]
     if swaps:
         weak = _weak(refs, cell_list)
-        for (r, c), s in zip(weak, qloo.pmap(lambda p: propose_swaps(text, p[0], audience, p[1]["score"]), weak, workers=4)):
-            r.swaps = s
+        landing = [r.entity_id for r, c in zip(refs, cell_list) if c and c["verdict"] == "lands"]
+        for (r, c), sw in zip(weak, qloo.pmap(lambda p: propose_swaps(text, p[0], audience, p[1]["score"], landing), weak, workers=4)):
+            r.swaps = sw
         timings["swaps"] = round(time.time() - t, 1)
     return {
         "timings": timings,
         "audience": asdict(audience) | {"label": audience.label()},
         "summary": _summary(cell_list, len(refs)),
+        "location_recognised": location_recognised(audience, cell_list),
         "references": [asdict(r) for r in refs],
         "bands": bands,
         "band_summaries": {k: _summary(v, len(refs)) for k, v in bands.items()},
@@ -516,27 +580,32 @@ def check(text: str, audience: Audience, swaps: bool = True) -> dict:
     }
 
 
-def matrix(text: str, audiences: list[Audience]) -> dict:
-    """One text, many audiences: one extraction and resolution, then one score column per audience."""
+def matrix(text: str, audiences: list[Audience], with_guesses: bool = False) -> dict:
+    """One text, many audiences: one extraction and resolution, then one score column per audience.
+    The model-alone guesses are a separate call (matrix_guesses) so the Qloo columns paint without waiting for an LLM."""
     refs = prepare(text)
-    jobs = [lambda a=a: cells_for(refs, a) for a in audiences] + [lambda: guesses(refs, audiences)]
-    results = qloo.pmap(lambda f: f(), jobs, workers=8)
-    columns, guess_rows = results[:-1], results[-1]
+    columns = qloo.pmap(lambda a: cells_for(refs, a), audiences, workers=8)
+    guess_rows = guesses(refs, audiences) if with_guesses else None
     cells = []
     for i, r in enumerate(refs):
         row = []
         for j in range(len(audiences)):
             c = dict(columns[j][i]) if columns[j][i] else None
-            if c is not None:
-                c["llm_guess"] = guess_rows[i][j] if guess_rows and i < len(guess_rows) else None
+            if c is not None and guess_rows is not None:
+                c["llm_guess"] = guess_rows[i][j] if i < len(guess_rows) else None
             row.append(c)
         cells.append(row)
     return {
-        "audiences": [asdict(a) | {"label": a.label()} for a in audiences],
+        "audiences": [asdict(a) | {"label": a.label(), "location_recognised": location_recognised(a, columns[j])} for j, a in enumerate(audiences)],
         "references": [asdict(r) for r in refs],
         "cells": cells,
         "summaries": [_summary([cells[i][j] for i in range(len(refs))], len(refs)) for j in range(len(audiences))],
+        "model": {k: scoring.P[k] for k in ("lands", "misses", "calibrated", "source")},
     }
+
+
+def matrix_guesses(text: str, audiences: list[Audience]) -> list[list[float | None]]:
+    return guesses(prepare(text), audiences)
 
 
 def apply_swaps(text: str, picks: list[tuple[Reference, Swap]]) -> str:

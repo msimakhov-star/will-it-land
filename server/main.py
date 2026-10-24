@@ -124,6 +124,13 @@ class LocaliseRequest(BaseModel):
     audience: AudienceIn
 
 
+class StandinRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=8000)
+    audiences: list[AudienceIn] = Field(min_length=1, max_length=MAX_AUDIENCES)
+    references: list[dict] = Field(max_length=80)
+    ref_start: int
+
+
 class ReportIn(BaseModel):
     kind: str = Field(pattern="^(check|matrix|localise)$")
     payload: dict
@@ -153,6 +160,18 @@ def _swaps_cached(text: str, age: str | None, gender: str | None, location: str 
 def _matrix_cached(text: str, audiences: str) -> str:
     auds = [pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")) for a in json.loads(audiences)]
     return json.dumps(_with_ledger(lambda: pipeline.matrix(text, auds)))
+
+
+@lru_cache(maxsize=128)
+def _guesses_cached(text: str, audiences: str) -> str:
+    auds = [pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")) for a in json.loads(audiences)]
+    return json.dumps({"guesses": pipeline.matrix_guesses(text, auds)})
+
+
+@lru_cache(maxsize=128)
+def _standin_cached(text: str, audiences: str, references: str, ref_start: int) -> str:
+    auds = [pipeline.Audience(a.get("age"), a.get("gender"), a.get("location"), a.get("name")) for a in json.loads(audiences)]
+    return json.dumps(_with_ledger(lambda: pipeline.common_standin(text, json.loads(references), ref_start, auds)))
 
 
 @lru_cache(maxsize=128)
@@ -220,6 +239,25 @@ def matrix(req: MatrixRequest, request: Request):
     auds = [x.to() for x in req.audiences]
     key = json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
     return _run(lambda: _matrix_cached(req.text, key), f"matrix {len(req.text)}ch x{len(auds)}")
+
+
+def _aud_key(auds) -> str:
+    return json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
+
+
+@app.post("/api/guesses")
+def matrix_guesses(req: MatrixRequest, request: Request):
+    """What the language model alone guesses for each reference x audience (no data). Fetched after the Qloo matrix paints."""
+    auds = [x.to() for x in req.audiences]
+    return _run(lambda: _guesses_cached(req.text, _aud_key(auds)), f"guesses x{len(auds)}")
+
+
+@app.post("/api/standin")
+def standin(req: StandinRequest, request: Request):
+    """One stand-in for every room: the candidate whose worst room scores highest."""
+    _guard(request)
+    auds = [x.to() for x in req.audiences]
+    return _run(lambda: _standin_cached(req.text, _aud_key(auds), json.dumps(req.references, sort_keys=True), req.ref_start), f"standin x{len(auds)}")
 
 
 @app.post("/api/localise")

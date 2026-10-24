@@ -17,6 +17,7 @@ vol = modal.Volume.from_name("will-it-land-cache", create_if_missing=True)
     secrets=[modal.Secret.from_name("qloo"), modal.Secret.from_name("llm")],
     volumes={"/cache": vol},
     min_containers=1,
+    max_containers=1,  # one sqlite writer on the Volume, and a hard ceiling on LLM spend
     timeout=300,
 )
 @modal.concurrent(max_inputs=20)
