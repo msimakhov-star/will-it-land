@@ -8,7 +8,15 @@ async function errText(r: Response): Promise<string> {
 }
 
 async function post<T>(path: string, body: unknown, signal?: AbortSignal): Promise<T> {
-  const r = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal })
+  const timeout = AbortSignal.timeout(90000)
+  const sig = signal && 'any' in AbortSignal ? (AbortSignal as unknown as { any: (s: AbortSignal[]) => AbortSignal }).any([signal, timeout]) : (signal ?? timeout)
+  let r: Response
+  try {
+    r = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal: sig })
+  } catch (e) {
+    if (e instanceof DOMException && e.name === 'TimeoutError') throw new Error('That took too long. Please try again.')
+    throw e
+  }
   if (!r.ok) throw new Error(await errText(r))
   return r.json() as Promise<T>
 }
@@ -39,11 +47,11 @@ export function utf16Offsets(text: string): number[] {
   return off
 }
 
-/** Run only the latest call: earlier in-flight calls are aborted and their results ignored. */
+/** Run only the latest call: earlier in-flight calls are aborted and their results ignored. cancel() drops any in flight. */
 export function latest() {
   let ctrl: AbortController | null = null
   let seq = 0
-  return async function run<T>(fn: (signal: AbortSignal) => Promise<T>): Promise<T | undefined> {
+  const run = async function <T>(fn: (signal: AbortSignal) => Promise<T>): Promise<T | undefined> {
     ctrl?.abort()
     ctrl = new AbortController()
     const my = ++seq
@@ -55,4 +63,5 @@ export function latest() {
       throw e
     }
   }
+  return Object.assign(run, { cancel() { ctrl?.abort(); seq++ } })
 }

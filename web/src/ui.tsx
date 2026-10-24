@@ -52,14 +52,14 @@ export function headline(label: string, s: Summary): string {
 }
 
 const PART_LABEL: Record<keyof Omit<Parts, 'score'>, [string, string]> = {
-  base: ['How widely known', '/search popularity'],
-  age: ['This age band', 'urn:demographics'],
-  gender: ['Men or women', 'urn:demographics'],
-  location: ['This place', 'insights rank in place'],
+  base: ['How widely known', 'Qloo /search popularity'],
+  age: ['This age band', 'Qloo demographics'],
+  gender: ['Men or women', 'Qloo demographics'],
+  location: ['This place', 'Qloo rank in place'],
 }
 
 /** Sequential breakdown of the score in points: base, then each audience term (see server/scoring.py). */
-export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boolean }) {
+export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boolean; locMeasured?: boolean }) {
   const rows = (['base', 'age', ...(p.showGender ? ['gender'] : []), ...(p.showPlace ? ['location'] : [])] as (keyof Omit<Parts, 'score'>)[])
   let acc = 0
   return (
@@ -71,7 +71,7 @@ export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boo
         const lo = Math.min(from, acc), hi = Math.max(from, acc)
         return (
           <div key={k} className="grid grid-cols-[8.5rem_1fr_3rem] items-center gap-2 text-xs">
-            <div className="text-muted leading-tight">{PART_LABEL[k][0]}<div className="text-[10px] text-muted/70">{PART_LABEL[k][1]}</div></div>
+            <div className="text-muted leading-tight">{PART_LABEL[k][0]}<div className="text-[10px] text-muted">{PART_LABEL[k][1]}{k === 'location' && !p.locMeasured ? ', weight hand-set' : ''}</div></div>
             <div className="relative h-3 rounded bg-line/70">
               <div className={`absolute top-0 h-3 rounded ${k === 'base' ? 'bg-ink/70' : v >= 0 ? 'bg-lands' : 'bg-misses'}`} style={{ left: `${lo}%`, width: `${Math.max(0.8, hi - lo)}%` }} />
             </div>
@@ -109,8 +109,9 @@ export function AgeStrip(p: { skew: Record<string, number>; selected: string | n
 }
 
 export function SourceBadge(p: { source: 'qloo' | 'ai'; why?: string }) {
+  const tags = p.why?.includes('via its tags ') ? p.why.split('via its tags ')[1] : ''
   return p.source === 'qloo'
-    ? <span title={p.why} className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[11px] font-medium text-paper">found in Qloo's graph</span>
+    ? <span title={p.why} className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[11px] font-medium text-paper">found in Qloo's graph{tags ? ` via ${tags}` : ''}</span>
     : <span title={p.why} className="inline-flex items-center gap-1 rounded-full border border-line bg-white px-2 py-0.5 text-[11px] text-muted">model idea, scored by Qloo</span>
 }
 

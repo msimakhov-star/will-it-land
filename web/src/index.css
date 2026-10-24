@@ -8,9 +8,9 @@
   --color-muted: #6b665c;
   --color-line: #e3ded3;
   --color-lands: #1f7a4d;
-  --color-risky: #a86b12;
+  --color-risky: #8a5a0e;
   --color-misses: #c0392b;
-  --color-unknown: #8b8678;
+  --color-unknown: #6f6a5e;
 }
 
 html, body { background: var(--color-paper); color: var(--color-ink); }

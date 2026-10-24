@@ -45,7 +45,7 @@ export type Room = { name?: string | null; age: string | null; gender: string | 
 export type Summary = { found: number; checked: number; not_in_qloo: number; lands: number; risky: number; misses: number }
 
 export type LedgerCall = { endpoint: string; params: Record<string, string>; source: 'live' | 'cache' | 'mock' | 'stale' | 'error'; ms: number }
-export type Ledger = { total: number; live: number; cache: number; mock: number; errors: number; by_endpoint: Record<string, number>; calls: LedgerCall[] }
+export type Ledger = { total: number; live: number; cache: number; mock: number; errors: number; by_endpoint: Record<string, number>; by_capability?: Record<string, number>; calls: LedgerCall[] }
 
 export type MatrixResult = {
   audiences: (Room & { label: string; location_recognised: boolean | null })[]
@@ -72,4 +72,4 @@ export type LocaliseAllResult = {
 export type Example = { id: string; title: string; kind: string; text: string; audience: Room; matrix?: Room[] }
 
 export type Health = { ok: boolean; qloo_key: boolean; mock: boolean; llm: string; model: string }
-export type Options = { ages: { value: string; label: string }[]; max_audiences: number; location_weight: number; calibrated: boolean }
+export type Options = { ages: { value: string; label: string }[]; max_audiences: number; location_weight: number; location_measured: boolean; calibrated: boolean }
