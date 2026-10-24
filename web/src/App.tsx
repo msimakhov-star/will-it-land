@@ -23,6 +23,7 @@ export default function App() {
   const [active, setActive] = useState<{ ref: number; room: number } | null>(null)
   const [hood, setHood] = useState(false)
   const [mcp, setMcp] = useState(false)
+  const [proof, setProof] = useState(false)
   const runMatrix = useRef(latest()).current
   const runGuesses = useRef(latest()).current
   const runFix = useRef(latest()).current
@@ -104,12 +105,18 @@ export default function App() {
           </div>
           <p className="mt-2 text-[15px] text-muted">Spellcheck for cultural references. Pick the rooms you are playing; every reference is checked against what that audience actually knows, using Qloo's taste graph, and the ones that will not land get a stand-in that does.</p>
         </div>
+        <div className="flex flex-wrap items-stretch gap-2">
+        <button onClick={() => setProof(true)} className="rounded-xl bg-white px-3 py-2 text-left text-xs ring-1 ring-line hover:ring-ink/40">
+          <div className="font-semibold text-ink">How we know</div>
+          <div className="text-muted">The tests behind the score</div>
+        </button>
         {ledger && (
           <button onClick={() => setHood(true)} className="rounded-xl bg-white px-3 py-2 text-left text-xs ring-1 ring-line hover:ring-ink/40">
             <div className="font-semibold text-ink">{ledger.total} Qloo calls across {endpoints} endpoint{endpoints === 1 ? '' : 's'}</div>
             <div className="text-muted">Under the hood: every request behind this result</div>
           </button>
         )}
+        </div>
       </header>
 
       <nav className="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 pb-4 md:px-6" aria-label="Examples">
@@ -178,6 +185,7 @@ export default function App() {
 
       {hood && ledger && <Hood ledger={ledger} onClose={() => setHood(false)} />}
       {mcp && <Mcp onClose={() => setMcp(false)} />}
+      {proof && <Proof onClose={() => setProof(false)} />}
     </div>
   )
 }
@@ -225,6 +233,58 @@ function Mcp(p: { onClose: () => void }) {
         <div className="mt-3 text-xs font-medium text-muted">Client config</div>
         <pre className="mt-1 overflow-x-auto rounded-lg bg-paper p-2 font-mono text-xs">{cfg}</pre>
         <div className="mt-3 text-xs text-muted">Tools: check_references, check_matrix, localise, localise_for_all, audience_options.</div>
+      </div>
+    </div>
+  )
+}
+
+type ProofData = {
+  model: { calibrated: boolean; source: string; k_loc: number }
+  fit?: { n_entities: number; pooled: Record<string, number>; gap: { qloo: number; llm: number; n: number } }
+  location?: { scored: number; hits: number; hit_rate: number; decision: string }
+  survey?: { respondents: number; items: number; spearman_qloo: number | null; spearman_llm: number | null; ai_picks_most_did_not_know: string[] }
+  taste_audit?: { total: { checked: number; weak: number; weak_share: number } }
+}
+
+function Proof(p: { onClose: () => void }) {
+  const [d, setD] = useState<ProofData | null>(null)
+  useEffect(() => { fetch('/api/proof').then(r => r.json()).then(setD).catch(() => {}) }, [])
+  const row = (label: string, q: number | undefined | null, a: number | undefined | null) => (
+    <tr className="border-t border-line"><td className="py-1.5 pr-3 text-muted">{label}</td><td className="py-1.5 pr-3 text-right font-semibold tabular-nums">{q == null ? '-' : q.toFixed(2)}</td><td className="py-1.5 text-right tabular-nums">{a == null ? '-' : a.toFixed(2)}</td></tr>
+  )
+  const pending = <span className="text-muted">not measured yet</span>
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink/20 p-4" onClick={p.onClose}>
+      <div className="rise max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl" onClick={e => e.stopPropagation()} role="dialog" aria-label="How we know">
+        <div className="flex items-start justify-between">
+          <h3 className="font-display text-2xl font-semibold">How we know it works</h3>
+          <button onClick={p.onClose} className="rounded-full p-1.5 text-muted hover:bg-paper hover:text-ink" aria-label="Close">✕</button>
+        </div>
+        <p className="mt-2 text-sm text-muted">We did not want to assert that Qloo makes the difference, so we test it against outside ground truth, with the method fixed before any data came in (eval/PREREG.md in the repository). Every number below is published whatever it says.</p>
+        <section className="mt-4">
+          <h4 className="font-semibold">1. Who has heard of it, by generation (YouGov, US)</h4>
+          <p className="text-xs text-muted">Rank correlation with the share of each generation who have heard of about 300 shows, films, artists, brands, people and podcasts. 1.0 is a perfect ordering.</p>
+          {d?.fit ? (
+            <table className="mt-2 w-full text-sm"><thead><tr className="text-xs text-muted"><th className="text-left font-normal" /><th className="text-right font-normal">With Qloo</th><th className="text-right font-normal">AI alone</th></tr></thead>
+              <tbody>{row('fame, all generations', d.fit.pooled.qloo, d.fit.pooled.llm)}{row('generation gap (what a room switch changes)', d.fit.gap.qloo, d.fit.gap.llm)}{row('AI and Qloo combined', d.fit.pooled.blend, null)}</tbody></table>
+          ) : <div className="mt-2 text-sm">{pending}</div>}
+        </section>
+        <section className="mt-4">
+          <h4 className="font-semibold">2. What under-25s actually recognise (our own survey)</h4>
+          {d?.survey ? <p className="mt-1 text-sm">{d.survey.respondents} respondents, {d.survey.items} items. Correlation with recognition: with Qloo {d.survey.spearman_qloo?.toFixed(2) ?? '-'}, AI alone {d.survey.spearman_llm?.toFixed(2) ?? '-'}.{d.survey.ai_picks_most_did_not_know.length ? ` References the AI chose "for under-25s" that most of them did not know: ${d.survey.ai_picks_most_did_not_know.slice(0, 6).join(', ')}.` : ''}</p>
+            : <p className="mt-1 text-sm">{pending}. <a className="underline underline-offset-2" href="/survey">Take the 2-minute survey</a> if you are 18 to 24.</p>}
+        </section>
+        <section className="mt-4">
+          <h4 className="font-semibold">3. Does the place signal mean anything?</h4>
+          {d?.location ? <p className="mt-1 text-sm">{d.location.hits} of {d.location.scored} regional brands and shows score stronger at home than far away. {d.model.k_loc > 0 ? 'Place is part of the score.' : 'Place is left out of the score.'}</p> : <p className="mt-1 text-sm">{pending}</p>}
+        </section>
+        {d?.taste_audit && (
+          <section className="mt-4">
+            <h4 className="font-semibold">4. AI writing for a named audience</h4>
+            <p className="mt-1 text-sm">Claude and Gemini each wrote 18 short pieces "for" a named room. {Math.round(100 * d.taste_audit.total.weak_share)}% of their {d.taste_audit.total.checked} references score risky or likely to miss for the very room they were written for.</p>
+          </section>
+        )}
+        <p className="mt-5 border-t border-line pt-3 text-xs text-muted">Score model: {d ? (d.model.calibrated ? d.model.source : 'hand-set starting values, to be fitted on the data above') : '...'}. "Likely to land" means likely to be recognised and liked by that audience; it never claims a joke is funny.</p>
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ image = (
     .add_local_dir("server", remote_path="/root/server")
     .add_local_dir("web/dist", remote_path="/root/web/dist")
     .add_local_file("eval/data/survey_items.json", remote_path="/root/eval/data/survey_items.json")
+    .add_local_dir("eval/out", remote_path="/root/eval/out")  # measured numbers for /api/proof (no Qloo payloads)
 )
 app = modal.App("will-it-land", image=image)
 vol = modal.Volume.from_name("will-it-land-cache", create_if_missing=True)

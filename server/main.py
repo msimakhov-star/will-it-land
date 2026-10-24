@@ -311,6 +311,26 @@ def localise(req: LocaliseRequest, request: Request):
     return _run(lambda: LOCALISED.get_or(("loc", req.text, _aud_key([a])), lambda: pipeline.localise(req.text, a)), f"localise [{a.label()}]")
 
 
+# ---- proof: the measured numbers, read from eval/out (bundled at deploy time) ------------------------------
+EVAL_OUT = os.path.join(os.path.dirname(__file__), "..", "eval", "out")
+
+
+@app.get("/api/proof")
+def proof():
+    """Whatever has been measured so far; anything missing is reported as not measured, never filled in."""
+    out = {"model": {k: pipeline.scoring.P.get(k) for k in ("calibrated", "source", "a", "b", "k_age", "k_loc", "lands", "misses")}}
+    for key, fn in (("kill_test_md", "kill_test.md"), ("fit", "fit_report.json"), ("location", "location_sanity.json"), ("survey", "survey_report.json"), ("taste_audit", "taste_audit.json")):
+        path = os.path.join(EVAL_OUT, fn)
+        if os.path.exists(path):
+            raw = open(path).read()
+            if fn.endswith(".json"):
+                d = json.loads(raw)
+                out[key] = {k: v for k, v in d.items() if k not in ("rows",)} if isinstance(d, dict) else d
+            else:
+                out[key] = raw
+    return out
+
+
 # ---- recognition survey (anonymous ground truth for the youngest room) ------------------------------------
 
 
