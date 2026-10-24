@@ -58,7 +58,7 @@ def main():
     idle = "document.body.innerText.includes('Qloo calls') && !document.body.innerText.includes('Re-scoring') && !document.body.innerText.includes('Finding references')"
     wait_for(idle)
     shot("01-two-rooms.png")
-    js("[...document.querySelectorAll('.mark-misses, .mark-risky')][0]?.click()")
+    js("[...document.querySelectorAll('[role=button].mark-misses, [role=button].mark-risky')][0]?.click()")
     time.sleep(1.5)
     shot("04-evidence.png")
     js("document.querySelector('aside button[aria-label=Close]')?.click()")

@@ -199,10 +199,10 @@ export default function App() {
         )}
         {!editing && result && rooms.length <= 2 && (
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted" aria-label="Legend">
-            <span><span className="mark mark-lands">solid</span> lands</span>
-            <span><span className="mark mark-risky">dotted</span> risky</span>
-            <span><span className="mark mark-misses">wavy</span> likely misses</span>
-            <span><span className="mark mark-unknown">dashed</span> not in Qloo</span>
+            <span><span className="mark mark-lands pointer-events-none">solid</span> lands</span>
+            <span><span className="mark mark-risky pointer-events-none">dotted</span> risky</span>
+            <span><span className="mark mark-misses pointer-events-none">wavy</span> likely misses</span>
+            <span><span className="mark mark-unknown pointer-events-none">dashed</span> not in Qloo</span>
             <span>Small numbers are the score out of 100. Tap or click a reference for the evidence.</span>
           </div>
         )}
