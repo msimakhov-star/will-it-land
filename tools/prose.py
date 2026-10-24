@@ -22,14 +22,27 @@ Return only the rewritten Markdown."""
 
 
 def rewrite(brief: str, model: str) -> str:
+    """Gemini directly; if the API refuses this client location, the same call runs in a US-hosted Modal container."""
     import os
 
-    from google import genai
-    from google.genai import types
+    try:
+        from google import genai
+        from google.genai import types
 
-    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    r = client.models.generate_content(model=model, contents=brief, config=types.GenerateContentConfig(system_instruction=STYLE, temperature=0.4))
-    return clean(r.text or "")
+        os.environ.setdefault("no_proxy", "localhost,127.0.0.1")
+        client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        r = client.models.generate_content(model=model, contents=brief, config=types.GenerateContentConfig(system_instruction=STYLE, temperature=0.4))
+        return clean(r.text or "")
+    except Exception as ex:
+        if "location" not in str(ex).lower() and "GEMINI_API_KEY" not in str(ex):
+            raise
+    import modal
+
+    fn = modal.Function.from_name("will-it-land-gemini", "generate")
+    res = fn.remote([{"prompt": brief, "system": STYLE, "temperature": 0.4}], model)
+    if res[0].get("error"):
+        raise RuntimeError(res[0]["error"])
+    return clean(res[0]["text"])
 
 
 def clean(text: str) -> str:

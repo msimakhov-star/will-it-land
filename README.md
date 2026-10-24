@@ -1,95 +1,75 @@
 # Will It Land
 
-**AI writes for the average audience. Will It Land checks every cultural reference in your script against the audience you are actually writing for, grounded in Qloo.**
+Spellcheck for cultural references. Paste a stand-up bit, an ad script, a toast or a speech. Pick the rooms you are playing. A room is an age band, optionally men or women, and a city or country. Will It Land checks every reference against what that audience actually knows. It uses Qloo's taste graph. References that will not land get a stand-in that does. The app rewrites the line.
 
-Paste a stand-up bit, an ad, a toast, a speech or localised copy. Pick the audience: an age band, optionally a gender, a city or country. The agent:
+Live app: https://m-simakhov--will-it-land-web.us-east.modal.run (built for the Qloo Agentic Hackathon, October 2026). Status while the hackathon API key is pending: the live app runs on demo data and says so in its header.
 
-1. finds every cultural reference (shows, films, artists, brands, people, books, games, podcasts, places),
-2. resolves each one to an entity in Qloo's taste graph, using the line's context to settle ambiguous names,
-3. scores how likely each reference is to land with that audience (0 to 100),
-4. for weak references, proposes stand-ins that play the same role in the line, ranked for the audience, and rewrites the line,
-5. re-scores, and leaves the writer to accept or ignore each swap.
+## What it does
+- Two rooms side by side: the app marks the same script like a spellchecker for each room. A red wavy underline means likely misses. Amber dotted means risky. Green means it lands. Grey dashed means it is not in Qloo. Each room gets a headline, such as "Under 25s in London: 2 of 7 risky".
+- Up to six rooms as a grid. A last column, "lands everywhere", takes each reference's worst room.
+- "Make it land in both rooms" (or "in every room"): the agent finds stand-ins for each weak reference. It scores every candidate in every room. It picks the one whose worst room scores best. It rewrites the line, re-scores the whole script and keeps the rewrite only if the rooms improved. Changes appear as tracked changes with a badge per stand-in. Badges say "found in Qloo's graph" or "model idea, scored by Qloo".
+- An evidence card for every mark: the card shows the score, a plain sentence and a breakdown of the score. The breakdown shows how widely known the reference is, this age band and this place. It also shows the age profile from Qloo and what a language model guessed without data.
+- "Scored by: Qloo data or AI guess alone" repaints the page with the model's unaided guesses. This makes the difference visible.
+- "Under the hood" lists every Qloo request behind the result.
+- An MCP server lets any writing agent check its own references before it finishes a draft.
 
-Switch the audience and the highlights change. Toggle "AI alone" to see where a language model guessing without data disagrees with the Qloo-grounded score.
+## How the agent works
+1. A language model finds the cultural references in the text. It names the role each one plays in its line (for example "a dead video-rental chain").
+2. Each reference is resolved to a Qloo entity with /search. When several entities share a name, the model picks one from the line's context.
+3. For each entity, Qloo's demographics insights give how much each age band and gender over-indexes or under-indexes on it. The /v2/trending endpoint gives its six-month direction. The app shows this direction but does not score it.
+4. For each room, one insights call per entity type ranks the references in that place against eight fixed anchor entities. This makes the place term comparable across calls.
+5. The score combines how widely known the entity is (Qloo popularity) with the room's age band, gender and place. The formula is in server/scoring.py.
+6. Stand-ins come from two sources. The first is Qloo itself. This uses the reference's characterising tags plus the room's demographics and place, with a popularity floor, filtered by the model for role fit. The second is the model's own role-based ideas. Each idea resolves to a real Qloo entity. The app scores every candidate the same way as the original, in the same calls.
 
-Live demo: _coming_ (hosted on Modal). Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com), October 2026.
-
-## Why Qloo is load-bearing
-
-A language model knows that Gen Z did not grow up with Seinfeld. It does not know how a mid-popularity reference skews by age in a given city, what has risen or faded since its training data, or which stand-in a 55+ audience in Texas actually over-indexes on. Qloo does. Every score here is built from:
-
-| signal | Qloo call |
+## Qloo endpoints used
+| purpose | Qloo call |
 |---|---|
-| how widely known the thing is | entity `popularity` percentile from `/search` |
-| how much the audience's age band over- or under-indexes on it | `/v2/insights?filter.type=urn:demographics` (age and gender affinity) |
-| how it plays in the audience's city or country | `/v2/insights` with `signal.location.query` and `filter.results.entities`, in one call per entity type with fixed calibration anchors so scores are comparable |
-| whether it is rising or fading | `/v2/trending` over the last six months |
-| stand-ins that play the same role | the model names the role, proposes candidates, `/search` resolves them, the same scoring ranks them for the audience |
+| resolve a name to an entity, popularity | /search |
+| age and gender affinity | /v2/insights with filter.type=urn:demographics |
+| place affinity, ranked against anchors | /v2/insights with filter.results.entities and signal.location.query |
+| tags that characterise a reference | /v2/insights with filter.type=urn:tag |
+| stand-ins the room over-indexes on | /v2/insights with signal.interests.tags, signal.interests.entities, signal.demographics.age and signal.location.query |
+| six-month direction (display only) | /v2/trending |
 
-If this project would work the same without Qloo, it would be the wrong project. The "AI alone" toggle and the benchmark below exist to check that claim rather than assert it.
-
-## Does it beat an AI guessing? The kill test
-
-`eval/` compares the Qloo-grounded score against an LLM's unaided guess, using public ground truth: YouGov Ratings' "fame" figure (the share of US adults in each generation who have heard of something) for about 1,800 TV shows, films, artists, brands, people, books and podcasts (`eval/yougov.py` fetches it; `eval/data/yougov_fame.csv`).
-
-Results: _pending the hackathon API key; the table from `python -m eval.kill_test` goes here, whatever it says._
+## How we test it
+The method was fixed before any real data arrived. It is committed in eval/PREREG.md. Results are published whatever they say.
+- Who has heard of it, by generation: YouGov Ratings publishes the share of US millennials, Gen X and baby boomers who have heard of thousands of shows, films, artists, brands, people and podcasts. eval/kill_test.py compares the Qloo-grounded score with a language model's unaided guess on about 300 of them. It compares them overall, within each entity type, and on the millennial-minus-boomer gap. Result: not measured yet.
+- What under-25s recognise: YouGov has no under-25 figures. The app hosts an anonymous survey at /survey. It asks for age band, city, and "have you heard of this?" for 49 items. Result: not measured yet.
+- Whether place means anything: 20 regional brands and shows scored at home and far away (eval/location_sanity.py). If place does not separate them, it is dropped from the score. The place box then disappears from the app. Result: not measured yet.
+- AI writing for a named audience: Claude and Gemini each wrote 18 short pieces for a named room (eval/data/ai_texts.json). The share of their references that miss that room is reported only if the tests above validate the score.
 
 ## What the score means, and what it does not
-
-- The score says how likely a reference is to **land with an audience**, not what any one person knows. Qloo data is aggregate taste data. No personal data is sent anywhere; the only thing that leaves your machine besides the text you paste is entity names.
-- Affinity is not awareness. The score starts from how widely known a thing is and shifts it by how much the audience over- or under-indexes on it. The benchmark above is the check on that model.
-- References Qloo has no entity for (slang, memes, very local things) are shown as "not in Qloo" and not scored.
-- The agent offers stand-ins that play the same role. It does not claim the joke got funnier. The writer decides.
+- "Likely to land" means likely to be recognised and liked by that audience. It is an estimate for a group. It is never a statement about one person. It never claims a joke is funny.
+- Until the tests above are run, the score uses hand-set starting values. The app says so.
+- Qloo age bands are under 25, 25 to 29, 30 to 34, 35 to 44, 45 to 54 and 55+.
+- References Qloo has no entity for (slang, memes, very local things) are shown as "not in Qloo". They are not scored.
+- Only reference names and audience settings are sent to Qloo. The text is never sent.
 
 ## Run it
-
 ```bash
-# backend
 uv venv --python 3.12 .venv && uv pip install -e .
-export QLOO_API_KEY=...            # hackathon key; works only against hackathon.api.qloo.com
-export ANTHROPIC_API_KEY=...       # or GEMINI_API_KEY=... (set LLM_PROVIDER=gemini)
-.venv/bin/uvicorn server.main:app --reload --port 8000
-
-# frontend (dev)
-cd web && npm install && npm run dev   # proxies /api to :8000
-# or build once and let FastAPI serve it
-cd web && npm run build
+export QLOO_API_KEY=...          # hackathon key; works only against hackathon.api.qloo.com
+export ANTHROPIC_API_KEY=...     # or GEMINI_API_KEY=... with LLM_PROVIDER=gemini
+cd web && npm install && npm run build && cd ..
+.venv/bin/uvicorn server.main:app --port 8000
 ```
+Without a key, QLOO_MOCK=1 runs the whole app on clearly labelled demo data.
 
-Open http://localhost:5173 (dev) or http://localhost:8000 (built).
-
-### As an MCP tool for your own writing agent
-
+## Use it from your own agent (MCP)
+Hosted endpoint, streamable HTTP: https://m-simakhov--will-it-land-web.us-east.modal.run/mcp
 ```json
-{ "mcpServers": { "will-it-land": { "command": "/path/to/.venv/bin/python", "args": ["-m", "server.mcp_server"], "cwd": "/path/to/will-it-land" } } }
+{ "mcpServers": { "will-it-land": { "url": "https://m-simakhov--will-it-land-web.us-east.modal.run/mcp" } } }
 ```
+Local stdio: `.venv/bin/python -m server.mcp_server`. Tools: check_references, check_matrix, localise, localise_for_all, audience_options.
 
-Tools: `check_references(text, age?, gender?, location?, propose_swaps?)` and `audience_options()`. Same pipeline, same result shape as the web app.
-
-### Deploy
-
-```bash
-modal secret create qloo QLOO_API_KEY=...
-modal secret create llm ANTHROPIC_API_KEY=...
-cd web && npm run build && cd ..
-modal deploy server/modal_app.py
-```
+## Tests
+`.venv/bin/python -m pytest -q` runs offline against a fake Qloo with injected faults (rate limits, timeouts, empty answers) and a scripted model. The `python -m tools.probe` command checks every field the code reads from the real Qloo API.
 
 ## Layout
-
-```
-server/   FastAPI app, Qloo client with on-disk cache, LLM adapter (Anthropic or Gemini), the agent pipeline, MCP server, Modal entrypoint
-web/      Vite + React + Tailwind UI
-eval/     YouGov ground truth fetcher and the kill test
-```
-
-## Known limitations
-
-- Qloo age buckets are coarse (under 25, 25 to 29, 30 to 34, 35 to 44, 45 to 54, 55+), so "Gen Z" and "under 18" are the same bucket.
-- Location affinity is relative to two fixed anchors per entity type, which keeps it comparable but means it is a ranking signal, not a probability.
-- Trend data is weekly and global, not per location.
-- Qloo returns an empty result rather than an error for parameters it does not accept for a given entity type; the client only sends parameters from the entity-type guide, but an empty result is still shown as "not in Qloo".
+- server/: FastAPI app, Qloo client with cache and call ledger, the agent pipeline, the score model, MCP server, Modal deployment
+- web/: React, Vite and Tailwind interface
+- eval/: YouGov ground truth, benchmark, calibration, location check, split finder, survey report, AI taste audit
+- tools/: key-day probe, cache prewarm, screenshots, prose rendering
 
 ## Licence
-
-MIT. Qloo data is fetched live and cached privately; none of it is in this repository. YouGov figures in `eval/data` are public survey aggregates published on yougov.com.
+MIT. Qloo data is fetched live and cached privately. None of it is in this repository. YouGov figures in eval/data are public survey aggregates published on yougov.com.
