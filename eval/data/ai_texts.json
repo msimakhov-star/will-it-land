@@ -308,5 +308,55 @@
    "location": "Toronto"
   },
   "text": "I moved back in with my parents at 58, and the house looks like Honest Ed's, because nothing has been thrown out since 1974.\n\nMom still keeps a drawer of Canadian Tire money, which she insists will be worth something the day the Leafs win the Cup.\n\nDad watches Hockey Night in Canada in the basement, yelling at the TV like he's personally been traded.\n\nEvery night at six, Mom puts on Gordon Lightfoot, and every night the Edmund Fitzgerald goes down again during dinner.\n\nDad calls driving twenty minutes to Tim Hortons \"going out,\" and honestly, it's the best social life I've had since Studio 54"
+ },
+ {
+  "model": "claude",
+  "format": "standup",
+  "room": {
+   "name": "30 to 34 year olds in Mumbai",
+   "age": "30_to_34",
+   "location": "Mumbai"
+  },
+  "text": "Hi Mumbai! I'm 32 and I've moved back in with my parents, because Bandra rent looked at my salary and said, \"Dil Chahta Hai? Nahi chahta.\"\n\nMy mom now runs my life like an Ekta Kapoor serial: every time I come home late, she gives me the dramatic three-angle zoom and says, \"Itni raat ko kahan the?\"\n\nI left home with a Nokia 1100 and big dreams, and I came back with a Swiggy addiction and a \"ghar pe 11 baje tak\" curfew.\n\nMy dad says, \"Sharma ji's son just bought a flat in Powai,\" and honestly, Sharma ji's son is the Arijit Singh of my life: he's everywhere, and he only makes me sad.\n\nI'm a grown adult with a LinkedIn profile, and my mother still shouts \"Khaana khaaya?\" through my door during my Zoom call with Singapore.\n\nShe watched one season of Sacred Games and now thinks Mumbai after midnight is Gaitonde's personal territory, so bas, beta, ghar pe raho!"
+ },
+ {
+  "model": "claude",
+  "format": "ad",
+  "room": {
+   "name": "25 to 29 year olds in Atlanta",
+   "age": "25_to_29",
+   "location": "Atlanta"
+  },
+  "text": "**\"GROUP CHAT\" – 30 SECONDS**\n\nSFX: Phone buzzing. Group chat pings.\n\nMAYA: Y'all. SkyHop has flights out of Hartsfield-Jackson for forty-nine dollars.\n\nDEVON: Forty-nine? That's less than my Waffle House tab after a Future show.\n\nMAYA: Miami. Hot Girl Summer. Go.\n\nDEVON: I'm in. Venmo me for the Chick-fil-A at the gate.\n\nSFX: Quick whoosh, plane takeoff.\n\nANNOUNCER (upbeat, fast): SkyHop Airlines. Fares so low, you'll still have money for the trip. Book now at FlySkyHop dot com.\n\nSFX: Phone buzz.\n\nDEVON: Wait, did somebody say the Beltline is cancelled this weekend?\n\nMAYA: Bye, Atlanta. See you Sunday.\n\nANNOUNCER: SkyHop. Go somewhere."
+ },
+ {
+  "model": "claude",
+  "format": "ad",
+  "room": {
+   "name": "30 to 34 year olds in Mumbai",
+   "age": "30_to_34",
+   "location": "Mumbai"
+  },
+  "text": "**30-SECOND RADIO SCRIPT: JHATPAT AIR**\n\n**SFX:** Mumbai local train rumbling. Station chime.\n\n**FRIEND 1:** Bro, remember our Dil Chahta Hai Goa trip plan?\n\n**FRIEND 2:** Yaar, that was in 2012. Even Maggi gets done faster than our plans.\n\n**FRIEND 1:** Zindagi Na Milegi Dobara, bro. Literally.\n\n**SFX:** Phone *ping*. Nokia 1100 ringtone.\n\n**VO (upbeat):** Jhatpat Air. Mumbai to Goa from just ₹1,499. Book it before the group chat goes quiet.\n\n**FRIEND 2:** Wait, that's cheaper than a Wankhede ticket!\n\n**VO:** Jhatpat Air. Plans ko *udaan* do.\n\n**SFX:** Jet whoosh.\n\n**VO (fast):** Conditions apply. Book at jhatpatair.com."
+ },
+ {
+  "model": "claude",
+  "format": "ad",
+  "room": {
+   "name": "35 to 44 year olds in Glasgow",
+   "age": "35_to_44",
+   "location": "Glasgow"
+  },
+  "text": "**ClydeJet – \"Gonnae Go Somewhere Sunny\" (30 seconds)**\n\n[SFX: Nokia 3310 ringtone, then Snake beeping]\n\nWOMAN: Remember when Snake on your Nokia was peak entertainment?\n\nMAN: Aye. And a Tunnock's caramel wafer was a proper holiday snack.\n\nWOMAN: You're a grown-up now. You deserve actual sunshine.\n\nMAN: ClydeJet flies from Glasgow Airport to Malaga, Faro and Tenerife from just £29.\n\nWOMAN: That's cheaper than one night in Ashton Lane.\n\nMAN: Even Jack and Victor would book it. Then moan about the legroom.\n\nWOMAN: Pack the Irn-Bru. We'll sort the sun.\n\nANNOUNCER (fast): Book at clydejet.com. Fares subject to availability.\n\nMAN: ClydeJet. Gonnae go somewhere sunny?\n\n[SFX: Plane whoosh]"
+ },
+ {
+  "model": "claude",
+  "format": "ad",
+  "room": {
+   "name": "45 to 54 year olds in Texas",
+   "age": "45_to_54",
+   "location": "Texas"
+  },
+  "text": "**\"Remember When\" – 30 seconds**\n\n[SFX: Cassette tape clicks into a boombox. Steel guitar kicks in.]\n\nANNCR (warm, easygoing, Texas drawl): Remember when Troy, Emmitt, and Michael ruled Sunday afternoons? When a midnight Whataburger and a George Strait mixtape was a whole evening?\n\nYou've earned a getaway, and you don't have to pay like J.R. Ewing to get one.\n\n[SFX: Jet whoosh, a \"ding!\"]\n\nANNCR: Lone Star Hopper Air. Fares from fifty-nine dollars each way out of Dallas, Houston, Austin, and San Antonio. Same Texas pride, a lot less cash.\n\nLone Star Hopper Air. Fly like you've got nothing to prove.\n\n[SFX: Cassette clicks off.]\n\nANNCR (fast, low): Taxes and fees extra. Book at LoneStarHopper dot com."
  }
 ]

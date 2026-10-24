@@ -40,7 +40,7 @@ def _claude(prompt: str) -> str:
     import httpx2
 
     c = anthropic.Anthropic(http_client=httpx2.Client(trust_env=False, timeout=60))
-    m = c.messages.create(model=os.environ.get("AUDIT_CLAUDE", "claude-sonnet-5-5"), max_tokens=900, messages=[{"role": "user", "content": prompt}])
+    m = c.messages.create(model=os.environ.get("AUDIT_CLAUDE", "claude-sonnet-5-5"), max_tokens=4000, messages=[{"role": "user", "content": prompt}])
     return "".join(b.text for b in m.content if getattr(b, "type", "") == "text").strip()
 
 
