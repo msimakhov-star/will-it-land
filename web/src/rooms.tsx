@@ -62,14 +62,13 @@ export function RoomHeader(p: { room: Room; showPlace: boolean; onChange: (r: Ro
             className={`rounded-full px-2.5 py-1 text-xs transition ${r.age === v ? 'bg-ink text-paper' : 'bg-white text-ink ring-1 ring-line hover:ring-ink/40'}`}>{p.compact ? s : l}</button>
         ))}
       </div>
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className={`flex flex-wrap items-center gap-1.5 ${p.compact ? 'flex-col items-stretch' : ''}`}>
         {p.showPlace && (
-          <>
-            <input list="wil-cities" value={r.location ?? ''} placeholder="any place" aria-label="City or country"
-              onChange={e => p.onChange({ ...r, name: null, location: e.target.value })}
-              className="min-w-0 flex-1 rounded-full bg-white px-3 py-1 text-xs ring-1 ring-line outline-none focus:ring-ink/50" />
-          </>
+          <input list="wil-cities" value={r.location ?? ''} placeholder="any place" aria-label="City or country"
+            onChange={e => p.onChange({ ...r, name: null, location: e.target.value })}
+            className={`min-w-0 rounded-full bg-white px-3 py-1 text-xs ring-1 ring-line outline-none focus:ring-ink/50 ${p.compact ? 'w-full' : 'flex-1'}`} />
         )}
+        <div className={`flex items-center gap-1.5 ${p.compact ? 'justify-between' : ''}`}>
         <div className="flex overflow-hidden rounded-full ring-1 ring-line" role="group" aria-label="Gender">
           {([['male', 'men'], ['female', 'women']] as const).map(([v, l]) => (
             <button key={v} onClick={() => p.onChange({ ...r, name: null, gender: r.gender === v ? null : v })} aria-pressed={r.gender === v}
@@ -77,6 +76,7 @@ export function RoomHeader(p: { room: Room; showPlace: boolean; onChange: (r: Ro
           ))}
         </div>
         {p.onRemove && <button onClick={p.onRemove} className="rounded-full px-2 py-1 text-xs text-muted hover:text-ink" aria-label="Remove room">remove</button>}
+        </div>
       </div>
       {p.recognised === false && <div className="text-xs text-risky">Qloo did not recognise this place, so it is scored without location.</div>}
     </div>
@@ -119,12 +119,12 @@ export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Sc
   }
   return (
     <div className="overflow-x-auto rounded-2xl bg-white shadow-sm ring-1 ring-line">
-      <table className="w-full min-w-[760px] border-collapse text-sm">
+      <table className="w-full border-collapse text-sm" style={{ minWidth: 240 + 168 * (p.rooms.length + 1) }}>
         <thead>
           <tr className="align-top">
-            <th className="w-[30%] border-b border-line p-3 text-left text-xs font-medium uppercase tracking-wide text-muted">Reference</th>
+            <th className="w-[240px] border-b border-line p-3 text-left text-xs font-medium uppercase tracking-wide text-muted">Reference</th>
             {p.rooms.map((room, j) => (
-              <th key={j} className="border-b border-l border-line p-3 text-left font-normal">
+              <th key={j} className="w-[168px] min-w-[168px] border-b border-l border-line p-3 text-left font-normal">
                 <div className="mb-2 font-display text-base font-semibold">{roomLabel(room, p.showPlace)}</div>
                 <RoomHeader room={room} compact showPlace={p.showPlace} onChange={r => p.onRoom(j, r)} onRemove={p.rooms.length > 1 ? () => p.onRemove(j) : undefined} recognised={p.m.audiences[j]?.location_recognised} />
                 {p.m.summaries[j] && <div className="mt-2"><LandBar s={p.m.summaries[j]} /></div>}

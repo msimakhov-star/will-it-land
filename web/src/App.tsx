@@ -142,6 +142,7 @@ export default function App() {
             <button onClick={landEverywhere} disabled={!result || fixing || busy || !anyWeak} className="rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-paper shadow-sm disabled:opacity-40">
               {fixing ? 'Finding stand-ins in Qloo...' : actionLabel}
             </button>
+            {result && !anyWeak && !busy && <span className="text-sm text-lands">Every reference lands in {rooms.length === 1 ? 'this room' : rooms.length === 2 ? 'both rooms' : 'every room'}.</span>}
             <button onClick={() => { setEditing(true); setDraft(text) }} className="rounded-xl bg-white px-3.5 py-2.5 text-sm ring-1 ring-line hover:ring-ink/40">Edit script</button>
             {rooms.length < 6 && <button onClick={addRoom} className="rounded-xl bg-white px-3.5 py-2.5 text-sm ring-1 ring-line hover:ring-ink/40">Add a room</button>}
             <div className="ml-auto flex items-center gap-2 text-xs">
