@@ -99,7 +99,7 @@ def run() -> None:
     tot = {k: sum(r[k] for r in rows) for k in ("checked", "weak", "misses")}
     tot["weak_share"] = round(tot["weak"] / tot["checked"], 3) if tot["checked"] else None
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    json.dump({"total": tot, "by": agg, "rows": rows}, open(OUT, "w"), indent=1)
+    json.dump({"data_source": "mock" if os.environ.get("QLOO_MOCK") else "live", "total": tot, "by": agg, "rows": rows}, open(OUT, "w"), indent=1)
     print(json.dumps({"total": tot, "by_model": agg["model"]}, indent=1))
 
 

@@ -11,6 +11,8 @@ from __future__ import annotations
 import json
 import os
 
+DATA_SOURCE = "mock" if os.environ.get("QLOO_MOCK") else "live"
+
 from server import pipeline, qloo
 
 CASES = [  # (name, Qloo type, home, away)
@@ -58,7 +60,7 @@ def main() -> None:
             row["status"] = "no location signal"
         rows.append(row)
         print(f"{name:20} home {home:15} {lh!s:>8}  away {away:15} {la!s:>8}  {'HIT' if row.get('hit') else ('miss' if 'hit' in row else row.get('status'))}")
-    out = {"scored": scored, "hits": hits, "hit_rate": round(hits / scored, 3) if scored else None, "rows": rows,
+    out = {"data_source": DATA_SOURCE, "scored": scored, "hits": hits, "hit_rate": round(hits / scored, 3) if scored else None, "rows": rows,
            "decision": ("keep location (k_loc > 0)" if scored >= 15 and hits / scored >= 0.75 else "drop location from the score and hide the place box") if scored else "no data"}
     os.makedirs(os.path.join(os.path.dirname(__file__), "out"), exist_ok=True)
     json.dump(out, open(os.path.join(os.path.dirname(__file__), "out", "location_sanity.json"), "w"), indent=1)

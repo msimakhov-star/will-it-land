@@ -15,6 +15,8 @@ import argparse
 import json
 import os
 
+DATA_SOURCE = "mock" if os.environ.get("QLOO_MOCK") else "live"
+
 import httpx
 
 from eval.kill_test import spearman
@@ -53,7 +55,7 @@ def main():
     g = pipeline.guesses(refs, [room])
     rows = [{"name": it["name"], "recognised": round(rate[iid], 1), "qloo": scores[qloo.eid(h)]["score"], "llm": (g[k][0] if g and k < len(g) else None)} for k, (iid, h, it) in enumerate(found)]
     ok = [r for r in rows if r["llm"] is not None]
-    out = {"respondents": len(resp), "items": len(ok),
+    out = {"data_source": DATA_SOURCE, "respondents": len(resp), "items": len(ok),
            "spearman_qloo": round(spearman([r["qloo"] for r in ok], [r["recognised"] for r in ok]), 3) if len(ok) > 2 else None,
            "spearman_llm": round(spearman([r["llm"] for r in ok], [r["recognised"] for r in ok]), 3) if len(ok) > 2 else None,
            "ai_picks_most_did_not_know": sorted([r["name"] for r in rows if r["recognised"] < 50]), "rows": sorted(rows, key=lambda r: r["recognised"])}

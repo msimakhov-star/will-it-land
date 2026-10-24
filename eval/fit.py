@@ -17,6 +17,8 @@ import argparse
 import json
 import math
 import os
+
+DATA_SOURCE = "mock" if os.environ.get("QLOO_MOCK") else "live"
 import random
 
 from eval.kill_test import GEN_BUCKETS, OUT, spearman
@@ -99,7 +101,7 @@ def main():
     llm = [float(t["llm"]) for t in allrows]
     q = [preds["qloo"][k] for k in keys]
     blend = [x + y for x, y in zip(zscores(q), zscores(llm))]
-    report = {"n_entities": len(ents), "n_rows": len(allrows), "pooled": {}, "gap": {}}
+    report = {"data_source": DATA_SOURCE, "n_entities": len(ents), "n_rows": len(allrows), "pooled": {}, "gap": {}}
     for name, v in (("qloo", q), ("no_age", [preds["no_age"][k] for k in keys]), ("llm", llm), ("blend", blend)):
         report["pooled"][name] = round(spearman(v, truth), 3)
     # millennial minus boomer gap, per entity

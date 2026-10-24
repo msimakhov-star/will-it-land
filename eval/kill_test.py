@@ -178,7 +178,7 @@ def main():
         rep = f"resolved {sum(1 for r in rows if r.get('qloo_id'))}/{len(rows)}"
     else:
         rep = report(rows)
-    open(os.path.join(OUT, "kill_test.md"), "w").write(rep)
+    open(os.path.join(OUT, "kill_test.md"), "w").write(("data: mock\n" if os.environ.get("QLOO_MOCK") else "data: live\n") + rep)
     print(rep)
 
 

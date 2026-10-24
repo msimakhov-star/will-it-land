@@ -325,9 +325,10 @@ def proof():
             raw = open(path).read()
             if fn.endswith(".json"):
                 d = json.loads(raw)
-                out[key] = {k: v for k, v in d.items() if k not in ("rows",)} if isinstance(d, dict) else d
-            else:
-                out[key] = raw
+                if isinstance(d, dict) and d.get("data_source") == "live":  # results from demo data are never shown as measured
+                    out[key] = {k: v for k, v in d.items() if k not in ("rows",)}
+            elif raw.startswith("data: live"):
+                out[key] = raw.split("\n", 1)[1]
     return out
 
 

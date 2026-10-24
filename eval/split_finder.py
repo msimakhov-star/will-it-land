@@ -14,6 +14,8 @@ import csv
 import json
 import os
 
+DATA_SOURCE = "mock" if os.environ.get("QLOO_MOCK") else "live"
+
 from server import pipeline, qloo
 from server.examples import EXAMPLES
 
@@ -68,7 +70,7 @@ def main():
                      "place_swing": round(max(places.values()) - min(places.values()), 1) if places else 0,
                      "verdicts_young_old": (pipeline.verdict_for(ages.get("24_and_younger", 0)), pipeline.verdict_for(ages.get("55_and_older", 0)))})
     flips = [r for r in rows if r["verdicts_young_old"][0] != r["verdicts_young_old"][1]]
-    out = {"n": len(rows), "verdict_flips_young_vs_55plus": len(flips), "rows": sorted(rows, key=lambda r: -abs(r["young_minus_old"]))}
+    out = {"data_source": DATA_SOURCE, "n": len(rows), "verdict_flips_young_vs_55plus": len(flips), "rows": sorted(rows, key=lambda r: -abs(r["young_minus_old"]))}
     os.makedirs(os.path.join(os.path.dirname(__file__), "out"), exist_ok=True)
     json.dump(out, open(os.path.join(os.path.dirname(__file__), "out", "split_finder.json"), "w"), indent=1)
     print(f"{len(rows)} references scored; {len(flips)} change verdict between under 25 and 55+\n")
