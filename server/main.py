@@ -101,8 +101,16 @@ async def lifespan(_: FastAPI):
     if sys.platform == "darwin":  # the first-call stall is a macOS proxy-discovery issue; Linux containers skip the warm-up
         pipeline.llm.warm()
     threading.Thread(target=_prewarm_examples, daemon=True).start()
-    async with mcp.session_manager.run():
+    cm = mcp.session_manager.run()
+    try:
+        await cm.__aenter__()
+    except RuntimeError:  # the MCP session manager runs once per process; a second app start (tests) reuses it
+        cm = None
+    try:
         yield
+    finally:
+        if cm is not None:
+            await cm.__aexit__(None, None, None)
 
 
 app = FastAPI(title="Will It Land", version="0.3.0", lifespan=lifespan)
