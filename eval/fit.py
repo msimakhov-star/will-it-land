@@ -121,7 +121,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     json.dump(report, open(os.path.join(OUT, "fit_report.json"), "w"), indent=1)
     if a.write:
-        cal = dict(scoring.DEFAULTS)
+        cal = scoring.params()  # keep location settings written by eval/location_sanity.py
         cal.update(report["fitted"])
         cal.update({"calibrated": True, "source": f"fitted on {len(ents)} YouGov entities x 3 generations, 5-fold CV Spearman {report['pooled']['qloo']}"})
         json.dump(cal, open(os.path.join(os.path.dirname(scoring.__file__), "calibration.json"), "w"), indent=1)

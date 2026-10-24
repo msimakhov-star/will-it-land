@@ -1,0 +1,30 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Will It Land" [level=1] [ref=e7]
+      - paragraph [ref=e8]: Spellcheck for cultural references. Pick the rooms you are playing; every reference is checked against what that audience actually knows, using Qloo's taste graph, and the ones that will not land get a stand-in that does.
+    - button "How we know The tests behind the score" [ref=e10]:
+      - generic [ref=e11]: How we know
+      - generic [ref=e12]: The tests behind the score
+  - navigation "Examples" [ref=e13]:
+    - 'button "Writing agent: via MCP" [ref=e14]'
+    - button "Paste your own" [ref=e15]
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - button "Make it land in every room" [disabled] [ref=e18]
+      - button "Edit script" [ref=e19]
+      - button "Add a room" [ref=e20]
+      - generic [ref=e21]:
+        - generic [ref=e22]: Scored by
+        - group "Scored by" [ref=e23]:
+          - button "Qloo data" [pressed] [ref=e24]
+          - button "AI guess alone" [ref=e25]
+  - contentinfo [ref=e26]:
+    - paragraph [ref=e27]: "\"Likely to land\" is an estimate for an audience, not a statement about any one person, and not a judgement on whether a joke is funny. Audience data is aggregate taste data from Qloo; only reference names are sent to it."
+    - paragraph [ref=e28]:
+      - text: Built for the Qloo Agentic Hackathon.
+      - button "Use it from your own agent (MCP)" [ref=e29]
+      - text: .
+      - link "Source code (MIT)" [ref=e30] [cursor=pointer]:
+        - /url: https://github.com/msimakhov-star/will-it-land
+      - text: .

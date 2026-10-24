@@ -65,12 +65,15 @@ Given the line, the reference, its intended type and role, and candidates (name,
 {"pick": <index of best candidate or -1 if none fits>, "why": "<one short clause>"}."""
 
 SWAP_SYSTEM = """You propose stand-in references for a line whose current reference will not land with the target audience.
-Each stand-in must play the same ROLE in the joke or sentence, be the same type of thing, and be something the target audience
-is likely to know. Prefer things that are at least as famous with that audience. Return {"candidates": ["Name", ...]} with 6 names,
-most promising first. No explanations."""
+Each stand-in must play the same ROLE in the joke or sentence, be the same kind of thing, and be something the target audience
+is likely to know. If the role depends on the thing being old, dead, dated, uncool or out of fashion (someone in the line is
+behind the times), every stand-in must be just as dated for this audience and still recognised by it: never propose something
+current for a dated role (a dead social network stays a dead social network). Otherwise prefer things at least as famous with
+that audience. Return {"candidates": ["Name", ...]} with 6 names, most promising first. No explanations."""
 
-ROLE_FILTER_SYSTEM = """A writer needs a stand-in for a reference in one line. A taste graph proposed candidates that this audience over-indexes on.
-Keep only candidates that could convincingly play the same ROLE in the line (same kind of thing, the joke or point still works).
+ROLE_FILTER_SYSTEM = """A writer needs a stand-in for a reference in one line. A taste graph proposed candidates.
+Keep only candidates that could convincingly play the same ROLE in the line: the same kind of thing, the same era when the role
+depends on it, and the joke or point still works. For a dated role, a current thing breaks the joke (TikTok for MySpace): drop it.
 Return {"keep": ["Name", ...]} using the exact names given, best first; [] if none fit."""
 
 REWRITE_SYSTEM = """You rewrite one line of a script so that a named reference is replaced by each stand-in in turn, keeping rhythm,
@@ -291,14 +294,15 @@ def prepare(text: str) -> list[Reference]:
             return [Reference(**copy.deepcopy(d)) for d in refs_d]
     outer = qloo.current_ledger()
     mine = qloo.start_ledger()
+    n_fail = len(llm.failures())
     try:
         refs = extract(text)
         resolve(text, refs)
         enrich(refs)
     finally:
         qloo.restore_ledger(outer, mine)
-    if any(c["source"] == "error" for c in mine):
-        return refs  # a Qloo call failed: serve this result but do not remember it
+    if any(c["source"] == "error" for c in mine) or len(llm.failures()) > n_fail:
+        return refs  # a Qloo or LLM call failed: serve this result but do not remember it
     with _prep_lock:
         _prep_cache[key] = ([asdict(r) for r in refs], [dict(c, source="cache" if c["source"] == "live" else c["source"]) for c in mine])
         while len(_prep_cache) > 256:
@@ -334,24 +338,32 @@ def verdict_for(score: float) -> str:
     return scoring.verdict(score)
 
 
-_anchor_ids: dict[str, list[str]] = {}
+_anchor_ids: dict[str, tuple[list[str], list[dict]]] = {}
 
 
 def anchors_for(entity_type: str) -> list[str]:
-    if entity_type not in _anchor_ids:
-        ids = []
+    hit = _anchor_ids.get(entity_type)
+    if hit:
+        qloo.replay(hit[1])  # the /search calls that resolved these anchors, so the ledger counts them
+        return hit[0]
+    outer = qloo.current_ledger()
+    mine = qloo.start_ledger()
+    ids = []
+    try:
         for n in ANCHORS.get(entity_type, []):
             try:
                 hits = qloo.search(n, types=[entity_type], take=3)
             except qloo.QlooError:
                 hits = []
-            hit = next((h for h in hits if _similar(n, h.get("name", ""))), None)
-            if hit and qloo.eid(hit):
-                ids.append(qloo.eid(hit))
-        if len(ids) < MIN_ANCHORS:
-            return ids  # do not memoise a failure (no key yet, transient error)
-        _anchor_ids[entity_type] = ids
-    return _anchor_ids[entity_type]
+            h = next((x for x in hits if _similar(n, x.get("name", ""))), None)
+            if h and qloo.eid(h):
+                ids.append(qloo.eid(h))
+    finally:
+        qloo.restore_ledger(outer, mine)
+    if len(ids) < MIN_ANCHORS:
+        return ids  # do not memoise a failure (no key yet, transient error)
+    _anchor_ids[entity_type] = (ids, [dict(c, source="cache" if c["source"] == "live" else c["source"]) for c in mine])
+    return ids
 
 
 def score_entities(items: list[dict], audience: Audience) -> dict[str, dict]:
@@ -449,7 +461,7 @@ def candidate_pool(text: str, ref: Reference, audiences: list[Audience], context
         if not ents:
             return []
         try:
-            keep = llm.complete_json(ROLE_FILTER_SYSTEM, json.dumps({"line": line, "reference": ref.surface, "role": ref.role, "audience": audience.describe(), "candidates": [e["name"] for e in ents]}), fast=True).get("keep", [])
+            keep = llm.complete_json(ROLE_FILTER_SYSTEM, json.dumps({"line": line, "reference": ref.surface, "role": ref.role, "era": ref.era, "audience": audience.describe(), "candidates": [e["name"] for e in ents]}), fast=True).get("keep", [])
         except Exception:
             keep = []
         by_name = {e["name"]: e for e in ents}
@@ -458,7 +470,7 @@ def candidate_pool(text: str, ref: Reference, audiences: list[Audience], context
 
     def from_ai():
         try:
-            names = llm.complete_json(SWAP_SYSTEM, json.dumps({"audience": who, "line": line, "reference": ref.surface, "type": ref.type, "role": ref.role})).get("candidates", [])
+            names = llm.complete_json(SWAP_SYSTEM, json.dumps({"audience": who, "line": line, "reference": ref.surface, "type": ref.type, "role": ref.role, "era": ref.era})).get("candidates", [])
         except Exception:
             return []
 
@@ -538,7 +550,11 @@ def common_standin(text: str, references: list[dict], ref_start: int, audiences:
             continue
         cands.append({"name": e["name"], "entity_id": k, "source": src, "why": why, "scores": scores, "min": min(scores)})
     cands.sort(key=lambda c: -c["min"])
-    best = cands[0] if cands and cands[0]["min"] > min(v for v in orig if v is not None) else None
+    floor = min((v for v in orig if v is not None), default=0)
+    best = cands[0] if cands and cands[0]["min"] > floor else None
+    if best and best["source"] != "qloo":  # prefer a stand-in found in Qloo's graph when it is within a few points
+        q = next((c for c in cands if c["source"] == "qloo" and c["min"] > floor and best["min"] - c["min"] <= PREFER_QLOO_WITHIN), None)
+        best = q or best
     if best:
         sw = Swap(best["name"], best["entity_id"], best["min"], best["source"], best["why"])
         _rewrite(text, ref, [sw])
@@ -636,18 +652,37 @@ def matrix_guesses(text: str, audiences: list[Audience]) -> list[list[float | No
     return guesses(prepare(text), audiences)
 
 
+def _fix_article(before: str, name: str) -> str:
+    """'a' or 'an' right before an inserted name follows the name's first letter."""
+    import re
+
+    m = re.search(r"(\b)(a|an|A|An)(\s+)$", before)
+    if not m:
+        return before
+    vowel = name[:1].lower() in "aeiou"
+    art = m.group(2)
+    want = ("an" if vowel else "a") if art.islower() else ("An" if vowel else "A")
+    return before[: m.start(2)] + want + m.group(3)
+
+
 def apply_swaps(text: str, picks: list[tuple[Reference, Swap]]) -> str:
-    """Apply one stand-in per line, working from the end of the text so earlier offsets stay valid."""
-    seen: set[int] = set()
-    for ref, s in sorted(picks, key=lambda p: -p[0].start):
-        a = text.rfind("\n", 0, ref.start) + 1
-        if a in seen:
-            continue
-        seen.add(a)
-        b = text.find("\n", ref.end)
+    """Apply every pick. A line with one swap uses the model's rewritten line (articles fixed); a line with several
+    swaps replaces each name in place, right to left, so no chosen stand-in is silently dropped."""
+    by_line: dict[int, list[tuple[Reference, Swap]]] = {}
+    for ref, sw in picks:
+        by_line.setdefault(text.rfind("\n", 0, ref.start) + 1, []).append((ref, sw))
+    for a in sorted(by_line, reverse=True):
+        b = text.find("\n", a)
         b = b if b >= 0 else len(text)
         old = text[a:b]
-        new = s.line if s.line and s.name in s.line else old[: ref.start - a] + s.name + old[ref.end - a :]
+        group = sorted(by_line[a], key=lambda p: -p[0].start)
+        if len(group) == 1 and group[0][1].line and group[0][1].name in group[0][1].line:
+            new = group[0][1].line
+        else:
+            new = old
+            for ref, sw in group:
+                pre = _fix_article(new[: ref.start - a], sw.name)
+                new = pre + sw.name + new[ref.end - a :]
         text = text[:a] + new + text[b:]
     return text
 
@@ -748,7 +783,8 @@ def localise(text: str, audience: Audience, rounds: int = 2) -> dict:
 
 def localise_all(text: str, audiences: list[Audience]) -> dict:
     """Make it land in every room: for each reference that is weak in any room, apply the stand-in whose worst room
-    scores best (common_standin), then re-score every room. Keeps the rewrite only if the worst room improved."""
+    scores best (common_standin), then re-score every room. Keeps the rewrite only if the total number of weak
+    references falls (misses count double) and no room gets more weak references."""
     before = matrix(text, audiences)
     refs = before["references"]
     weak = [i for i, row in enumerate(before["cells"]) if any(c and c["verdict"] in ("risky", "misses") for c in row)]
@@ -769,7 +805,8 @@ def localise_all(text: str, audiences: list[Audience]) -> dict:
     def worst(m):
         return sum(_bad(s) for s in m["summaries"])
 
-    kept = worst(after) < worst(before)
+    # keep only if the total falls and no room gets more weak references
+    kept = worst(after) < worst(before) and all(_bad(x) <= _bad(y) for x, y in zip(after["summaries"], before["summaries"]))
     return {"original": text, "text": new_text if kept else text, "before": before, "after": after if kept else before, "swaps": chosen, "kept": kept,
             "applied": {"total": len(picks), "from_qloo": sum(1 for _, sw in picks if sw.source == "qloo")}}
 

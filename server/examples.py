@@ -60,6 +60,19 @@ EXAMPLES = [
         ),
     },
     {
+        "id": "tour",
+        "title": "Touring comic: one opener, six cities",
+        "kind": "tour",
+        "audience": {"age": "25_to_29", "gender": None, "location": "Leeds"},
+        "matrix": TOUR,
+        "text": (
+            "Good to be back on the road. I've been living off Greggs and service-station coffee for a week.\n"
+            "My tour manager plans everything on Google Maps and still got us lost looking for a Wetherspoons.\n"
+            "Last night the whole crowd sang Mr. Brightside louder than I could do my closer.\n"
+            "Tonight I'm told this room only goes quiet for The Great British Bake Off."
+        ),
+    },
+    {
         "id": "speech",
         "title": "Toast: best man speech",
         "kind": "speech",

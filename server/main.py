@@ -8,89 +8,40 @@ import sqlite3
 import sys
 import threading
 import time
-from collections import OrderedDict, defaultdict, deque
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import pipeline, qloo, survey
+from . import memos, pipeline, qloo, survey
 from .examples import EXAMPLES, PRESETS
 from .mcp_server import http_app, mcp
 
 mcp_app = http_app()
 MAX_AUDIENCES = 8
-
-
-# ---- memo that never remembers a degraded result ------------------------------------------------------
-class Memo:
-    """Process-local memo for whole responses. A result built while any Qloo call failed is returned but not stored,
-    so a brief rate limit cannot pin 'not in Qloo' on a reference for the rest of the process."""
-
-    def __init__(self, maxsize: int):
-        self.maxsize, self.data, self.lock = maxsize, OrderedDict(), threading.Lock()
-
-    def get_or(self, key, fn):
-        with self.lock:
-            if key in self.data:
-                self.data.move_to_end(key)
-                return self.data[key]
-        calls = qloo.start_ledger()
-        out = fn()
-        out["ledger"] = _ledger_summary(calls)
-        body = json.dumps(out)
-        if not qloo.degraded():
-            with self.lock:
-                self.data[key] = body
-                while len(self.data) > self.maxsize:
-                    self.data.popitem(last=False)
-        return body
-
-    def clear(self):
-        with self.lock:
-            self.data.clear()
-
-
-CHECKS, SWAPS, MATRICES, GUESSES, STANDINS, LOCALISED, LOCALISED_ALL = (Memo(n) for n in (256, 256, 128, 128, 128, 128, 64))
-MEMOS = (CHECKS, SWAPS, MATRICES, GUESSES, STANDINS, LOCALISED, LOCALISED_ALL)
-
-
-def _aud_key(auds) -> str:
-    return json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
-
-
-def _check_body(text: str, a: pipeline.Audience, swaps: bool) -> str:
-    return CHECKS.get_or(("check", text, a.age, a.gender, a.location, swaps), lambda: pipeline.check(text, a, swaps=swaps))
-
-
-def _swaps_body(text: str, a: pipeline.Audience) -> str:
-    """Stand-ins are computed from the server's own scored check (never from client-sent references), so the prewarm
-    and a browser request share one cache entry."""
-    def run():
-        first = json.loads(_check_body(text, a, False))
-        return {"references": pipeline.swaps_for(text, a, first["references"])}
-
-    return SWAPS.get_or(("swaps", text, a.age, a.gender, a.location), run)
-
-
-def _matrix_body(text: str, auds: list[pipeline.Audience]) -> str:
-    return MATRICES.get_or(("matrix", text, _aud_key(auds)), lambda: pipeline.matrix(text, auds))
+MEMOS = memos.ALL
 
 
 def _prewarm_examples():
-    """Run the bundled examples once per process so a judge's first click is instant and the Qloo cache is populated."""
+    """Run the bundled examples once per process, including the hero 'Make it land' result and the AI-alone guesses,
+    so a judge's first clicks are instant and the Qloo cache is populated."""
     if not os.environ.get("QLOO_API_KEY") and not os.environ.get("QLOO_MOCK"):
         return
     for ex in EXAMPLES:
         try:
             a = pipeline.Audience(**{k: v for k, v in ex["audience"].items() if k in ("age", "gender", "location")})
-            _check_body(ex["text"], a, False)
-            _swaps_body(ex["text"], a)
+            memos.check_body(ex["text"], a, False)
             if ex.get("matrix"):
                 auds = [pipeline.Audience(x.get("age"), x.get("gender"), x.get("location"), x.get("name")) for x in ex["matrix"]]
-                _matrix_body(ex["text"], auds)
+                memos.matrix_body(ex["text"], auds)
+                memos.guesses_body(ex["text"], auds)
+                memos.localise_all_body(ex["text"], auds)
+            else:
+                memos.swaps_body(ex["text"], a)
         except Exception as ex_:  # pre-warming is best effort
             print("prewarm failed:", type(ex_).__name__, ex_, flush=True)
     print("prewarm done", flush=True)
@@ -113,7 +64,8 @@ async def lifespan(_: FastAPI):
             await cm.__aexit__(None, None, None)
 
 
-app = FastAPI(title="Will It Land", version="0.3.0", lifespan=lifespan)
+app = FastAPI(title="Will It Land", version="0.4.0", lifespan=lifespan)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 
 @app.middleware("http")
@@ -126,7 +78,7 @@ async def mcp_without_slash(request: Request, call_next):
 app.mount("/mcp", mcp_app)
 
 
-# ---- abuse guard: the public endpoints spend LLM and Qloo quota -------------------------------------
+# ---- abuse guard: the public endpoints spend LLM and Qloo quota (charged only when work is done) ------------
 _hits: dict[str, deque] = defaultdict(deque)
 _hits_lock = threading.Lock()
 RATE = int(os.environ.get("RATE_PER_10MIN", "60"))
@@ -142,23 +94,12 @@ def _guard(request: Request) -> None:
         while q and now - q[0] > 600:
             q.popleft()
         if len(q) >= RATE:
-            raise HTTPException(429, "Too many checks from this address in 10 minutes. Try again shortly.")
+            raise HTTPException(429, "Too many new checks from this address in 10 minutes. Try again shortly.")
         q.append(now)
 
 
-def _ledger_summary(calls: list) -> dict:
-    by_endpoint: dict[str, int] = defaultdict(int)
-    for c in calls:
-        by_endpoint[c["endpoint"]] += 1
-    return {
-        "total": len(calls),
-        "live": sum(c["source"] == "live" for c in calls),
-        "cache": sum(c["source"] in ("cache", "stale") for c in calls),
-        "mock": sum(c["source"] == "mock" for c in calls),
-        "errors": sum(c["source"] == "error" for c in calls),
-        "by_endpoint": dict(by_endpoint),
-        "calls": calls[:400],
-    }
+def _g(request: Request):
+    return lambda: _guard(request)
 
 
 # ---- models --------------------------------------------------------------------------------------------
@@ -251,64 +192,55 @@ def presets():
 
 @app.get("/api/options")
 def options():
+    P = pipeline.scoring.P
     return {"ages": [{"value": a, "label": pipeline.AGE_LABELS[a]} for a in pipeline.AUDIENCE_AGES], "genders": ["male", "female"], "types": pipeline.TYPES, "max_audiences": MAX_AUDIENCES,
-            "location_weight": pipeline.scoring.P.get("k_loc"), "calibrated": pipeline.scoring.P.get("calibrated")}
+            "location_weight": P.get("k_loc"), "location_measured": bool(P.get("loc_measured")), "calibrated": P.get("calibrated")}
 
 
 @app.post("/api/check")
 def check(req: CheckRequest, request: Request):
     a = _audience(req.age, req.gender, req.location)
-    _guard(request)
-    return _run(lambda: _check_body(req.text, a, req.swaps), f"check {len(req.text)}ch [{a.label()}]")
+    return _run(lambda: memos.check_body(req.text, a, req.swaps, _g(request)), f"check {len(req.text)}ch [{a.label()}]")
 
 
 @app.post("/api/swaps")
 def swaps(req: SwapsRequest, request: Request):
     """Second phase of a check: stand-ins for the weak references. Split out so the UI shows scores first."""
     a = _audience(req.age, req.gender, req.location)
-    return _run(lambda: _swaps_body(req.text, a), f"swaps [{a.label()}]")
+    return _run(lambda: memos.swaps_body(req.text, a, _g(request)), f"swaps [{a.label()}]")
 
 
 @app.post("/api/matrix")
 def matrix(req: MatrixRequest, request: Request):
-    _guard(request)
     auds = [x.to() for x in req.audiences]
-    return _run(lambda: _matrix_body(req.text, auds), f"matrix {len(req.text)}ch x{len(auds)}")
+    return _run(lambda: memos.matrix_body(req.text, auds, _g(request)), f"matrix {len(req.text)}ch x{len(auds)}")
 
 
 @app.post("/api/guesses")
 def matrix_guesses(req: MatrixRequest, request: Request):
     """What the language model alone guesses for each reference x audience (no data). Fetched after the Qloo matrix paints."""
     auds = [x.to() for x in req.audiences]
-    return _run(lambda: GUESSES.get_or(("guesses", req.text, _aud_key(auds)), lambda: {"guesses": pipeline.matrix_guesses(req.text, auds)}), f"guesses x{len(auds)}")
+    return _run(lambda: memos.guesses_body(req.text, auds), f"guesses x{len(auds)}")
 
 
 @app.post("/api/standin")
 def standin(req: StandinRequest, request: Request):
     """One stand-in for every room: the candidate whose worst room scores highest."""
-    _guard(request)
     auds = [x.to() for x in req.audiences]
-
-    def run():
-        refs = json.loads(_matrix_body(req.text, auds))["references"]
-        return pipeline.common_standin(req.text, refs, req.ref_start, auds)
-
-    return _run(lambda: STANDINS.get_or(("standin", req.text, _aud_key(auds), req.ref_start), run), f"standin x{len(auds)}")
+    return _run(lambda: memos.standin_body(req.text, auds, req.ref_start, _g(request)), f"standin x{len(auds)}")
 
 
 @app.post("/api/localise_all")
 def localise_all(req: MatrixRequest, request: Request):
     """Make it land in every room: one stand-in per weak reference, chosen so its worst room scores best."""
-    _guard(request)
     auds = [x.to() for x in req.audiences]
-    return _run(lambda: LOCALISED_ALL.get_or(("lall", req.text, _aud_key(auds)), lambda: pipeline.localise_all(req.text, auds)), f"localise_all x{len(auds)}")
+    return _run(lambda: memos.localise_all_body(req.text, auds, _g(request)), f"localise_all x{len(auds)}")
 
 
 @app.post("/api/localise")
 def localise(req: LocaliseRequest, request: Request):
-    _guard(request)
     a = req.audience.to()
-    return _run(lambda: LOCALISED.get_or(("loc", req.text, _aud_key([a])), lambda: pipeline.localise(req.text, a)), f"localise [{a.label()}]")
+    return _run(lambda: memos.localise_body(req.text, a, _g(request)), f"localise [{a.label()}]")
 
 
 # ---- proof: the measured numbers, read from eval/out (bundled at deploy time) ------------------------------
@@ -426,4 +358,6 @@ if os.path.isdir(DIST):
     def spa(path: str):
         f = os.path.realpath(os.path.join(DIST, path))
         ok = bool(path) and f.startswith(DIST + os.sep) and os.path.isfile(f)  # never serve anything outside web/dist
-        return FileResponse(f if ok else os.path.join(DIST, "index.html"))
+        if ok and not f.endswith("index.html"):
+            return FileResponse(f)
+        return FileResponse(os.path.join(DIST, "index.html"), headers={"Cache-Control": "no-cache"})

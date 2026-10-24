@@ -13,7 +13,21 @@ KNOWN = {  # name -> (popularity percentile, young skew, old skew)
     "lidl": (0.7, 0.0, 0.1), "le creuset": (0.6, -0.2, 0.3), "game of thrones": (0.95, 0.2, -0.2), "manhattan": (0.9, 0.0, 0.1),
     "hmv": (0.7, -0.1, 0.3), "netflix": (0.98, 0.3, 0.1), "the office": (0.94, 0.3, 0.0), "stranger things": (0.92, 0.5, -0.2),
     "tiktok": (0.97, 0.6, -0.4), "facebook": (0.98, -0.2, 0.4), "iphone": (0.98, 0.3, 0.0), "the simpsons": (0.96, 0.1, 0.2),
+    "tower records": (0.5, -0.6, 0.5), "stormzy": (0.7, 0.6, -0.6), "spotify wrapped": (0.75, 0.6, -0.5), "bebo": (0.35, -0.3, 0.2),
+    "angry birds": (0.8, 0.0, -0.1), "friends reunited": (0.3, -0.5, 0.4), "vesta curry": (0.3, -0.6, 0.6), "wimpy": (0.45, -0.5, 0.5),
+    "greggs": (0.8, 0.3, 0.1), "nando's": (0.85, 0.5, -0.3), "fred again..": (0.6, 0.6, -0.6), "central cee": (0.65, 0.65, -0.6),
 }
+# per-place lift for the demo's market examples: name -> {place: affinity}; anything else is hashed
+LOCAL = {
+    "succession": {"united states": 0.9, "india": 0.1, "brazil": 0.2, "united kingdom": 0.7},
+    "ted lasso": {"united kingdom": 0.95, "united states": 0.8, "india": 0.15, "brazil": 0.1, "texas": 0.6},
+    "taylor swift": {"united states": 0.95, "texas": 0.9, "india": 0.35, "brazil": 0.5},
+    "coldplay": {"india": 0.9, "brazil": 0.85, "united kingdom": 0.9},
+    "minecraft": {},
+    "greggs": {"london": 0.95, "united kingdom": 0.95, "st. louis": 0.05, "texas": 0.05},
+    "manhattan": {"new york": 0.95, "london": 0.4},
+}
+_SEEN: dict[str, str] = {}  # entity id -> the name that was searched, so later calls know what the entity is
 SUGGEST = {  # what the fake "recommend" returns per type
     "brand": ["Netflix", "HMV", "TikTok", "Facebook", "iPhone"],
     "tv_show": ["The Office", "Stranger Things", "The Simpsons", "Friends"],
@@ -33,13 +47,19 @@ def _eid(name: str) -> str:
 
 
 def _name(eid: str) -> str:
-    return next((n for n in list(KNOWN) + [x.lower() for v in SUGGEST.values() for x in v] if _eid(n) == eid), eid)
+    return _SEEN.get(eid) or next((n for n in list(KNOWN) + [x.lower() for v in SUGGEST.values() for x in v] if _eid(n) == eid), eid)
+
+
+def _known(name: str):
+    """Exact match, or the table entry the name starts with ('domino's pizza' -> 'domino's', 'hollister co.' -> 'hollister')."""
+    n = name.lower()
+    return KNOWN.get(n) or next((v for k, v in KNOWN.items() if n.startswith(k + " ") or n.startswith(k + ".")), None)
 
 
 def _pop(name: str) -> float:
     """Real Qloo popularity is a percentile over a huge catalogue, so famous things sit at 0.99 to 0.9999.
     Map the table's 0..1 'fame' onto that range so the mock exercises the same saturation the real data has."""
-    fame = KNOWN.get(name.lower(), (round(0.3 + 0.6 * _h(name), 2), 0, 0))[0]
+    fame = (_known(name) or (round(0.3 + 0.6 * _h(name), 2), 0, 0))[0]
     return round(1 - 10 ** (-(1 + 3 * fame)), 6)
 
 
@@ -79,9 +99,11 @@ def _respond(path: str, params: dict) -> dict:
     if path == "/search":
         q = params["query"]
         t = (params.get("types") or "urn:entity:tv_show").split(",")[0]
+        _SEEN[_eid(q)] = q.lower()
         hits = [{"name": q, "entity_id": _eid(q), "types": [t], "popularity": _pop(q), "properties": {}}]
         if q.lower() in AMBIGUOUS:  # so the disambiguation path runs offline too
             alt = AMBIGUOUS[q.lower()]
+            _SEEN[_eid(alt)] = alt.lower()
             hits.append({"name": alt, "entity_id": _eid(alt), "types": [t], "popularity": round(_pop(q) - 0.009, 6), "properties": {"short_description": "a different entity with the same name"}})
         return {"success": True, "results": hits[: int(params.get("take", 8))]}
     if path == "/v2/insights":
@@ -91,7 +113,9 @@ def _respond(path: str, params: dict) -> dict:
             rows = []
             for i in ids:
                 name = _name(i)
-                _, young, old = KNOWN.get(name, (0, _h(i) - 0.5, 0.5 - _h(i)))
+                k = _known(name)
+                # unknown entities get a mild deterministic skew, not a random dramatic one
+                _, young, old = k if k else (0, 0.3 * (_h(name) - 0.5), 0.3 * (0.5 - _h(name)))
                 age = {"24_and_younger": young, "25_to_29": young * 0.7, "30_to_34": young * 0.3, "35_to_44": 0.0, "45_to_54": old * 0.6, "55_and_older": old}
                 rows.append({"entity_id": i, "query": {"age": age, "gender": {"male": 0.05, "female": -0.05}}})
             return {"success": True, "results": {"demographics": rows}}
@@ -101,7 +125,15 @@ def _respond(path: str, params: dict) -> dict:
             return {"success": True, "results": {"tags": [{"tag_id": f"urn:tag:genre:mock:{k}", "name": k, "subtype": "urn:tag:genre"} for k in ("nostalgia", "pop culture", "comedy")]}}
         etype = ftype.split(":")[-1]
         if params.get("filter.results.entities"):
-            ents = [{"entity_id": i, "name": _name(i), "query": {"affinity": round(_h(i + (params.get("signal.location.query") or "")), 3)}} for i in ids]
+            loc = (params.get("signal.location.query") or "").lower()
+
+            def aff(i):
+                local = next((v for k, v in LOCAL.items() if _name(i).startswith(k)), None)
+                if local is not None and loc in local:
+                    return local[loc]
+                return round(_h(i + loc), 3)
+
+            ents = [{"entity_id": i, "name": _name(i), "query": {"affinity": aff(i)}} for i in ids]
         else:
             names = SUGGEST.get(etype, [])
             ents = [{"entity_id": _eid(n), "name": n, "popularity": _pop(n), "query": {"affinity": round(_h(n), 3)}} for n in names]

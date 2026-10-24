@@ -15,7 +15,7 @@ import json
 import math
 import os
 
-DEFAULTS = {"a": -2.3, "b": 1.17, "k_age": 3.0, "k_gender": 1.5, "k_loc": 2.0, "lands": 60.0, "misses": 35.0, "calibrated": False, "source": "hand-set priors"}
+DEFAULTS = {"a": -2.3, "b": 1.17, "k_age": 3.0, "k_gender": 1.5, "k_loc": 2.0, "lands": 60.0, "misses": 35.0, "calibrated": False, "loc_measured": False, "source": "hand-set priors"}
 _PATH = os.path.join(os.path.dirname(__file__), "calibration.json")
 
 

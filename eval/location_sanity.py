@@ -65,6 +65,16 @@ def main() -> None:
     os.makedirs(os.path.join(os.path.dirname(__file__), "out"), exist_ok=True)
     json.dump(out, open(os.path.join(os.path.dirname(__file__), "out", "location_sanity.json"), "w"), indent=1)
     print(f"\n{hits}/{scored} stronger at home than away -> {out['decision']}")
+    if DATA_SOURCE == "live" and scored:
+        from server import scoring
+
+        cal = scoring.params()
+        if scored >= 15 and hits / scored >= 0.75:
+            cal.update({"loc_measured": True})
+        else:
+            cal.update({"k_loc": 0.0, "loc_measured": False})
+        json.dump(cal, open(os.path.join(os.path.dirname(scoring.__file__), "calibration.json"), "w"), indent=1)
+        print("updated server/calibration.json:", {k: cal[k] for k in ("k_loc", "loc_measured")})
 
 
 if __name__ == "__main__":

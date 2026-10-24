@@ -1,0 +1,36 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Will It Land" [level=1] [ref=e7]
+        - generic [ref=e8]: "Demo data: Qloo key pending"
+      - paragraph [ref=e9]: Spellcheck for cultural references. Pick the rooms you are playing; every reference is checked against what that audience actually knows, using Qloo's taste graph, and the ones that will not land get a stand-in that does.
+    - button "How we know The tests behind the score" [ref=e11]:
+      - generic [ref=e12]: How we know
+      - generic [ref=e13]: The tests behind the score
+  - navigation "Examples" [ref=e14]:
+    - 'button "Comedian: same bit, two rooms" [ref=e15]'
+    - 'button "Ad team: one spot, six markets" [ref=e16]'
+    - 'button "Best man: one shot" [ref=e17]'
+    - 'button "Writing agent: via MCP" [ref=e18]'
+    - button "Paste your own" [ref=e19]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - button "Make it land in both rooms" [disabled] [ref=e22]
+      - button "Edit script" [ref=e23]
+      - button "Add a room" [ref=e24]
+      - generic [ref=e25]:
+        - generic [ref=e26]: Scored by
+        - group "Scored by" [ref=e27]:
+          - button "Qloo data" [pressed] [ref=e28]
+          - button "AI guess alone" [ref=e29]
+    - generic [ref=e30]: Finding references and asking Qloo...
+  - contentinfo [ref=e32]:
+    - paragraph [ref=e33]: "\"Likely to land\" is an estimate for an audience, not a statement about any one person, and not a judgement on whether a joke is funny. Audience data is aggregate taste data from Qloo; only reference names are sent to it."
+    - paragraph [ref=e34]:
+      - text: Built for the Qloo Agentic Hackathon.
+      - button "Use it from your own agent (MCP)" [ref=e35]
+      - text: .
+      - link "Source code (MIT)" [ref=e36] [cursor=pointer]:
+        - /url: https://github.com/msimakhov-star/will-it-land
+      - text: .

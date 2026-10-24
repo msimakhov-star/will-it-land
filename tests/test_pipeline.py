@@ -242,13 +242,17 @@ def test_localise_all(monkeypatch):
             assert min(sw["scores_to"]) > min(sw["scores_from"])
 
 
-def test_apply_swaps_one_per_line():
+def test_apply_swaps_every_pick():
     from server.pipeline import Reference, Swap, apply_swaps
 
     t = "We rented it at Blockbuster.\nBlockbuster again."
     r1 = Reference("Blockbuster", 16, 27, "brand", "Blockbuster", "", None)
     r2 = Reference("Blockbuster", 29, 40, "brand", "Blockbuster", "", None)
     assert apply_swaps(t, [(r1, Swap("HMV", "x", 80, "ai")), (r2, Swap("HMV", "x", 80, "ai"))]) == "We rented it at HMV.\nHMV again."
+    two = "Seinfeld on a Nokia."
+    a = Reference("Seinfeld", 0, 8, "tv_show", "Seinfeld", "", None)
+    b = Reference("Nokia", 14, 19, "brand", "Nokia", "", None)
+    assert apply_swaps(two, [(a, Swap("Friends", "f", 80, "ai", line="Friends on a Nokia.")), (b, Swap("iPhone", "i", 80, "qloo"))]) == "Friends on an iPhone."
 
 
 def test_no_references(monkeypatch):
@@ -324,3 +328,11 @@ def test_derive_prepared_skips_reextraction(monkeypatch):
             assert out["text"][r["start"]:r["end"]].lower() == r["surface"].lower()
         names = {r["name"] for r in new_refs}
         assert all(sw["to"] in names for sw in out["swaps"])
+
+
+def test_mock_matches_qualified_names():
+    from server import mock
+
+    mock._respond("/search", {"query": "Domino's Pizza", "types": "urn:entity:brand"})
+    row = mock._respond("/v2/insights", {"filter.type": "urn:demographics", "signal.interests.entities": mock._eid("Domino's Pizza")})["results"]["demographics"][0]
+    assert row["query"]["age"]["55_and_older"] == mock.KNOWN["domino's"][2]

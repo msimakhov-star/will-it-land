@@ -32,9 +32,16 @@ def check_references(text: str, age: str | None = None, gender: str | None = Non
     score how likely each is to land with the audience (0-100, grounded in Qloo popularity, age/gender and location
     affinity), and for weak ones return stand-ins that play the same role (some found by Qloo itself) plus a rewritten line.
     age: """ + AGES + """. gender: male|female. location: a city, region or country."""
-    from . import pipeline
+    from . import memos, pipeline
 
-    return json.dumps(pipeline.check(text, pipeline.Audience(age, gender, location), swaps=propose_swaps))
+    a = pipeline.Audience(age, gender, location)
+    if not propose_swaps:
+        return memos.check_body(text, a, False)
+    first = json.loads(memos.check_body(text, a, False))
+    sw = {r["start"]: r["swaps"] for r in json.loads(memos.swaps_body(text, a))["references"]}
+    for r in first["references"]:
+        r["swaps"] = sw.get(r["start"], [])
+    return json.dumps(first)
 
 
 @mcp.tool()
@@ -42,27 +49,27 @@ def check_matrix(text: str, audiences: list[dict]) -> str:
     """Score every reference in `text` against several audiences at once (up to 8). Each audience is
     {"name"?: str, "age"?: str, "gender"?: "male"|"female", "location"?: str}. Returns references, one score cell per
     reference x audience, and a summary per audience."""
-    from . import pipeline
+    from . import memos
 
-    return json.dumps(pipeline.matrix(text, [_aud(a) for a in audiences[:8]]))
+    return memos.matrix_body(text, [_aud(a) for a in audiences[:8]])
 
 
 @mcp.tool()
 def localise(text: str, age: str | None = None, gender: str | None = None, location: str | None = None) -> str:
     """Rewrite `text` for one audience: check, swap the references that miss for Qloo-scored stand-ins that play the same
     role, re-check, and stop when it lands or stops improving. Returns the new text, before/after summaries and each step."""
-    from . import pipeline
+    from . import memos, pipeline
 
-    return json.dumps(pipeline.localise(text, pipeline.Audience(age, gender, location)))
+    return memos.localise_body(text, pipeline.Audience(age, gender, location))
 
 
 @mcp.tool()
 def localise_for_all(text: str, audiences: list[dict]) -> str:
     """Rewrite `text` so it lands in every given audience at once (up to 8): each weak reference is replaced by the
     Qloo-scored stand-in whose worst audience scores best. Returns the new text, before/after matrices and the swaps."""
-    from . import pipeline
+    from . import memos
 
-    return json.dumps(pipeline.localise_all(text, [_aud(a) for a in audiences[:8]]))
+    return memos.localise_all_body(text, [_aud(a) for a in audiences[:8]])
 
 
 @mcp.tool()

@@ -5,15 +5,33 @@ The app is model-agnostic on purpose: Qloo is the moat, not the model.
 """
 from __future__ import annotations
 
+import contextvars
 import json
 import os
 import re
+import threading
 
 PROVIDER = os.environ.get("LLM_PROVIDER") or ("anthropic" if os.environ.get("ANTHROPIC_API_KEY") else "gemini")
 MODEL = os.environ.get("LLM_MODEL") or {"anthropic": "claude-sonnet-5-5", "gemini": "gemini-3.5-flash"}[PROVIDER]
 FAST_MODEL = os.environ.get("LLM_FAST_MODEL") or {"anthropic": "claude-haiku-5-5", "gemini": "gemini-3.5-flash-lite"}[PROVIDER]
 
 _client = None
+_failed: contextvars.ContextVar[list | None] = contextvars.ContextVar("llm_failed", default=None)
+_slots = threading.BoundedSemaphore(int(os.environ.get("LLM_CONCURRENCY", "12")))  # process-wide cap on concurrent LLM calls
+
+
+def start_failures() -> list:
+    """Begin recording LLM failures for the current request (nested calls share the outer list), so a result built
+    while the model failed is never memoised as if it were real."""
+    f = _failed.get()
+    if f is None:
+        f = []
+        _failed.set(f)
+    return f
+
+
+def failures() -> list:
+    return _failed.get() or []
 
 
 def _anthropic():
@@ -44,7 +62,8 @@ def complete(system: str, user: str, max_tokens: int = 4000, temperature: float 
         import time
 
         t = time.time()
-        msg = _anthropic().messages.create(model=model, max_tokens=max_tokens, system=system, messages=[{"role": "user", "content": user}])
+        with _slots:  # bounded tail: a stuck call fails in 25 s (fast) or 45 s rather than stalling a demo
+            msg = _anthropic().with_options(timeout=25.0 if fast else 45.0, max_retries=1).messages.create(model=model, max_tokens=max_tokens, system=system, messages=[{"role": "user", "content": user}])
         print(f"llm {model} {time.time() - t:.1f}s in={msg.usage.input_tokens} out={msg.usage.output_tokens} stop={msg.stop_reason}", flush=True)
         return "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
     from google.genai import types
@@ -67,8 +86,14 @@ def warm() -> None:
 
 
 def complete_json(system: str, user: str, max_tokens: int = 4000, fast: bool = False):
-    text = complete(system + "\nReply with JSON only, no prose, no code fences.", user, max_tokens=max_tokens, temperature=0, fast=fast)
-    return parse_json(text)
+    try:
+        text = complete(system + "\nReply with JSON only, no prose, no code fences.", user, max_tokens=max_tokens, temperature=0, fast=fast)
+        return parse_json(text)
+    except Exception:
+        f = _failed.get()
+        if f is not None:
+            f.append(system[:40])
+        raise
 
 
 def parse_json(text: str):

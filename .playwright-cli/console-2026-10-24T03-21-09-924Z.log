@@ -1,0 +1,2 @@
+[     810ms] [ERROR] Failed to load resource: the server responded with a status of 429 (Too Many Requests) @ http://localhost:8000/api/matrix:0
+[    7346ms] [ERROR] Failed to load resource: the server responded with a status of 429 (Too Many Requests) @ http://localhost:8000/api/matrix:0
