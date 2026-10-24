@@ -277,6 +277,9 @@ def test_api(monkeypatch):
         assert r.status_code == 200 and r.json()["references"][0]["surface"] == "Seinfeld"
         led = r.json()["ledger"]
         assert led["total"] > 0 and "/search" in led["by_endpoint"] and "/v2/insights" in led["by_endpoint"]
+        # a second audience reuses the cached preparation, but its ledger still counts the lookups behind the result
+        r2 = c.post("/api/check", json={"text": TEXT, "age": "24_and_younger", "swaps": False}).json()["ledger"]
+        assert "/search" in r2["by_endpoint"] and r2["total"] >= led["by_endpoint"]["/search"]
         m = c.post("/api/matrix", json={"text": TEXT, "audiences": [{"age": "24_and_younger", "location": "London"}, {"age": "55_and_older"}]})
         assert m.status_code == 200 and len(m.json()["cells"][0]) == 2
         assert c.post("/api/matrix", json={"text": TEXT, "audiences": [{"age": "x"}]}).status_code == 400

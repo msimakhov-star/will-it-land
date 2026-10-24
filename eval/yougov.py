@@ -37,7 +37,7 @@ GROUPS = {
     "fiction-books": ("c216747d-3eb7-11ea-ad6c-f58df2eb70ac", "book"),
     "radio-programs-podcasts": ("1327c164-1b0e-11e8-accf-0ed5f89f718b", "podcast"),
 }
-PER_GROUP = 80  # top N by fame (all adults) per group
+PER_GROUP = 200  # top N by fame per crossbreak per group (deeper lists overlap more, so more entities have every generation)
 
 
 def fetch(group_uuid: str, crossbreak: str, limit: int, offset: int) -> dict:

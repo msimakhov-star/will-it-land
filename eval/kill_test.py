@@ -49,22 +49,33 @@ def spearman(xs: list[float], ys: list[float]) -> float:
 
 
 def load(n: int, seed: int) -> list[dict]:
+    """Balanced across entity types. Within each type, half the slots are random and half come from the top quarter
+    by |millennial minus boomer| fame gap, so the generation-skewed references the product exists to catch are in the test."""
     rows = [r for r in csv.DictReader(open(DATA)) if r.get("fame_millennials") and r.get("fame_babyboomers") and r.get("fame_all")]
-    random.Random(seed).shuffle(rows)
-    # balance across types
+    rng = random.Random(seed)
     by_type: dict[str, list] = {}
     for r in rows:
         by_type.setdefault(r["qloo_type"], []).append(r)
-    per = max(1, n // len(by_type))
+    per = max(2, n // len(by_type))
     out = []
-    for t, rs in by_type.items():
-        out += rs[:per]
+    for t in sorted(by_type):
+        rs = by_type[t][:]
+        rng.shuffle(rs)
+        gap = sorted(rs, key=lambda r: -abs(float(r["fame_millennials"]) - float(r["fame_babyboomers"])))
+        skewed = gap[: max(1, len(gap) // 4)][: per // 2]
+        keys = {(r["group"], r["slug"]) for r in skewed}
+        rest = [r for r in rs if (r["group"], r["slug"]) not in keys][: per - len(skewed)]
+        out += skewed + rest
     return out[:n]
 
 
 def qloo_side(rows: list[dict]) -> None:
     def one(r):
-        hits = qloo.search(r["name"], types=[r["qloo_type"]], take=3)
+        try:
+            hits = qloo.search(r["name"], types=[r["qloo_type"]], take=3)
+        except qloo.QlooError as ex:  # one bad row must not sink a 300-row run
+            print("search failed", r["name"], ex)
+            hits = []
         hit = next((h for h in hits if pipeline._similar(r["name"], h.get("name", ""))), None)
         r["qloo_id"] = hit.get("entity_id") if hit else None
         r["qloo_pop"] = hit.get("popularity") if hit else None
@@ -72,7 +83,11 @@ def qloo_side(rows: list[dict]) -> None:
     with ThreadPoolExecutor(6) as ex:
         list(ex.map(one, rows))
     ids = [r["qloo_id"] for r in rows if r["qloo_id"]]
-    demo = qloo.demographics(ids)
+    try:
+        demo = qloo.demographics(ids)
+    except qloo.QlooError as ex:
+        print("demographics failed", ex)
+        demo = {}
     for r in rows:
         d = demo.get(r.get("qloo_id") or "", {}).get("age") or {}
         for gen, buckets in GEN_BUCKETS.items():
@@ -126,8 +141,19 @@ def report(rows: list[dict]) -> str:
     lines.append(f"| millennial minus boomer gap | {spearman([r['qloo_millennials'] - r['qloo_babyboomers'] for r in ok], truth_gap):.2f} | {spearman([r['llm_millennials'] - r['llm_babyboomers'] for r in ok], truth_gap):.2f} |")
     pop_only = [float(r["qloo_pop"] or 0) for r in ok]
     lines.append(f"| fame among all adults, Qloo popularity only | {spearman(pop_only, [float(r['fame_all']) for r in ok]):.2f} | {spearman([(r['llm_millennials'] + r['llm_generationx'] + r['llm_babyboomers']) / 3 for r in ok], [float(r['fame_all']) for r in ok]):.2f} |")
+    def within(pred, truth):
+        vals = []
+        for t in sorted({r["qloo_type"] for r in ok}):
+            sub = [r for r in ok if r["qloo_type"] == t]
+            if len(sub) >= 8:
+                vals.append(spearman([pred(r) for r in sub], [truth(r) for r in sub]))
+        return sum(vals) / len(vals) if vals else float("nan")
+
+    for gen in ("millennials", "babyboomers"):
+        lines.append(f"| fame among {gen}, mean within entity type | {within(lambda r: r[f'qloo_{gen}'], lambda r: float(r[f'fame_{gen}'])):.2f} | {within(lambda r: r[f'llm_{gen}'], lambda r: float(r[f'fame_{gen}'])):.2f} |")
+    lines.append(f"| gap, mean within entity type | {within(lambda r: r['qloo_millennials'] - r['qloo_babyboomers'], lambda r: float(r['fame_millennials']) - float(r['fame_babyboomers'])):.2f} | {within(lambda r: r['llm_millennials'] - r['llm_babyboomers'], lambda r: float(r['fame_millennials']) - float(r['fame_babyboomers'])):.2f} |")
     lines.append("")
-    lines.append("Spearman rank correlation with YouGov fame (% who have heard of it). 1.0 = perfect ordering.")
+    lines.append("Spearman rank correlation with YouGov fame (% who have heard of it). 1.0 = perfect ordering. Within-type rows average the correlation inside each entity type (TV, film, music, brands, people, books, podcasts), so a model cannot score well just by knowing that TV shows are more famous than podcasts.")
     return "\n".join(lines)
 
 

@@ -49,6 +49,24 @@ def start_ledger() -> list:
     return calls
 
 
+def current_ledger() -> list | None:
+    return _ledger.get()
+
+
+def restore_ledger(outer: list | None, inner: list) -> None:
+    """End a nested ledger: put the outer one back and copy the inner calls into it."""
+    _ledger.set(outer)
+    if outer is not None:
+        outer.extend(inner)
+
+
+def replay(calls: list) -> None:
+    """Add remembered calls (from a cached preparation) to the current request's ledger."""
+    cur = _ledger.get()
+    if cur is not None:
+        cur.extend(dict(c) for c in calls)
+
+
 def degraded() -> bool:
     """True if any Qloo call in the current request failed. Results built from a degraded request must not be memoised,
     or a brief 429 would show as 'not in Qloo' until the process restarts."""

@@ -80,7 +80,8 @@ def main():
     ap.add_argument("--write", action="store_true", help="write server/calibration.json from the full-data fit")
     ap.add_argument("--folds", type=int, default=5)
     a = ap.parse_args()
-    ents = [r for r in json.load(open(os.path.join(OUT, "kill_test_rows.json"))) if r.get("qloo_id") and r.get("llm_millennials") is not None]
+    ents = [r for r in json.load(open(os.path.join(OUT, "kill_test_rows.json")))
+            if r.get("qloo_id") and r.get("qloo_pop") is not None and all(r.get(f"fame_{g}") not in (None, "") and r.get(f"llm_{g}") is not None for g in GENS)]
     demo = qloo.demographics([r["qloo_id"] for r in ents])  # cached from the kill test
     random.Random(11).shuffle(ents)
     folds = [ents[i :: a.folds] for i in range(a.folds)]

@@ -1,337 +1,230 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { api, latest } from './api'
+import type { Example, Health, Ledger, LocaliseAllResult, MatrixResult, Options, Room } from './types'
+import { CITIES, Evidence, Grid, TrackedChanges, TwoUp, type Scoring } from './rooms'
+import { Spinner } from './ui'
 
-type Swap = { name: string; entity_id: string; score: number; line: string | null }
-type Ref = {
-  surface: string; start: number; end: number; type: string; query: string; role: string; era: string | null
-  llm_guess: number; entity_id: string | null; name: string | null; disambiguation: string | null
-  candidates: { name: string; entity_id: string; popularity: number | null; year: string | null; disambiguation: string | null }[]
-  popularity: number | null; affinity: number | null; age_skew: Record<string, number> | null
-  gender_skew: Record<string, number> | null; trend: { direction: string; delta: number | null } | null
-  score: number | null; verdict: 'lands' | 'risky' | 'misses' | 'unknown'; why: string; swaps: Swap[]
-}
-type Result = { summary: { found: number; checked: number; not_in_qloo: number; lands: number; risky: number; misses: number }; references: Ref[]; took_s: number }
-type Example = { id: string; title: string; text: string; audience: { age: string | null; gender: string | null; location: string | null } }
-
-const AGES: [string, string][] = [
-  ['24_and_younger', 'under 25'], ['25_to_29', '25 to 29'], ['30_to_34', '30 to 34'],
-  ['35_to_44', '35 to 44'], ['45_to_54', '45 to 54'], ['55_and_older', '55+'],
-]
-const AGE_SHORT = ['<25', '25', '30', '35', '45', '55+']
-const TYPE_LABEL: Record<string, string> = { tv_show: 'TV', movie: 'film', artist: 'music', brand: 'brand', person: 'person', book: 'book', videogame: 'game', podcast: 'podcast', place: 'place' }
-const VERDICT_TEXT = { lands: 'lands', risky: 'risky', misses: 'misses', unknown: 'not in Qloo' }
+const JOBS: Record<string, string> = { comedy: 'Comedian: same bit, two rooms', ad: 'Ad team: one spot, six markets', speech: 'Best man: one shot' }
 
 export default function App() {
-  const [text, setText] = useState('')
-  const [age, setAge] = useState<string | null>('24_and_younger')
-  const [gender, setGender] = useState<string | null>(null)
-  const [location, setLocation] = useState('')
+  const [health, setHealth] = useState<Health | null>(null)
+  const [options, setOptions] = useState<Options | null>(null)
   const [examples, setExamples] = useState<Example[]>([])
-  const [result, setResult] = useState<Result | null>(null)
-  const [checkedText, setCheckedText] = useState('')
+  const [text, setText] = useState('')
+  const [draft, setDraft] = useState('')
+  const [editing, setEditing] = useState(false)
+  const [rooms, setRooms] = useState<Room[]>([])
+  const [result, setResult] = useState<MatrixResult | null>(null)
+  const [mode, setMode] = useState<Scoring>('qloo')
   const [busy, setBusy] = useState(false)
-  const [swapping, setSwapping] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [active, setActive] = useState<number | null>(null)
-  const [compare, setCompare] = useState(false)
-  const cards = useRef<Record<number, HTMLDivElement | null>>({})
+  const [fix, setFix] = useState<LocaliseAllResult | null>(null)
+  const [fixing, setFixing] = useState(false)
+  const [active, setActive] = useState<{ ref: number; room: number } | null>(null)
+  const [hood, setHood] = useState(false)
+  const [mcp, setMcp] = useState(false)
+  const runMatrix = useRef(latest()).current
+  const runGuesses = useRef(latest()).current
+  const runFix = useRef(latest()).current
 
-  useEffect(() => { fetch('/api/examples').then(r => r.json()).then(setExamples).catch(() => {}) }, [])
+  // location carries weight unless calibration set it to zero; if it does not, no place control is shown
+  const showPlace = (options?.location_weight ?? 1) > 0
 
-  const dirty = result !== null && text !== checkedText
+  useEffect(() => {
+    api.health().then(setHealth).catch(() => {})
+    api.options().then(setOptions).catch(() => {})
+    api.examples().then(ex => {
+      setExamples(ex)
+      const first = ex[0]
+      if (first) load(first)
+    }).catch(e => setError(String(e.message ?? e)))
+  }, [])
 
-  async function run(overrides?: Partial<{ age: string | null; gender: string | null; location: string }>) {
-    const a = overrides?.age !== undefined ? overrides.age : age
-    const g = overrides?.gender !== undefined ? overrides.gender : gender
-    const l = overrides?.location !== undefined ? overrides.location : location
-    if (!text.trim()) return
-    setBusy(true); setError(null); setActive(null)
-    const body = { text, age: a, gender: g, location: l || null }
-    try {
-      const r = await fetch('/api/check', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...body, swaps: false }) })
-      if (!r.ok) throw new Error((await r.json()).detail || r.statusText)
-      const first: Result = await r.json()
-      setResult(first); setCheckedText(text); setBusy(false)
-      if (first.references.some(x => x.verdict === 'risky' || x.verdict === 'misses')) {
-        setSwapping(true)
-        const r2 = await fetch('/api/swaps', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...body, references: first.references }) })
-        if (r2.ok) { const { references } = await r2.json(); setResult(res => res ? { ...res, references } : res) }
-        setSwapping(false)
+  function load(ex: Example) {
+    setFix(null); setActive(null); setEditing(false); setMode('qloo')
+    setText(ex.text); setDraft(ex.text)
+    setRooms(ex.matrix ?? [ex.audience])
+  }
+
+  // score whenever the text or the rooms change (debounced so typing a city does not fire on every key)
+  const key = useMemo(() => JSON.stringify([text, rooms.map(r => [r.age, r.gender, (r.location ?? '').trim(), r.name])]), [text, rooms])
+  useEffect(() => {
+    if (!text.trim() || !rooms.length) return
+    setBusy(true); setError(null)
+    const t = setTimeout(async () => {
+      try {
+        const m = await runMatrix(signal => api.matrix(text, rooms, signal))
+        if (!m) return
+        setResult(m); setBusy(false)
+        const g = await runGuesses(signal => api.guesses(text, rooms, signal)).catch(() => undefined)
+        if (g) setResult(cur => (cur && cur.references.length === m.references.length && cur === m) ? { ...cur, cells: cur.cells.map((row, i) => row.map((c, j) => (c ? { ...c, llm_guess: g.guesses[i]?.[j] ?? null } : c))) } : cur)
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : String(e)); setBusy(false)
       }
-    } catch (e: unknown) { setError(e instanceof Error ? e.message : String(e)); setBusy(false); setSwapping(false) }
+    }, 350)
+    return () => clearTimeout(t)
+  }, [key])
+
+  const setRoom = useCallback((i: number, r: Room) => { setFix(null); setRooms(rs => rs.map((x, j) => (j === i ? r : x))) }, [])
+  const removeRoom = useCallback((i: number) => { setFix(null); setActive(null); setRooms(rs => rs.filter((_, j) => j !== i)) }, [])
+  const addRoom = () => { setFix(null); setRooms(rs => (rs.length >= 6 ? rs : [...rs, { age: '35_to_44', gender: null, location: showPlace ? 'New York' : null }])) }
+
+  async function landEverywhere() {
+    setFixing(true); setError(null); setActive(null)
+    try {
+      const r = await runFix(signal => api.landEverywhere(text, rooms, signal))
+      if (r) setFix(r)
+    } catch (e: unknown) { setError(e instanceof Error ? e.message : String(e)) } finally { setFixing(false) }
   }
 
-  function loadExample(ex: Example) {
-    setText(ex.text); setAge(ex.audience.age); setGender(ex.audience.gender); setLocation(ex.audience.location || ''); setResult(null)
+  function keepFix() {
+    if (!fix) return
+    setText(fix.text); setDraft(fix.text); setResult(fix.after); setFix(null)
   }
 
-  function applySwaps(pairs: [Ref, Swap][]) {
-    if (!result) return
-    let next = checkedText
-    // apply from the end of the text backwards so earlier offsets stay valid; one swap per line
-    const seen = new Set<number>()
-    for (const [ref, swap] of [...pairs].sort((a, b) => b[0].start - a[0].start)) {
-      const line = lineBounds(checkedText, ref)
-      if (seen.has(line[0])) continue
-      seen.add(line[0])
-      const newLine = swap.line ?? checkedText.slice(line[0], line[1]).replace(ref.surface, swap.name)
-      next = next.slice(0, line[0]) + newLine + next.slice(line[1])
-    }
-    setText(next)
-  }
-  function applySwap(ref: Ref, swap: Swap) { applySwaps([[ref, swap]]) }
-  function applyBest() {
-    if (!result) return
-    applySwaps(result.references.filter(r => r.swaps.length > 0).map(r => [r, r.swaps[0]] as [Ref, Swap]))
+  function commitDraft() {
+    setFix(null); setActive(null); setEditing(false); setText(draft)
   }
 
-  const weakFirst = useMemo(() => result ? [...result.references].map((r, i) => ({ r, i })).sort((a, b) => rank(a.r) - rank(b.r)) : [], [result])
+  const ledger: Ledger | undefined = fix?.ledger ?? result?.ledger
+  const endpoints = ledger ? Object.keys(ledger.by_endpoint).length : 0
+  const actionLabel = rooms.length === 1 ? 'Make it land in this room' : rooms.length === 2 ? 'Make it land in both rooms' : 'Make it land in every room'
+  const anyWeak = !!result?.summaries.some(s => s.misses + s.risky > 0)
 
   return (
     <div className="min-h-screen">
-      <header className="mx-auto max-w-7xl px-4 pt-8 pb-4 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight">Will It Land</h1>
-          <p className="mt-2 text-muted max-w-xl">AI writes for the average audience. This checks every cultural reference in your script against the one you are actually writing for, grounded in Qloo taste data.</p>
+      <datalist id="wil-cities">{CITIES.map(c => <option key={c} value={c} />)}</datalist>
+      <header className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4 px-4 pt-7 pb-3 md:px-6">
+        <div className="max-w-2xl">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">Will It Land</h1>
+            {health && (health.mock
+              ? <span className="rounded-full bg-risky/15 px-2.5 py-1 text-xs font-medium text-risky">Demo data: Qloo key pending</span>
+              : <span className="rounded-full bg-lands/15 px-2.5 py-1 text-xs font-medium text-lands">Live Qloo data</span>)}
+          </div>
+          <p className="mt-2 text-[15px] text-muted">Spellcheck for cultural references. Pick the rooms you are playing; every reference is checked against what that audience actually knows, using Qloo's taste graph, and the ones that will not land get a stand-in that does.</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {examples.map(ex => <button key={ex.id} onClick={() => loadExample(ex)} className="rounded-full border border-line bg-white/70 px-3 py-1.5 text-sm hover:bg-white">{ex.title}</button>)}
-        </div>
+        {ledger && (
+          <button onClick={() => setHood(true)} className="rounded-xl bg-white px-3 py-2 text-left text-xs ring-1 ring-line hover:ring-ink/40">
+            <div className="font-semibold text-ink">{ledger.total} Qloo calls across {endpoints} endpoint{endpoints === 1 ? '' : 's'}</div>
+            <div className="text-muted">Under the hood: every request behind this result</div>
+          </button>
+        )}
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 pb-16 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-        <section className="space-y-4">
-          <AudienceBar age={age} gender={gender} location={location}
-            onAge={v => { setAge(v); if (result) run({ age: v }) }}
-            onGender={v => { setGender(v); if (result) run({ gender: v }) }}
-            onLocation={setLocation} onLocationCommit={() => { if (result) run() }} />
+      <nav className="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 pb-4 md:px-6" aria-label="Examples">
+        {examples.map(ex => (
+          <button key={ex.id} onClick={() => load(ex)} className={`rounded-full px-3.5 py-1.5 text-sm ring-1 transition ${text === ex.text ? 'bg-ink text-paper ring-ink' : 'bg-white ring-line hover:ring-ink/40'}`}>
+            {JOBS[ex.kind] ?? ex.title}
+          </button>
+        ))}
+        <button onClick={() => setMcp(true)} className="rounded-full bg-white px-3.5 py-1.5 text-sm ring-1 ring-line hover:ring-ink/40">Writing agent: via MCP</button>
+        <button onClick={() => { setEditing(true); setDraft(''); setFix(null) }} className="rounded-full px-3.5 py-1.5 text-sm text-muted underline-offset-2 hover:text-ink hover:underline">Paste your own</button>
+      </nav>
 
-          <div className="rounded-2xl border border-line bg-white shadow-sm">
-            {result && !dirty ? (
-              <Highlighted text={checkedText} refs={result.references} active={active} onPick={i => { setActive(i); cards.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }} />
-            ) : (
-              <textarea value={text} onChange={e => setText(e.target.value)} placeholder="Paste a script, a stand-up bit, an ad, a speech..." className="w-full min-h-[320px] resize-y bg-transparent p-5 text-[17px] leading-7 outline-none placeholder:text-muted/60" />
-            )}
-            <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3">
-              <div className="text-sm text-muted">
-                {result && !dirty ? <button onClick={() => setResult(null)} className="underline underline-offset-2 hover:text-ink">Edit text</button> : `${text.length.toLocaleString()} characters`}
+      <main className="mx-auto max-w-7xl space-y-4 px-4 pb-16 md:px-6">
+        {editing && (
+          <section className="rise rounded-2xl bg-white p-4 shadow-sm ring-1 ring-line">
+            <textarea autoFocus value={draft} onChange={e => setDraft(e.target.value)} maxLength={8000} placeholder="Paste a stand-up bit, an ad script, a speech, a toast..." aria-label="Script"
+              className="min-h-[200px] w-full resize-y bg-transparent text-[16.5px] leading-7 outline-none placeholder:text-muted/60" />
+            <div className="flex items-center justify-between border-t border-line pt-3">
+              <span className="text-xs text-muted">{draft.length.toLocaleString()} / 8,000 characters. Only reference names leave this page.</span>
+              <div className="flex gap-2">
+                {text && <button onClick={() => { setEditing(false); setDraft(text) }} className="rounded-xl px-4 py-2 text-sm ring-1 ring-line">Cancel</button>}
+                <button onClick={commitDraft} disabled={!draft.trim()} className="rounded-xl bg-ink px-4 py-2 text-sm font-medium text-paper disabled:opacity-40">Check it</button>
               </div>
-              <button onClick={() => run()} disabled={busy || !text.trim()} className="rounded-xl bg-ink px-5 py-2.5 font-medium text-paper disabled:opacity-40">
-                {busy ? 'Checking...' : dirty ? 'Re-check' : 'Check references'}
-              </button>
+            </div>
+          </section>
+        )}
+
+        {!editing && (
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={landEverywhere} disabled={!result || fixing || busy || !anyWeak} className="rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-paper shadow-sm disabled:opacity-40">
+              {fixing ? 'Finding stand-ins in Qloo...' : actionLabel}
+            </button>
+            <button onClick={() => { setEditing(true); setDraft(text) }} className="rounded-xl bg-white px-3.5 py-2.5 text-sm ring-1 ring-line hover:ring-ink/40">Edit script</button>
+            {rooms.length < 6 && <button onClick={addRoom} className="rounded-xl bg-white px-3.5 py-2.5 text-sm ring-1 ring-line hover:ring-ink/40">Add a room</button>}
+            <div className="ml-auto flex items-center gap-2 text-xs">
+              <span className="text-muted">Scored by</span>
+              <div className="flex overflow-hidden rounded-full ring-1 ring-line" role="group" aria-label="Scored by">
+                {([['qloo', 'Qloo data'], ['ai', 'AI guess alone']] as const).map(([v, l]) => (
+                  <button key={v} onClick={() => setMode(v)} aria-pressed={mode === v} className={`px-3 py-1.5 ${mode === v ? 'bg-ink text-paper' : 'bg-white hover:bg-paper'}`}>{l}</button>
+                ))}
+              </div>
             </div>
           </div>
-          {error && <div className="rounded-xl border border-misses/40 bg-misses/5 p-3 text-sm text-misses">{error}</div>}
-          {busy && <Progress />}
-        </section>
+        )}
+        {busy && <Spinner label={result ? 'Re-scoring with Qloo...' : 'Finding references and asking Qloo...'} />}
+        {error && <div className="rounded-xl bg-misses/5 p-3 text-sm text-misses ring-1 ring-misses/30">{error}</div>}
+        {mode === 'ai' && result && <div className="rounded-xl bg-white p-3 text-sm text-muted ring-1 ring-line">Showing what a language model guesses with no data, on the same scale. Marks with ◆ are where it disagrees with the Qloo-grounded score by 25 points or more.</div>}
 
-        <section className="space-y-4">
-          {result ? (
-            <>
-              <Summary r={result} compare={compare} onCompare={setCompare} audience={label(age, gender, location)}
-                canApply={!dirty && result.references.some(r => r.swaps.length > 0)} onApplyBest={applyBest}
-                onCopy={() => navigator.clipboard?.writeText(text).catch(() => {})} />
-              {weakFirst.map(({ r, i }) => (
-                <div key={i} ref={el => { cards.current[i] = el }}>
-                  <Card r={r} active={active === i} compare={compare} age={age} swapping={swapping} onHover={() => setActive(i)} onApply={s => applySwap(r, s)} />
-                </div>
-              ))}
-            </>
-          ) : (
-            <Empty />
-          )}
-        </section>
+        {fix && <TrackedChanges r={fix} rooms={rooms} showPlace={showPlace} onKeep={keepFix} onUndo={() => setFix(null)} />}
+
+        {result && !editing && (rooms.length <= 2
+          ? <TwoUp text={text} m={result} rooms={rooms} mode={mode} showPlace={showPlace} active={active} onPick={(ref, room) => setActive({ ref, room })} onRoom={setRoom} onRemove={removeRoom} />
+          : <Grid text={text} m={result} rooms={rooms} mode={mode} showPlace={showPlace} onPick={(ref, room) => setActive({ ref, room })} onRoom={setRoom} onRemove={removeRoom} />)}
+
+        {result && active && result.references[active.ref] && rooms[active.room] && (
+          <Evidence m={result} ref_={active.ref} room={active.room} rooms={rooms} showPlace={showPlace} mode={mode} onClose={() => setActive(null)} />
+        )}
       </main>
 
-      <footer className="mx-auto max-w-7xl px-4 pb-10 text-xs text-muted">
-        Scores say how likely a reference is to land with an audience, not what any one person knows. Audience data is aggregate taste data from Qloo; no personal data is sent anywhere.
-        Built for the Qloo Agentic Hackathon. Also available as an MCP tool for writing agents.
+      <footer className="mx-auto max-w-7xl space-y-2 px-4 pb-10 text-xs text-muted md:px-6">
+        <p>"Likely to land" is an estimate for an audience, not a statement about any one person, and not a judgement on whether a joke is funny. Audience data is aggregate taste data from Qloo; only reference names are sent to it.
+          {result && ` Score model: ${result.model.calibrated ? result.model.source : 'hand-set priors, not yet calibrated against survey data'}.`}</p>
+        <p>Built for the Qloo Agentic Hackathon. <button onClick={() => setMcp(true)} className="underline underline-offset-2 hover:text-ink">Use it from your own agent (MCP)</button>. <a className="underline underline-offset-2 hover:text-ink" href="https://github.com/msimakhov-star/will-it-land">Source code (MIT)</a>.</p>
       </footer>
+
+      {hood && ledger && <Hood ledger={ledger} onClose={() => setHood(false)} />}
+      {mcp && <Mcp onClose={() => setMcp(false)} />}
     </div>
   )
 }
 
-function rank(r: Ref) { return r.verdict === 'misses' ? 0 : r.verdict === 'risky' ? 1 : r.verdict === 'unknown' ? 2 : 3 }
-function label(age: string | null, gender: string | null, loc: string) {
-  return [age ? AGES.find(a => a[0] === age)?.[1] : null, gender, loc || null].filter(Boolean).join(', ') || 'general audience'
-}
-function lineBounds(text: string, ref: Ref): [number, number] {
-  const a = text.lastIndexOf('\n', ref.start - 1) + 1
-  const b = text.indexOf('\n', ref.end)
-  return [a, b < 0 ? text.length : b]
-}
-
-function AudienceBar(p: { age: string | null; gender: string | null; location: string; onAge: (v: string | null) => void; onGender: (v: string | null) => void; onLocation: (v: string) => void; onLocationCommit: () => void }) {
+function Hood(p: { ledger: Ledger; onClose: () => void }) {
+  const l = p.ledger
   return (
-    <div className="rounded-2xl border border-line bg-white/70 p-3 flex flex-wrap items-center gap-2">
-      <span className="text-xs uppercase tracking-wide text-muted px-1">Audience</span>
-      <div className="flex rounded-xl border border-line overflow-hidden">
-        {AGES.map(([v, l]) => (
-          <button key={v} onClick={() => p.onAge(p.age === v ? null : v)} className={`px-3 py-1.5 text-sm ${p.age === v ? 'bg-ink text-paper' : 'bg-white hover:bg-paper'}`}>{l}</button>
-        ))}
-      </div>
-      <div className="flex rounded-xl border border-line overflow-hidden">
-        {[['male', 'men'], ['female', 'women']].map(([v, l]) => (
-          <button key={v} onClick={() => p.onGender(p.gender === v ? null : v)} className={`px-3 py-1.5 text-sm ${p.gender === v ? 'bg-ink text-paper' : 'bg-white hover:bg-paper'}`}>{l}</button>
-        ))}
-      </div>
-      <input value={p.location} onChange={e => p.onLocation(e.target.value)} onBlur={p.onLocationCommit} onKeyDown={e => e.key === 'Enter' && p.onLocationCommit()} placeholder="city or country" className="min-w-[160px] flex-1 rounded-xl border border-line bg-white px-3 py-1.5 text-sm outline-none focus:border-ink" />
-    </div>
-  )
-}
-
-function Highlighted(p: { text: string; refs: Ref[]; active: number | null; onPick: (i: number) => void }) {
-  const parts: React.ReactNode[] = []
-  const sorted = p.refs.map((r, i) => ({ r, i })).sort((a, b) => a.r.start - b.r.start)
-  let pos = 0
-  for (const { r, i } of sorted) {
-    if (r.start < pos) continue
-    parts.push(p.text.slice(pos, r.start))
-    parts.push(<mark key={i} onClick={() => p.onPick(i)} title={`${r.name ?? r.surface}: ${r.score ?? '?'} / 100`} className={`ref ref-${r.verdict} ${p.active === i ? 'active' : ''}`}>{p.text.slice(r.start, r.end)}</mark>)
-    pos = r.end
-  }
-  parts.push(p.text.slice(pos))
-  return <div className="whitespace-pre-wrap p-5 text-[17px] leading-7 min-h-[320px]">{parts}</div>
-}
-
-function Summary(p: { r: Result; compare: boolean; onCompare: (v: boolean) => void; audience: string; canApply: boolean; onApplyBest: () => void; onCopy: () => void }) {
-  const s = p.r.summary
-  return (
-    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
-      <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-display text-2xl font-semibold">For {p.audience}</h2>
-        <span className="text-xs text-muted">{p.r.took_s}s</span>
-      </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-        <Pill color="lands" n={s.lands} label="land" /><Pill color="risky" n={s.risky} label="risky" /><Pill color="misses" n={s.misses} label="miss" />
-        {s.not_in_qloo > 0 && <Pill color="unknown" n={s.not_in_qloo} label="not in Qloo" />}
-        <span className="flex-1" />
-        {p.canApply && <button onClick={p.onApplyBest} className="rounded-lg bg-ink px-3 py-1.5 text-xs font-medium text-paper">Apply best stand-ins</button>}
-        <button onClick={p.onCopy} className="rounded-lg border border-line px-3 py-1.5 text-xs hover:border-ink">Copy text</button>
-      </div>
-      <label className="mt-3 flex items-center gap-2 text-sm text-muted cursor-pointer">
-        <input type="checkbox" checked={p.compare} onChange={e => p.onCompare(e.target.checked)} /> Show what the AI alone guessed, next to the Qloo-grounded score
-      </label>
-    </div>
-  )
-}
-
-function Pill(p: { color: string; n: number; label: string }) {
-  return <span className={`rounded-full px-2.5 py-1 text-${p.color} bg-${p.color}/10 font-medium`}>{p.n} {p.label}</span>
-}
-
-function Card(p: { r: Ref; active: boolean; compare: boolean; age: string | null; swapping: boolean; onHover: () => void; onApply: (s: Swap) => void }) {
-  const r = p.r
-  const weak = r.verdict === 'risky' || r.verdict === 'misses'
-  return (
-    <div onMouseEnter={p.onHover} className={`rounded-2xl border bg-white p-4 shadow-sm transition ${p.active ? 'border-ink' : 'border-line'}`}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-lg truncate">{r.name ?? r.surface}</span>
-            <span className="rounded-full border border-line px-2 py-0.5 text-xs text-muted">{TYPE_LABEL[r.type] ?? r.type}</span>
-            {r.trend && r.trend.direction !== 'flat' && <span className="text-xs text-muted">{r.trend.direction}</span>}
+    <div className="fixed inset-0 z-40 flex justify-end bg-ink/20" onClick={p.onClose}>
+      <aside className="rise h-full w-full max-w-xl overflow-y-auto bg-white p-5 shadow-2xl" onClick={e => e.stopPropagation()} aria-label="Under the hood">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-display text-2xl font-semibold">Under the hood</h3>
+            <p className="mt-1 text-sm text-muted">{l.total} Qloo calls behind this result: {l.live} live, {l.cache} from cache{l.mock ? `, ${l.mock} from demo data` : ''}{l.errors ? `, ${l.errors} failed` : ''}. Only reference names and audience settings are sent, never your text.</p>
           </div>
-          {r.name && r.name !== r.surface && <div className="text-xs text-muted">written as "{r.surface}"</div>}
-          {r.disambiguation && <div className="text-xs text-muted truncate">{r.disambiguation}</div>}
+          <button onClick={p.onClose} className="rounded-full p-1.5 text-muted hover:bg-paper hover:text-ink" aria-label="Close">✕</button>
         </div>
-        <Score score={r.score} verdict={r.verdict} />
+        <div className="mt-4 flex flex-wrap gap-2">
+          {Object.entries(l.by_endpoint).map(([e, n]) => <span key={e} className="rounded-full bg-paper px-2.5 py-1 text-xs"><span className="font-mono">{e}</span> x{n}</span>)}
+        </div>
+        <ol className="mt-4 space-y-1.5">
+          {l.calls.map((c, i) => (
+            <li key={i} className="rounded-lg bg-paper/60 p-2 font-mono text-[11px] leading-snug">
+              <span className={c.source === 'error' ? 'text-misses' : c.source === 'live' ? 'text-lands' : 'text-muted'}>{c.source}</span> GET {c.endpoint}?{Object.entries(c.params).map(([k, v]) => `${k}=${v}`).join('&').slice(0, 220)} <span className="text-muted">{c.ms} ms</span>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </div>
+  )
+}
+
+function Mcp(p: { onClose: () => void }) {
+  const url = `${location.origin}/mcp`
+  const cfg = JSON.stringify({ mcpServers: { 'will-it-land': { url } } }, null, 2)
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink/20 p-4" onClick={p.onClose}>
+      <div className="rise w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl" onClick={e => e.stopPropagation()} role="dialog" aria-label="Use from your agent">
+        <div className="flex items-start justify-between">
+          <h3 className="font-display text-2xl font-semibold">Give your writing agent an audience</h3>
+          <button onClick={p.onClose} className="rounded-full p-1.5 text-muted hover:bg-paper hover:text-ink" aria-label="Close">✕</button>
+        </div>
+        <p className="mt-2 text-sm text-muted">Will It Land is also an MCP server. Add it to Claude, ChatGPT or any MCP client and the agent can check its own references before it finishes a joke, an ad or a speech.</p>
+        <div className="mt-3 text-xs font-medium text-muted">Hosted endpoint (streamable HTTP)</div>
+        <code className="mt-1 block rounded-lg bg-paper p-2 font-mono text-xs">{url}</code>
+        <div className="mt-3 text-xs font-medium text-muted">Client config</div>
+        <pre className="mt-1 overflow-x-auto rounded-lg bg-paper p-2 font-mono text-xs">{cfg}</pre>
+        <div className="mt-3 text-xs text-muted">Tools: check_references, check_matrix, localise, localise_for_all, audience_options.</div>
       </div>
-      {r.why && <p className="mt-2 text-sm text-muted">{r.why}</p>}
-      {r.verdict === 'unknown' && <p className="mt-2 text-sm text-muted">{r.why || 'Qloo has no entity for this, so it is not scored.'}</p>}
-      {r.entity_id && (
-        <details className="mt-2 text-xs text-muted">
-          <summary className="cursor-pointer hover:text-ink">Evidence from Qloo</summary>
-          <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5">
-            <span>entity</span><span className="truncate" title={r.entity_id}>{r.name} ({TYPE_LABEL[r.type] ?? r.type})</span>
-            <span>popularity percentile</span><span>{r.popularity === null ? 'n/a' : Math.round(100 * r.popularity)}</span>
-            {r.age_skew && <><span>age affinity, selected band</span><span>{p.age ? (r.age_skew[p.age] ?? 0).toFixed(2) : 'no band selected'}</span></>}
-            {r.gender_skew && <><span>gender affinity (m / f)</span><span>{(r.gender_skew.male ?? 0).toFixed(2)} / {(r.gender_skew.female ?? 0).toFixed(2)}</span></>}
-            {r.affinity !== null && <><span>audience affinity (this call)</span><span>{r.affinity.toFixed(3)}</span></>}
-            {r.trend && <><span>trend, last 6 months</span><span>{r.trend.direction}{r.trend.delta != null ? ` (${r.trend.delta > 0 ? '+' : ''}${Number(r.trend.delta).toFixed(1)}%)` : ''}</span></>}
-            {r.candidates.length > 1 && <><span>other matches considered</span><span className="truncate">{r.candidates.filter(c => c.entity_id !== r.entity_id).map(c => c.name).join(', ')}</span></>}
-          </div>
-        </details>
-      )}
-      {r.age_skew && <AgeBars skew={r.age_skew} age={p.age} />}
-      {p.compare && r.score !== null && (
-        <div className="mt-3 text-sm">
-          <div className="flex items-center gap-2"><span className="w-24 text-muted">AI alone</span><Bar v={r.llm_guess} muted /><span className="w-8 text-right tabular-nums">{Math.round(r.llm_guess)}</span></div>
-          <div className="flex items-center gap-2 mt-1"><span className="w-24 text-muted">with Qloo</span><Bar v={r.score} /><span className="w-8 text-right tabular-nums">{Math.round(r.score)}</span></div>
-          {Math.abs(r.llm_guess - r.score) >= 25 && <div className="mt-1 text-xs text-muted">The model guessed {r.llm_guess > r.score ? 'higher' : 'lower'} than the data says.</div>}
-        </div>
-      )}
-      {weak && p.swapping && r.swaps.length === 0 && <div className="mt-3 border-t border-line pt-3 text-sm text-muted pulse">Finding stand-ins that play the same role...</div>}
-      {r.swaps.length > 0 && (
-        <div className="mt-3 border-t border-line pt-3">
-          <div className="text-xs uppercase tracking-wide text-muted mb-2">Stand-ins that play the same role</div>
-          <div className="space-y-2">
-            {r.swaps.map(s => (
-              <div key={s.entity_id} className="rounded-xl bg-paper p-3">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium">{s.name} <span className="text-muted text-sm">{Math.round(s.score)}</span></span>
-                  <button onClick={() => p.onApply(s)} className="rounded-lg border border-line bg-white px-2.5 py-1 text-xs hover:border-ink">Use this</button>
-                </div>
-                {s.line && <p className="mt-1 text-sm">{s.line}</p>}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function Score(p: { score: number | null; verdict: Ref['verdict'] }) {
-  return (
-    <div className="text-right shrink-0">
-      <div className={`font-display text-3xl font-bold leading-none text-${p.verdict}`}>{p.score === null ? '--' : Math.round(p.score)}</div>
-      <div className={`text-xs font-medium text-${p.verdict}`}>{VERDICT_TEXT[p.verdict]}</div>
-    </div>
-  )
-}
-
-function Bar(p: { v: number; muted?: boolean }) {
-  return <div className="h-2 flex-1 rounded-full bg-line overflow-hidden"><div className={`h-full ${p.muted ? 'bg-muted/60' : 'bg-ink'}`} style={{ width: `${Math.max(2, Math.min(100, p.v))}%` }} /></div>
-}
-
-function AgeBars(p: { skew: Record<string, number>; age: string | null }) {
-  const vals = AGES.map(([k]) => p.skew[k] ?? 0)
-  const max = Math.max(0.3, ...vals.map(Math.abs))
-  return (
-    <div className="mt-3">
-      <div className="flex items-end gap-1 h-10">
-        {vals.map((v, i) => {
-          const h = Math.round(50 * Math.abs(v) / max)
-          const sel = AGES[i][0] === p.age
-          return (
-            <div key={i} className="flex-1 flex flex-col items-center justify-end h-full" title={`${AGES[i][1]}: ${v >= 0 ? '+' : ''}${v.toFixed(2)}`}>
-              <div className={`w-full rounded-sm ${v >= 0 ? (sel ? 'bg-lands' : 'bg-lands/35') : (sel ? 'bg-misses' : 'bg-misses/35')}`} style={{ height: `${Math.max(6, h)}%` }} />
-            </div>
-          )
-        })}
-      </div>
-      <div className="flex gap-1 text-[10px] text-muted mt-1">{AGE_SHORT.map((l, i) => <div key={i} className={`flex-1 text-center ${AGES[i][0] === p.age ? 'text-ink font-semibold' : ''}`}>{l}</div>)}</div>
-      <div className="text-[10px] text-muted mt-0.5">Age skew: how much more (green) or less (red) than average each age group cares about this.</div>
-    </div>
-  )
-}
-
-function Progress() {
-  const steps = ['Finding references', 'Resolving against Qloo', 'Scoring for this audience', 'Finding stand-ins', 'Rewriting lines']
-  const [i, setI] = useState(0)
-  useEffect(() => { const t = setInterval(() => setI(x => Math.min(x + 1, steps.length - 1)), 4000); return () => clearInterval(t) }, [])
-  return <div className="rounded-2xl border border-line bg-white/70 p-4 text-sm text-muted"><span className="pulse">{steps[i]}...</span></div>
-}
-
-function Empty() {
-  return (
-    <div className="rounded-2xl border border-dashed border-line p-6 text-sm text-muted space-y-2">
-      <p className="font-medium text-ink">How it works</p>
-      <p>1. Paste your text and pick the audience you are writing for.</p>
-      <p>2. The agent finds every cultural reference and resolves it against Qloo's graph of 250M+ entities.</p>
-      <p>3. Each reference gets a 0 to 100 "likely to land" score from how widely known it is and how much that audience over- or under-indexes on it.</p>
-      <p>4. For weak references it proposes stand-ins that play the same role in the line, and rewrites the line for you to accept or ignore.</p>
-      <p>Switch the audience and watch the highlights change.</p>
     </div>
   )
 }

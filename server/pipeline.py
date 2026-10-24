@@ -273,25 +273,34 @@ def enrich(refs: list[Reference]) -> None:
         r.age_skew, r.gender_skew, r.trend = d.get("age"), d.get("gender"), trends.get(r.entity_id)
 
 
-_prep_cache: OrderedDict[str, list[dict]] = OrderedDict()
+_prep_cache: OrderedDict[str, tuple[list[dict], list[dict]]] = OrderedDict()
 _prep_lock = threading.Lock()
 
 
 def prepare(text: str) -> list[Reference]:
-    """Extract + resolve + enrich, memoised per text (switching audiences never re-runs the LLM extraction)."""
+    """Extract + resolve + enrich, memoised per text (switching audiences never re-runs the LLM extraction).
+    The Qloo calls that produced the references are remembered too and replayed into the current request's ledger,
+    so 'N Qloo calls behind this result' counts lookups that happened on an earlier request."""
     key = hashlib.sha1(text.encode()).hexdigest()
     with _prep_lock:
         hit = _prep_cache.get(key)
         if hit is not None:
             _prep_cache.move_to_end(key)
-            return [Reference(**copy.deepcopy(d)) for d in hit]
-    refs = extract(text)
-    resolve(text, refs)
-    enrich(refs)
-    if qloo.degraded():
+            refs_d, calls = hit
+            qloo.replay(calls)
+            return [Reference(**copy.deepcopy(d)) for d in refs_d]
+    outer = qloo.current_ledger()
+    mine = qloo.start_ledger()
+    try:
+        refs = extract(text)
+        resolve(text, refs)
+        enrich(refs)
+    finally:
+        qloo.restore_ledger(outer, mine)
+    if any(c["source"] == "error" for c in mine):
         return refs  # a Qloo call failed: serve this result but do not remember it
     with _prep_lock:
-        _prep_cache[key] = [asdict(r) for r in refs]
+        _prep_cache[key] = ([asdict(r) for r in refs], [dict(c, source="cache" if c["source"] == "live" else c["source"]) for c in mine])
         while len(_prep_cache) > 256:
             _prep_cache.popitem(last=False)
     return refs

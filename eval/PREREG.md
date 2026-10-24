@@ -8,8 +8,8 @@ YouGov Ratings "fame": the share of US adults in each generation (millennials, G
 Public figures from yougov.com, fetched by `eval/yougov.py` into `eval/data/yougov_fame.csv` (1,827 TV shows, films, artists, brands, people, books and podcasts).
 
 ## Sample
-`python -m eval.kill_test --n 300 --seed 7`: about 300 entities, balanced across the seven YouGov groups' Qloo types.
-The language-model baseline for exactly these entities was generated and cached on 22 Oct (`eval/out/llm_guesses.json`): Claude Sonnet, asked for each generation's "% who have heard of it", no data.
+`python -m eval.kill_test --n 300 --seed 7`: about 300 entities, balanced across Qloo entity types. Within each type, half the entities are random and half come from the top quarter by |millennial fame minus boomer fame|, so references that split by generation (what the product exists to catch) are represented. (Amended 24 Oct before any data: the first draft sampled only randomly, which an audit showed under-samples exactly those references.)
+The language-model baseline is Claude Sonnet, asked for each generation's "% who have heard of it" with no data; guesses are cached per entity in `eval/out/llm_guesses.json` (the first batch on 22 Oct) and generated for any newly sampled entity before the Qloo side runs.
 
 ## Metrics (fixed now)
 1. Pooled Spearman rank correlation between predicted and actual fame, over entity x generation, out-of-fold (5-fold CV by entity, seed 11), for:
@@ -17,7 +17,8 @@ The language-model baseline for exactly these entities was generated and cached 
    - `llm`: the cached model guess,
    - `blend`: sum of the two z-scores,
    - `no_age`: Qloo model without age affinity (ablation: does the audience signal carry weight?).
-2. Gap metric: Spearman between predicted and actual (millennial fame minus boomer fame), per entity. This is what an audience switch changes, so it is the headline for the product's core claim.
+2. Within-type versions of 1 (the correlation computed inside each entity type, then averaged), so neither side scores well merely by knowing that TV shows are more famous than podcasts.
+3. Gap metric: Spearman between predicted and actual (millennial fame minus boomer fame), per entity. This is what an audience switch changes, so it is the headline for the product's core claim.
 
 ## What we will say for each outcome
 - Qloo beats the model on the gap metric: headline it.
