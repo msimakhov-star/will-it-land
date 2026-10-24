@@ -34,6 +34,8 @@ _db: sqlite3.Connection | None = None
 # 2 to 80 s on this machine. trust_env=False skips the proxy lookup entirely.
 _http = httpx.Client(trust_env=False, timeout=30)
 _ledger: contextvars.ContextVar[list | None] = contextvars.ContextVar("qloo_ledger", default=None)
+# ponytail: one process-wide cap on concurrent live calls (threads x concurrent requests could otherwise fan out to 100+)
+_live = threading.BoundedSemaphore(int(os.environ.get("QLOO_CONCURRENCY", "6")))
 
 
 class QlooError(RuntimeError):
@@ -73,7 +75,7 @@ def _record(path: str, params: dict, source: str, ms: float) -> None:
         calls.append({"endpoint": path, "params": params, "source": source, "ms": round(ms)})
 
 
-def get(path: str, params: dict, ttl: float = 7 * 86400) -> dict:
+def get(path: str, params: dict, ttl: float = 30 * 86400) -> dict:
     """GET a Qloo endpoint. Lists become comma-joined strings. Cached by (path, params)."""
     t0 = time.time()
     clean = {k: (",".join(map(str, v)) if isinstance(v, (list, tuple)) else v) for k, v in params.items() if v not in (None, "", [], ())}
@@ -91,10 +93,34 @@ def get(path: str, params: dict, ttl: float = 7 * 86400) -> dict:
     api_key = os.environ.get("QLOO_API_KEY")
     if not api_key:
         raise QlooError("QLOO_API_KEY is not set")
+    try:
+        data = _fetch(path, clean, api_key)
+    except QlooError:
+        if row:  # stale-on-error: an expired cached answer beats a failed demo
+            _record(path, clean, "stale", (time.time() - t0) * 1000)
+            return json.loads(row[0])
+        raise
+    with _lock:
+        _cache().execute("insert or replace into q values (?,?,?)", (key, json.dumps(data), time.time()))
+        _cache().commit()
+    _record(path, clean, "live", (time.time() - t0) * 1000)
+    return data
+
+
+def _fetch(path: str, clean: dict, api_key: str) -> dict:
+    r = None
     for attempt in range(3):
-        r = _http.get(BASE_URL + path, params=clean, headers={"X-Api-Key": api_key})
-        if r.status_code == 429 and attempt < 2:  # bounded backoff, as the kit's API_ACCESS.md asks
-            time.sleep(1.5 * (attempt + 1))
+        try:
+            with _live:
+                r = _http.get(BASE_URL + path, params=clean, headers={"X-Api-Key": api_key})
+        except httpx.HTTPError as ex:
+            if attempt == 2:
+                raise QlooError(f"Qloo unreachable: {type(ex).__name__}") from ex
+            time.sleep(1.0 * (attempt + 1))
+            continue
+        if r.status_code in (429, 500, 502, 503, 504) and attempt < 2:  # bounded backoff, as the kit's API_ACCESS.md asks
+            retry = r.headers.get("retry-after")
+            time.sleep(min(float(retry), 5.0) if retry and retry.replace(".", "", 1).isdigit() else 1.5 * (attempt + 1))
             continue
         break
     if r.status_code == 401:
@@ -103,12 +129,7 @@ def get(path: str, params: dict, ttl: float = 7 * 86400) -> dict:
         raise QlooError("Qloo rate limit (429). Try again shortly.")
     if r.status_code >= 400:
         raise QlooError(f"Qloo {r.status_code}: {r.text[:200]}")
-    data = r.json()
-    with _lock:
-        _cache().execute("insert or replace into q values (?,?,?)", (key, json.dumps(data), time.time()))
-        _cache().commit()
-    _record(path, clean, "live", (time.time() - t0) * 1000)
-    return data
+    return r.json()
 
 
 # ---- response helpers (field fallbacks copied from Qloo's harness) -------------------------------

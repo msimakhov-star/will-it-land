@@ -21,7 +21,7 @@ import threading
 from collections import OrderedDict
 from dataclasses import asdict, dataclass, field
 
-from . import llm, qloo
+from . import llm, qloo, scoring
 
 AUDIENCE_AGES = qloo.AGE_BUCKETS
 AGE_LABELS = {"24_and_younger": "under 25", "25_to_29": "25 to 29", "30_to_34": "30 to 34", "35_to_44": "35 to 44", "45_to_54": "45 to 54", "55_and_older": "55+"}
@@ -296,15 +296,12 @@ def guesses(refs: list[Reference], audiences: list[Audience]) -> list[list[float
 
 
 def land_score(popularity: float | None, age_aff: float, gender_aff: float, loc_aff: float | None) -> float:
-    """0-100 'likely to land'. Base is Qloo popularity percentile (how widely known); demographic and location
-    affinity shift it. Weights are a first guess until eval/fit.py calibrates them against YouGov fame."""
-    base = 100 * (popularity if popularity is not None else 0.5)
-    s = base + 35 * age_aff + 15 * gender_aff + (25 * loc_aff if loc_aff is not None else 0)
-    return max(0.0, min(100.0, s))
+    """0-100 'likely to land' (see server/scoring.py for the model and its calibration)."""
+    return scoring.score(popularity, age_aff, gender_aff, loc_aff)
 
 
 def verdict_for(score: float) -> str:
-    return "lands" if score >= 65 else "risky" if score >= 40 else "misses"
+    return scoring.verdict(score)
 
 
 _anchor_ids: dict[str, list[str]] = {}
@@ -357,7 +354,8 @@ def score_entities(items: list[dict], audience: Audience) -> dict[str, dict]:
         a = float((i.get("age_skew") or {}).get(audience.age, 0) or 0) if audience.age else 0.0
         g = float((i.get("gender_skew") or {}).get(audience.gender, 0) or 0) if audience.gender else 0.0
         loc = loc_rel.get(e)
-        s = round(land_score(i.get("popularity"), a, g, loc), 1)
+        parts = scoring.components(i.get("popularity"), a, g, loc)
+        s = parts["score"]
         bits = [f"known at the {_ordinal(int(100 * (i.get('popularity') or 0)))} percentile"]
         if audience.age and i.get("age_skew"):
             bits.append(f"{'over' if a >= 0 else 'under'}-indexes with {AGE_LABELS.get(audience.age, audience.age)} ({a:+.2f})")
@@ -365,7 +363,7 @@ def score_entities(items: list[dict], audience: Audience) -> dict[str, dict]:
             bits.append(f"{'over' if g >= 0 else 'under'}-indexes with {'men' if audience.gender == 'male' else 'women'} ({g:+.2f})")
         if loc is not None:
             bits.append(f"{'strong' if loc > 0.1 else 'weak' if loc < -0.1 else 'average'} in {audience.location}")
-        out[e] = {"score": s, "verdict": verdict_for(s), "why": "; ".join(bits), "affinity": affs.get(e), "location": loc, "age_affinity": a if audience.age else None}
+        out[e] = {"score": s, "verdict": verdict_for(s), "why": "; ".join(bits), "affinity": affs.get(e), "location": loc, "age_affinity": a if audience.age else None, "parts": parts}
     return out
 
 
@@ -479,25 +477,43 @@ def swaps_for(text: str, audience: Audience, references: list[dict]) -> list[dic
 # ---- public entry points ----------------------------------------------------------------------------
 
 
+BAND_KEYS = ["any"] + AUDIENCE_AGES
+
+
 def check(text: str, audience: Audience, swaps: bool = True) -> dict:
+    """One audience in detail, plus every age band precomputed for the same gender and place, so the UI can drag
+    the room's age without another round trip (location still needs Qloo rank calls; those run here, cached)."""
     import time
 
     timings = {}
     t = time.time()
     refs = prepare(text)
     timings["prepare"] = round(time.time() - t, 1); t = time.time()
-    cell_list, guess_rows = qloo.pmap(lambda f: f(), [lambda: cells_for(refs, audience), lambda: guesses(refs, [audience])], workers=2)
+    band_auds = [Audience(None if k == "any" else k, audience.gender, audience.location) for k in BAND_KEYS]
+    jobs = [lambda a=a: cells_for(refs, a) for a in band_auds] + [lambda: guesses(refs, band_auds)]
+    res = qloo.pmap(lambda f: f(), jobs, workers=8)
+    band_cells, band_guess = res[:-1], res[-1]
+    bands = {k: [dict(c, llm_guess=(band_guess[i][j] if band_guess and i < len(band_guess) else None)) if c else None for i, c in enumerate(band_cells[j])] for j, k in enumerate(BAND_KEYS)}
+    sel = audience.age or "any"
+    cell_list = bands[sel]
     timings["score"] = round(time.time() - t, 1); t = time.time()
-    for r, c, g in zip(refs, cell_list, guess_rows or [[None]] * len(refs)):
-        r.llm_guess = g[0] if g else None
+    for r, c in zip(refs, cell_list):
         if c:
-            r.score, r.verdict, r.why, r.affinity = c["score"], c["verdict"], c["why"], c["affinity"]
+            r.score, r.verdict, r.why, r.affinity, r.llm_guess = c["score"], c["verdict"], c["why"], c["affinity"], c["llm_guess"]
     if swaps:
         weak = _weak(refs, cell_list)
         for (r, c), s in zip(weak, qloo.pmap(lambda p: propose_swaps(text, p[0], audience, p[1]["score"]), weak, workers=4)):
             r.swaps = s
         timings["swaps"] = round(time.time() - t, 1)
-    return {"timings": timings, "audience": asdict(audience) | {"label": audience.label()}, "summary": _summary(cell_list, len(refs)), "references": [asdict(r) for r in refs]}
+    return {
+        "timings": timings,
+        "audience": asdict(audience) | {"label": audience.label()},
+        "summary": _summary(cell_list, len(refs)),
+        "references": [asdict(r) for r in refs],
+        "bands": bands,
+        "band_summaries": {k: _summary(v, len(refs)) for k, v in bands.items()},
+        "model": {k: scoring.P[k] for k in ("a", "b", "k_age", "k_gender", "k_loc", "lands", "misses", "calibrated", "source")},
+    }
 
 
 def matrix(text: str, audiences: list[Audience]) -> dict:
@@ -577,7 +593,7 @@ if __name__ == "__main__":
     used = []
     assert _locate(t, "Blockbuster", used) == (16, 27), used
     assert _locate(t, "Blockbuster", used) == (29, 40), used
-    assert verdict_for(land_score(0.9, 0.3, 0, None)) == "lands" and verdict_for(land_score(0.3, -0.4, 0, None)) == "misses"
+    assert verdict_for(land_score(0.9999, 0.3, 0, None)) == "lands" and verdict_for(land_score(0.9, -0.4, 0, None)) == "misses"
     r1 = Reference("Blockbuster", 16, 27, "brand", "Blockbuster", "", None)
     r2 = Reference("Blockbuster", 29, 40, "brand", "Blockbuster", "", None)
     out = apply_swaps(t, [(r1, Swap("HMV", "x", 80, "ai")), (r2, Swap("HMV", "x", 80, "ai"))])

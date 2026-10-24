@@ -37,14 +37,24 @@ def _name(eid: str) -> str:
 
 
 def _pop(name: str) -> float:
-    return KNOWN.get(name.lower(), (round(0.3 + 0.6 * _h(name), 2), 0, 0))[0]
+    """Real Qloo popularity is a percentile over a huge catalogue, so famous things sit at 0.99 to 0.9999.
+    Map the table's 0..1 'fame' onto that range so the mock exercises the same saturation the real data has."""
+    fame = KNOWN.get(name.lower(), (round(0.3 + 0.6 * _h(name), 2), 0, 0))[0]
+    return round(1 - 10 ** (-(1 + 3 * fame)), 6)
+
+
+AMBIGUOUS = {"friends": "Friends (2011 film)", "chelsea": "Chelsea (person)", "manhattan": "Manhattan (1979 film)"}
 
 
 def respond(path: str, params: dict) -> dict:
     if path == "/search":
         q = params["query"]
         t = (params.get("types") or "urn:entity:tv_show").split(",")[0]
-        return {"success": True, "results": [{"name": q, "entity_id": _eid(q), "types": [t], "popularity": _pop(q), "properties": {}}]}
+        hits = [{"name": q, "entity_id": _eid(q), "types": [t], "popularity": _pop(q), "properties": {}}]
+        if q.lower() in AMBIGUOUS:  # so the disambiguation path runs offline too
+            alt = AMBIGUOUS[q.lower()]
+            hits.append({"name": alt, "entity_id": _eid(alt), "types": [t], "popularity": round(_pop(q) - 0.009, 6), "properties": {"short_description": "a different entity with the same name"}})
+        return {"success": True, "results": hits[: int(params.get("take", 8))]}
     if path == "/v2/insights":
         ftype = params.get("filter.type", "")
         ids = [i for i in (params.get("signal.interests.entities") or params.get("filter.results.entities") or "").split(",") if i]

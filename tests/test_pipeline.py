@@ -72,9 +72,21 @@ def test_check_shapes_and_spans(monkeypatch):
         assert TEXT[r["start"]:r["end"]] == r["surface"]
         assert r["entity_id"] and 0 <= r["score"] <= 100
         assert r["verdict"] in ("lands", "risky", "misses")
-        assert r["llm_guess"] == 50
+        assert r["llm_guess"] == 60  # fake guesser: 50 + 10 * column, and under-25s is column 1 after "any"
     s = out["summary"]
     assert s["found"] == 3 and s["checked"] == 3 and s["lands"] + s["risky"] + s["misses"] == 3
+
+
+def test_bands_match_single_checks(monkeypatch):
+    from server import pipeline
+
+    fake_llm(monkeypatch, REFS[:2])
+    out = pipeline.check(TEXT, pipeline.Audience("24_and_younger", None, "London"), swaps=False)
+    assert list(out["bands"]) == ["any"] + pipeline.AUDIENCE_AGES
+    other = pipeline.check(TEXT, pipeline.Audience("55_and_older", None, "London"), swaps=False)
+    assert [c["score"] for c in out["bands"]["55_and_older"]] == [r["score"] for r in other["references"]]
+    parts = out["bands"]["24_and_younger"][0]["parts"]
+    assert abs(parts["base"] + parts["age"] + parts["gender"] + parts["location"] - parts["score"]) < 0.3
 
 
 def test_extraction_runs_once_per_text(monkeypatch):
