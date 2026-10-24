@@ -1,52 +1,44 @@
-# Devpost submission text (draft, update numbers after the kill test)
-
-## Project name
-Will It Land
+# Will It Land
 
 ## Tagline
-AI writes for the average audience. Will It Land checks every cultural reference in your script against the one you are actually writing for.
+Spellcheck for cultural references: it checks every reference in your script against the room you are actually playing using Qloo, and swaps the ones that will not land.
 
 ## Inspiration
-Ask a language model for a joke, an ad line or a wedding toast and the references come out average: Seinfeld, Taylor Swift, Minecraft. Models regress to the mean of their training data. Writers do not get to write for the mean. A comedian plays a room of 22-year-olds in Leeds on Friday and a corporate dinner of 55-year-olds in Houston on Monday. An ad localisation team ships one script to twelve markets. A best man has one audience and one shot.
-
-What nobody has at their desk is the data: which references a specific audience actually over-indexes on, which are fading, and which stand-in would play the same role for them. Qloo has exactly that data. So we built the reference checker.
+Ask a language model for a joke, an ad line or a wedding toast. The references come out average. The model suggests the same handful of shows, artists and brands for every audience. Writers never perform for the average room. A comedian plays 22-year-olds in one city on Friday and a dinner of 55-year-olds in another on Monday. An ad team ships one script to several markets. A best man gets one audience and one shot. None of them has data at their desk on which references a specific audience actually over-indexes on. They do not know which stand-in plays the same part for that audience. Qloo has that data.
 
 ## What it does
-Paste a stand-up bit, an ad script, a toast, a speech or localised copy. Pick the audience: an age band, optionally men or women, a city or country.
+Paste a script and pick the rooms. A room is an age band, optionally men or women, and a city or country. Will It Land marks every cultural reference like a spellchecker for each room. Red wavy lines mean likely misses. Amber dotted lines mean risky. Green means the reference lands. Each room gets a headline. 
 
-The agent then:
-1. finds every cultural reference (shows, films, artists, brands, people, books, games, podcasts, places);
-2. resolves each one to an entity in Qloo's taste graph, using the line's context to settle ambiguous names;
-3. scores how likely each reference is to land with that audience, 0 to 100, from how widely known it is, how much that audience over- or under-indexes on it, how it plays in that location, and whether it is rising or fading;
-4. for weak references, works out the role the reference plays in the line ("a dead video-rental chain", "a luxury brand that signals new money"), proposes stand-ins that play the same role, resolves and ranks them for the audience with Qloo, and rewrites the line;
-5. re-scores, and leaves the writer to accept or ignore each swap.
+You click "Make it land in both rooms" to run the agent. For each weak reference, the agent gathers stand-ins from the Qloo graph and the language model. It scores every candidate in every room with Qloo. It picks the candidate whose worst room scores best. The agent rewrites the line and re-scores the whole script. It keeps the rewrite only if the rooms improved. Each change appears as a tracked change with a badge. The badge shows where the stand-in came from. 
 
-Switch the audience from under-25s in London to 55+ in Texas and watch the highlights change colour. Toggle "AI alone" to see where a model guessing without data disagrees with the Qloo-grounded score.
+Up to six rooms fit in a grid with a "lands everywhere" column. Every mark opens an evidence card. The card shows the score and its breakdown: how widely known, this age band, and this place. It shows the age profile from Qloo and what a language model guessed without data. An "Under the hood" section lists every Qloo request behind the result. Will It Land is also an MCP server. A writing agent can check its own references before it finishes a draft.
 
-It is also an MCP server (`check_references`), so Claude, ChatGPT or any writing agent can call it before finishing a draft.
+## How I built it
+The server uses Python and FastAPI. The browser uses React, Vite and Tailwind. Modal hosts the app with one warm container and a persistent cache. The agent uses Claude for language steps: finding references, naming each role, choosing between entities with the same name, and rewriting lines. An adapter can switch Claude to Gemini. 
 
-## How we built it
-- Python, FastAPI, httpx. Qloo REST called directly against the hackathon host with an on-disk cache.
-- The agent brain is model-agnostic (Anthropic or Gemini through one adapter), because the moat is the data, not the model.
-- Qloo calls per check: `/search` for resolution, `/v2/insights` with `filter.type=urn:demographics` for age and gender affinity, `/v2/insights` with `signal.location.query` and `filter.results.entities` (one call per entity type with fixed calibration anchors, so scores are comparable), `/v2/trending` for momentum, and `/search` again to resolve the stand-ins the model proposes.
-- React, Vite and Tailwind for the UI. Hosted on Modal with a warm container and a persistent cache volume.
-- MCP via the official Python SDK, over stdio and streamable HTTP.
+The Qloo side uses several endpoints. It uses /search to resolve names. It uses /v2/insights with demographics for age and gender affinity. It uses /v2/insights to rank each room's references in a place against eight fixed anchors. It uses /v2/insights with tags for the tags that define a reference. It uses /v2/insights with tags plus the room's demographics and place to find stand-ins the room over-indexes on. It uses /v2/trending for direction. The app shows trending direction but does not score it. 
 
-## Does it beat an AI guessing? (the kill test)
-We did not want to assert that Qloo is essential; we wanted to check. `eval/` scores about 300 TV shows, films, artists, brands, people, books and podcasts two ways: the Qloo-grounded score, and a language model's unaided estimate. Ground truth is YouGov Ratings' "fame" (the share of US adults in each generation who have heard of something), which is public.
+The score is a small logistic model in server/scoring.py. The MCP server uses the official Python SDK over stdio and streamable HTTP.
 
-[TABLE FROM eval/out/kill_test.md]
+## How I test it
+The test method was fixed in eval/PREREG.md before any real data arrived. The test compares the Qloo-grounded score with a language model's unaided guess against outside ground truth. The ground truth includes YouGov's share of each US generation who have heard of about 300 shows, films, artists, brands, people and podcasts. It includes an anonymous survey of what under-25s recognise, because YouGov has no under-25 figures. It also includes a check that place separates 20 regional brands and shows at home and far away. Results: not measured yet.
 
-## What we learned
-- Affinity is not awareness. Qloo tells you how much an audience cares about something relative to average; YouGov tells you how many have heard of it. The score combines the two, and the benchmark is the check on that model.
-- Ambiguity is the real work. "Friends", "Chelsea", "Manhattan" each resolve to several entities; the agent has to read the line to pick the right one, and it shows you the alternatives.
-- Qloo silently returns an empty result for parameters it does not accept for a given entity type, so the client only ever sends parameters from the entity-type guide.
+## Challenges
+Affinity is not awareness. Qloo says how much an audience over-indexes on something, not how many people have heard of it. The score combines popularity with the room's affinity. The app tests this score against "heard of" data. Popularity is a percentile over a very large catalogue. Almost anything a writer names sits near the top. A linear score called every famous but dated reference a hit. The score uses a log transform instead. 
+
+Names are ambiguous, like "Friends" or "Manhattan". The agent reads the line to pick the entity and shows the alternatives. Qloo silently ignores parameters it does not accept. The client only sends documented parameters. A probe checks every field the code reads.
+
+## Accomplishments
+The agent finds one fix that lands in every room at once. Qloo scores this fix in every room. The project has a public, pre-registered test plan with ground truth no other entry uses. The demo shows its own evidence. Every number traces to a Qloo request.
+
+## What I learned
+Grounding is not a garnish. The interesting part of a reference check is the stand-in. Only a taste graph can say which stand-in a specific room actually loves.
 
 ## What's next
-Script-level reports for localisation teams (one upload, twelve markets), a Chrome extension for Google Docs, and routing the "stand-in" step through Qloo's tag graph so stand-ins can come from a different entity type when the role allows it.
+Next steps include a browser extension for documents and scripts. The project will add a localisation report for teams shipping one script to many markets. It will also add rooms defined by Qloo audiences, for example "nurses in Chicago", instead of only age and place.
 
 ## Built with
-python, fastapi, react, vite, tailwind, qloo, anthropic, modal, mcp
+python, fastapi, react, vite, tailwind, qloo, anthropic, gemini, modal, mcp
 
 ## Links
 - Live app: https://m-simakhov--will-it-land-web.us-east.modal.run
