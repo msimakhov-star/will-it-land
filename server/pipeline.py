@@ -665,6 +665,54 @@ def _bad(s: dict) -> int:
     return 2 * s["misses"] + s["risky"]
 
 
+def derive_prepared(old_text: str, new_text: str, picks: list[tuple[Reference, Swap]]) -> bool:
+    """After a rewrite, build the new text's prepared references from what the agent already knows, instead of
+    running the LLM extraction again: untouched references keep their entity, swapped ones take the stand-in's entity.
+    Stores the result in the preparation cache. Returns False (and stores nothing) if any reference cannot be placed."""
+    old = prepare(old_text)
+    swapped = {r.start: sw for r, sw in picks}
+    new_ids = [sw.entity_id for sw in swapped.values()]
+    try:
+        demo = qloo.demographics(new_ids) if new_ids else {}
+        pops = {}
+        for sw in swapped.values():
+            hits = qloo.search(sw.name, types=[next(r.type for r, s2 in picks if s2 is sw)], take=3)
+            hit = next((h for h in hits if qloo.eid(h) == sw.entity_id), None)
+            pops[sw.entity_id] = hit.get("popularity") if hit else None
+    except qloo.QlooError:
+        return False
+    used: list[tuple[int, int]] = []
+    out: list[Reference] = []
+    # place swapped references first (their names are new), then the rest in order
+    for r in sorted(old, key=lambda r: (r.start not in swapped, r.start)):
+        if r.start in swapped:
+            sw = swapped[r.start]
+            span = _locate(new_text, sw.name, used)
+            if not span:
+                low = new_text.lower()
+                i = low.find(sw.name.lower())
+                if i < 0 or any(a < i + len(sw.name) and i < b for a, b in used):
+                    return False
+                span = (i, i + len(sw.name))
+                used.append(span)
+            d = demo.get(sw.entity_id) or {}
+            out.append(Reference(surface=new_text[span[0]:span[1]], start=span[0], end=span[1], type=r.type, query=sw.name, role=r.role, era=None,
+                                 entity_id=sw.entity_id, name=sw.name, popularity=pops.get(sw.entity_id), age_skew=d.get("age"), gender_skew=d.get("gender")))
+        else:
+            span = _locate(new_text, r.surface, used)
+            if not span:
+                return False
+            nr = Reference(**{k: v for k, v in asdict(r).items() if k in Reference.__dataclass_fields__ and k != "swaps"})
+            nr.start, nr.end = span
+            nr.llm_guess, nr.score, nr.verdict, nr.why, nr.affinity = None, None, "unknown", r.why if not r.entity_id else "", None
+            out.append(nr)
+    out.sort(key=lambda r: r.start)
+    key = hashlib.sha1(new_text.encode()).hexdigest()
+    with _prep_lock:
+        _prep_cache[key] = ([asdict(r) for r in out], [])
+    return True
+
+
 def localise(text: str, audience: Audience, rounds: int = 2) -> dict:
     """The agent loop, made visible: check, apply the chosen stand-in per weak line, re-check, keep only improvements."""
     steps = []
@@ -682,6 +730,7 @@ def localise(text: str, audience: Audience, rounds: int = 2) -> dict:
             steps.append({"round": n + 1, "action": "stop", "detail": "no weak reference has a stand-in that scores higher"})
             break
         new_text = apply_swaps(current, picks)
+        derive_prepared(current, new_text, picks)  # skip a second LLM extraction when the rewrite is fully accounted for
         steps.append({"round": n + 1, "action": "swap", "swaps": [{"from": r.name or r.surface, "to": sw.name, "score_from": r.score, "score_to": sw.score, "source": sw.source, "why": sw.why} for r, sw in picks]})
         nxt = check(new_text, audience, swaps=(n + 1 < rounds))
         steps.append({"round": n + 1, "action": "recheck", "summary": nxt["summary"]})
@@ -714,6 +763,7 @@ def localise_all(text: str, audiences: list[Audience]) -> dict:
     if not picks:
         return {"original": text, "text": text, "before": before, "after": before, "swaps": [], "kept": False, "detail": "no stand-in beats the original in every room"}
     new_text = apply_swaps(text, picks)
+    derive_prepared(text, new_text, picks)  # skip a second LLM extraction when the rewrite is fully accounted for
     after = matrix(new_text, audiences)
 
     def worst(m):

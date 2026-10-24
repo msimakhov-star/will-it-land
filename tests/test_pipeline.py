@@ -307,3 +307,20 @@ def test_api(monkeypatch):
         assert c.post("/mcp", json={"jsonrpc": "2.0", "id": 9, "method": "tools/list"}, headers={"accept": "application/json, text/event-stream"}).status_code == 200
         tools = c.post("/mcp/", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"}, headers={"accept": "application/json, text/event-stream"})
         assert tools.status_code == 200 and {t["name"] for t in tools.json()["result"]["tools"]} >= {"check_references", "check_matrix", "localise", "localise_for_all", "audience_options"}
+
+
+def test_derive_prepared_skips_reextraction(monkeypatch):
+    from server import pipeline
+
+    calls = []
+    fake_llm(monkeypatch, REFS[:2], calls)
+    auds = [pipeline.Audience("24_and_younger", None, "London"), pipeline.Audience("55_and_older", None, "St. Louis")]
+    out = pipeline.localise_all(TEXT, auds)
+    extractions = sum(c.startswith("You find cultural") for c in calls)
+    assert extractions == 1, f"the rewritten text was re-extracted ({extractions} extractions)"
+    if out["kept"]:
+        new_refs = out["after"]["references"]
+        for r in new_refs:
+            assert out["text"][r["start"]:r["end"]].lower() == r["surface"].lower()
+        names = {r["name"] for r in new_refs}
+        assert all(sw["to"] in names for sw in out["swaps"])
