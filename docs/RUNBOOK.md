@@ -16,9 +16,11 @@ Deadline: Fri 30 Oct 2026, 23:45 EDT (03:45 Sat UK time). After the deadline the
 | 7 | 7:15 | tune `STANDIN_MIN_POP` (env, default 0.99) so a Qloo-found stand-in beats the original for at least half the weak references in the examples | applied-swap Qloo share measured |
 | 8 | 7:45 | redeploy, then `.venv/bin/python -m tools.prewarm --base https://m-simakhov--will-it-land-web.us-east.modal.run` (background, ~10 min) | prewarm log all 200 |
 | 9 | 8:00 | `.venv/bin/python -m eval.taste_audit run` (background) and `eval/freshness.py` if the probe showed trending works | numbers saved in `eval/out/` |
-| 10 | 8:30 | `.venv/bin/python -m tools.screenshots --base <live url>` | 6 gallery images + 1 mobile in `docs/screenshots/` |
+| 10 | 8:30 | `.venv/bin/python -m tools.screenshots --base <live url>`; then edit `tools/og/og.html` (real reference, real scores, stamp "Live Qloo data"), serve it locally and screenshot it at 1200x630 into `web/public/og.png` | 8 gallery images in `docs/screenshots/`, og.png shows real numbers |
 | 11 | 9:00 | Public text: write the factual brief, render with `tools/prose.py` (Gemini, via `eval/gemini_remote.py` if the API refuses this location), check every number against `eval/out/`, no claims about trend in the score, location only if k_loc > 0 | README and docs/DEVPOST.md updated, `tests/test_text.py` green |
 | 12 | 10:00 | Devpost: fill the draft (#1248003), upload images, links (live URL, repo), submit | Devpost shows "Submitted" |
+
+Note: the demo examples were tuned against the mock (server/mock.py) so the demo shows splits; step 6 must re-check every example against live data and change any text whose split does not hold. Never keep a line for a split the live data does not show.
 
 ## Friday minimum path (about 5 hours)
 1 probe and fix, 2 deploy, 3 kill test at `--n 120` and fit (no refit loop), 6 split finder on the existing examples only, 8 prewarm, 10 screenshots, 11 text with the numbers that exist, 12 submit before 20:00 EDT.

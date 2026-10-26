@@ -5,12 +5,13 @@ Spellcheck for cultural references. Paste a stand-up bit, an ad script, a toast 
 Live app: https://m-simakhov--will-it-land-web.us-east.modal.run (built for the Qloo Agentic Hackathon, October 2026). Status while the hackathon API key is pending: the live app runs on demo data and says so in its header.
 
 ## What it does
-- Two rooms side by side: the same script, marked like a spellchecker for each room (red wavy underline: likely misses; amber dotted: risky; green: lands; grey dashed: not in Qloo), with a headline per room such as "Under 25s in London: 2 of 7 risky".
+- Two rooms side by side: the same script, marked like a spellchecker for each room (wavy underline: likely misses; dotted: risky; solid: lands; dashed: not in Qloo), with a headline per room such as "Under 25s in London: 3 of 7 will likely miss", and one line naming the biggest split between the rooms.
+- Four examples: a comedian's bit in two rooms, a touring comic's opener in six cities, an ad in six markets, and a best man's toast for two tables.
 - Up to six rooms as a grid, with a "lands everywhere" column next to each reference that takes its worst room.
-- "Make it land in both rooms" (or "in every room"): for each weak reference the agent finds stand-ins, scores every candidate in every room, picks the one whose worst room scores best, rewrites the line, re-scores the whole script and keeps the rewrite only if the rooms improved. Changes appear as tracked changes with a badge per stand-in: "found in Qloo's graph" or "model idea, scored by Qloo".
-- An evidence card for every mark: the score, a plain sentence, a breakdown of the score (how widely known, this age band, this place), the age profile from Qloo, and what a language model guessed without data.
+- "Make it land in both rooms" (or "in every room"): for each weak reference the agent finds stand-ins, scores every candidate in every room, picks the one whose weakest room scores best, rewrites the line, re-scores the whole script and keeps the rewrite only if no room gets worse. Changes appear as word-level suggestions inside each line, with the part each reference plays and a badge for where each stand-in came from.
+- An evidence card for every mark: the score, a plain sentence, the parts of the score (how well known, fit with this age band, strength in this place), the age profile, and the same reference in every other room.
 - "Scored by: Qloo data or AI guess alone" repaints the page with the model's unaided guesses, so the difference is visible. It is hidden while the app runs on demo data.
-- "Under the hood" lists every Qloo request behind the result.
+- "Under the hood" lists every request behind the result. Any result can be shared as a link.
 - An MCP server, so any writing agent can check its own references before it finishes a draft.
 
 ## How the agent works
@@ -38,11 +39,20 @@ The method was fixed before any real data arrived and committed in eval/PREREG.m
 - Whether place means anything: 20 regional brands and shows scored at home and far away (eval/location_sanity.py). If place does not separate them, it is dropped from the score and the place box disappears from the app. Result: not measured yet.
 - AI writing for a named audience: Claude and Gemini each wrote 18 short pieces for a named room (eval/data/ai_texts.json). The share of their references that miss that room is reported only if the tests above validate the score.
 
+## From request to result (one reference)
+1. The model reads "My mum's idea of a wild Friday is a Blockbuster card she never returned" and returns the reference "Blockbuster", type brand, part "a dead video-rental chain".
+2. /search with query Blockbuster and type brand returns the entity and its popularity; if several entities share the name, the model picks one from the line.
+3. /v2/insights with urn:demographics returns the over- or under-indexing of each age band.
+4. For the room "under 25, London", /v2/insights ranks the brand references in London against eight anchor brands.
+5. The score combines popularity with the age band and place terms; the evidence card shows each part.
+6. If the reference is weak in any room, stand-ins are gathered and each is scored in every room the same way.
+
 ## What the score means, and what it does not
 - "Likely to land" means likely to be recognised and liked by that audience. It is an estimate for a group, never a statement about one person, and it never claims a joke is funny.
 - Until the tests above are run, the score uses hand-set starting values, not calibrated against any data, and the app says so. The YouGov test covers US adults in three generations (roughly 30 and over); under-25s are covered only by our own survey.
 - Qloo age bands are under 25, 25 to 29, 30 to 34, 35 to 44, 45 to 54 and 55+.
 - References Qloo has no entity for (slang, memes, very local things) are shown as "not in Qloo" and not scored.
+- A stand-in can be well known in every room and still break the joke; the writer decides.
 - The text goes to a language model, which finds the references. Only reference names and room settings are sent to Qloo, never the text.
 
 ## Run it
