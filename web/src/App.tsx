@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api, latest } from './api'
-import type { Example, Health, Ledger, LocaliseAllResult, MatrixResult, Options, Room } from './types'
+import type { Example, Health, Ledger, LocaliseAllResult, MatrixResult, Options, Room, Segment } from './types'
 import { CITIES, Evidence, Grid, Legend, TrackedChanges, TwoUp, biggestSplit, whereLabel, type Scoring } from './rooms'
 import { Modal, Spinner, headline } from './ui'
 
@@ -16,7 +16,7 @@ const PURPOSE: Record<string, string> = {
   '/v2/trending': 'six-month trend (shown, not scored)',
 }
 
-const roomKey = (text: string, rooms: Room[]) => JSON.stringify([text, rooms.map(r => [r.age, r.gender, (r.location ?? '').trim(), r.name])])
+const roomKey = (text: string, rooms: Room[]) => JSON.stringify([text, rooms.map(r => [r.age, r.gender, (r.location ?? '').trim(), r.name, r.segment ?? null])])
 const errMsg = (e: unknown) => (e instanceof Error ? e.message : String(e))
 const link = 'text-muted underline decoration-line underline-offset-4 hover:text-ink hover:decoration-ink'
 
@@ -24,6 +24,7 @@ export default function App() {
   const [health, setHealth] = useState<Health | null>(null)
   const [options, setOptions] = useState<Options | null>(null)
   const [examples, setExamples] = useState<Example[]>([])
+  const [segments, setSegments] = useState<Segment[]>([])
   const [exampleId, setExampleId] = useState<string | null>(null)
   const [text, setText] = useState('')
   const [draft, setDraft] = useState('')
@@ -61,7 +62,7 @@ export default function App() {
 
   useEffect(() => {
     api.health().then(setHealth).catch(() => {})
-    api.options().then(setOptions).catch(() => {})
+    api.options().then(o => { setOptions(o); if ((o.segment_weight ?? 0) > 0) api.segments().then(d => setSegments(d.segments)).catch(() => {}) }).catch(() => {})
     const rid = location.pathname.match(/^\/r\/([\w-]+)/)?.[1]
     api.examples().then(async ex => {
       setExamples(ex)
@@ -343,9 +344,9 @@ export default function App() {
         {fix && <TrackedChanges r={fix} rooms={rooms} showPlace={showPlace} demo={demo} onKeep={keepFix} onUndo={() => { setFix(null); requestAnimationFrame(() => document.getElementById('edit-script')?.focus()) }} />}
 
         {result && !editing && (rooms.length <= 2
-          ? <TwoUp text={scored.text} m={result} rooms={rooms} mode={mode} showPlace={showPlace} dim={stale || !!fix} demo={demo} active={active} flash={flash}
+          ? <TwoUp text={scored.text} m={result} rooms={rooms} mode={mode} showPlace={showPlace} segments={segments} dim={stale || !!fix} demo={demo} active={active} flash={flash}
               onPick={(ref, room) => setActive({ ref, room })} onRoom={setRoom} onRemove={removeRoom} onAiView={() => setMode('ai')} />
-          : <Grid text={scored.text} m={result} rooms={rooms} mode={mode} showPlace={showPlace} dim={stale || !!fix} onPick={(ref, room) => setActive({ ref, room })} onRoom={setRoom} onRemove={removeRoom} />)}
+          : <Grid text={scored.text} m={result} rooms={rooms} mode={mode} showPlace={showPlace} segments={segments} dim={stale || !!fix} onPick={(ref, room) => setActive({ ref, room })} onRoom={setRoom} onRemove={removeRoom} />)}
 
         {result && active && result.references[active.ref] && rooms[active.room] && (
           <Evidence key={`${active.ref}`} m={result} ref_={active.ref} room={active.room} rooms={rooms} showPlace={showPlace} locMeasured={!!options?.location_measured} demo={demo}

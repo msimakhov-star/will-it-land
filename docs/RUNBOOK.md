@@ -8,6 +8,7 @@ Deadline: Fri 30 Oct 2026, 23:45 EDT (03:45 Sat UK time). After the deadline the
 | step | time | command / action | done when |
 |---|---|---|---|
 | 1 | 0:00 | `export QLOO_API_KEY=...` then `.venv/bin/python -m tools.probe` | "ALL CONTRACT CHECKS PASSED", or each FAIL fixed in `server/qloo.py` parsers (tests still green) |
+| 1b | 1:15 | if the probe's audience checks fail, write `{"k_seg": 0}` into `server/calibration.json` (the audience picker then hides itself) | picker only shown when segments really work |
 | 2 | 1:30 | `python3.12 -m modal secret create qloo QLOO_API_KEY="$QLOO_API_KEY" --force` (drops QLOO_MOCK), `cd web && npm run build && cd .. && python3.12 -m modal deploy server/modal_app.py` | `curl .../api/health` shows `"mock": false`, AND a real `POST /api/matrix` on the hosted URL returns live Qloo calls in its ledger |
 | 3 | 2:00 | `.venv/bin/python -m eval.kill_test --n 300` then `.venv/bin/python -m eval.fit` | `eval/out/kill_test.md` and `fit_report.json` exist |
 | 4 | 4:00 | `.venv/bin/python -m eval.fit --write` only if CV Spearman for `qloo` beats `no_age` (otherwise keep priors and say so) | `server/calibration.json` written, tests green |

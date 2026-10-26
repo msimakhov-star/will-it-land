@@ -100,6 +100,24 @@ def main() -> int:
     if rows:
         expect(all(k in rows[-1] for k in ("population_percentile", "population_rank_velocity")), f"trending fields the UI reads exist (got {keys(rows[-1])})")
 
+    # 7. audience segments: list them, then rank our entities for one (the "Qloo audience" room)
+    try:
+        raw = qloo.get("/v2/audiences/types", {})
+        show("/v2/audiences/types", raw)
+        types = qloo.segment_types()
+        raw = qloo.get("/v2/audiences", {"take": 10, **({"filter.parents.types": types[0]} if types else {})})
+        show("/v2/audiences (first type)", raw)
+        segs = qloo.segments(types[0] if types else None, take=10)
+    except qloo.QlooError as ex:
+        print(f"  info audiences unavailable: {ex}")
+        segs = []
+    expect(bool(segs) and all(x["id"] and x["name"] for x in segs), f"audience segments parse to id + name ({len(segs)}); if this fails set k_seg to 0 in calibration.json")
+    if segs:
+        r1 = qloo.rank_for_audience(ids + anchors, "tv_show", audiences=[segs[0]["id"]])
+        r2 = qloo.rank_for_audience(ids + anchors, "tv_show", audiences=[segs[-1]["id"]])
+        expect(len(r1) >= len(set(ids + anchors)) - 1, f"rank with signal.demographics.audiences returns affinities ({len(r1)})")
+        expect(any(abs(r1.get(k, 0) - r2.get(k, 0)) > 1e-6 for k in r1), f"affinities differ between {segs[0]['name']} and {segs[-1]['name']} (the segment changes the answer)")
+
     print("\n" + ("ALL CONTRACT CHECKS PASSED" if not failures else f"{len(failures)} FAILED:\n  - " + "\n  - ".join(failures)))
     return 1 if failures else 0
 

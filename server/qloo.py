@@ -227,7 +227,7 @@ def demographics(entity_ids: list[str]) -> dict[str, dict]:
     return out
 
 
-def rank_for_audience(entity_ids: list[str], entity_type: str, age: str | None = None, gender: str | None = None, location: str | None = None) -> dict[str, float]:
+def rank_for_audience(entity_ids: list[str], entity_type: str, age: str | None = None, gender: str | None = None, location: str | None = None, audiences: list[str] | None = None) -> dict[str, float]:
     """Affinity of the given entities for an audience, in ONE call so scores are comparable.
     Uses filter.results.entities so Qloo scores exactly our list (same shape as the harness's rank workflow)."""
     ids = list(dict.fromkeys(i for i in entity_ids if i))
@@ -238,6 +238,8 @@ def rank_for_audience(entity_ids: list[str], entity_type: str, age: str | None =
         params["signal.demographics.gender"] = gender
     if location:
         params["signal.location.query"] = location
+    if audiences:
+        params["signal.demographics.audiences"] = audiences
     out = {}
     for e in _entities(get("/v2/insights", params)):
         a = affinity(e)
@@ -272,7 +274,7 @@ def entity_tags(entity_ids: list[str], take: int = 12) -> list[dict]:
     return out
 
 
-def recommend(entity_type: str, signal_entities: list[str] | None = None, signal_tags: list[str] | None = None, tags_operator: str = "union", age: str | None = None, gender: str | None = None, location: str | None = None, min_popularity: float | None = None, take: int = 15) -> list[dict]:
+def recommend(entity_type: str, signal_entities: list[str] | None = None, signal_tags: list[str] | None = None, tags_operator: str = "union", age: str | None = None, gender: str | None = None, location: str | None = None, min_popularity: float | None = None, take: int = 15, audiences: list[str] | None = None) -> list[dict]:
     """Entities of one type that an audience over-indexes on, optionally steered by seed entities/tags."""
     params = {"filter.type": f"urn:entity:{entity_type}", "take": take}
     if signal_entities:
@@ -286,6 +288,8 @@ def recommend(entity_type: str, signal_entities: list[str] | None = None, signal
         params["signal.demographics.gender"] = gender
     if location:
         params["signal.location.query"] = location
+    if audiences:
+        params["signal.demographics.audiences"] = audiences
     if min_popularity is not None:
         params["filter.popularity.min"] = min_popularity
     out = _entities(get("/v2/insights", params))
@@ -293,6 +297,33 @@ def recommend(entity_type: str, signal_entities: list[str] | None = None, signal
         if "entity_id" not in e and e.get("id"):
             e["entity_id"] = e["id"]
     return out
+
+
+def segments(parent_type: str | None = None, take: int = 50) -> list[dict]:
+    """Qloo audience segments (/v2/audiences), optionally under one parent type: [{id, name, parent}].
+    Field names are read defensively; tools/probe.py verifies them against the live API on key day."""
+    params: dict = {"take": take}
+    if parent_type:
+        params["filter.parents.types"] = parent_type
+    data = get("/v2/audiences", params)
+    res = data.get("results", data) if isinstance(data, dict) else data
+    rows = (res.get("audiences") or res.get("entities") or []) if isinstance(res, dict) else (res or [])
+    out = []
+    for a in rows:
+        aid = a.get("entity_id") or a.get("id") or a.get("audience_id")
+        parents = a.get("parents") if isinstance(a.get("parents"), list) else []
+        parent = a.get("parent_type") or (parents[0].get("type") if parents and isinstance(parents[0], dict) else None) or parent_type
+        if aid and a.get("name"):
+            out.append({"id": aid, "name": a["name"], "parent": parent})
+    return out
+
+
+def segment_types() -> list[str]:
+    """Parent types of Qloo audience segments (/v2/audiences/types)."""
+    data = get("/v2/audiences/types", {})
+    res = data.get("results", data) if isinstance(data, dict) else data
+    rows = (res.get("audience_types") or res.get("types") or []) if isinstance(res, dict) else (res or [])
+    return [r if isinstance(r, str) else (r.get("type") or r.get("id") or r.get("name")) for r in rows if r]
 
 
 if __name__ == "__main__":

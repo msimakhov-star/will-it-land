@@ -36,7 +36,7 @@ def _prewarm_examples():
             a = pipeline.Audience(**{k: v for k, v in ex["audience"].items() if k in ("age", "gender", "location")})
             memos.check_body(ex["text"], a, False)
             if ex.get("matrix"):
-                auds = [pipeline.Audience(x.get("age"), x.get("gender"), x.get("location"), x.get("name")) for x in ex["matrix"]]
+                auds = [pipeline.Audience(x.get("age"), x.get("gender"), x.get("location"), x.get("name"), x.get("segment"), x.get("segment_name")) for x in ex["matrix"]]
                 memos.matrix_body(ex["text"], auds)
                 memos.guesses_body(ex["text"], auds)
                 memos.localise_all_body(ex["text"], auds)
@@ -105,9 +105,9 @@ def _g(request: Request):
 # ---- models --------------------------------------------------------------------------------------------
 
 
-def _audience(age=None, gender=None, location=None, name=None) -> pipeline.Audience:
+def _audience(age=None, gender=None, location=None, name=None, segment=None, segment_name=None) -> pipeline.Audience:
     try:
-        return pipeline.Audience(age, gender, location, name)
+        return pipeline.Audience(age, gender, location, name, segment, segment_name)
     except ValueError as ex:
         raise HTTPException(400, str(ex))
 
@@ -117,9 +117,11 @@ class AudienceIn(BaseModel):
     gender: str | None = None
     location: str | None = Field(default=None, max_length=80)
     name: str | None = Field(default=None, max_length=60)
+    segment: str | None = Field(default=None, max_length=120)
+    segment_name: str | None = Field(default=None, max_length=60)
 
     def to(self) -> pipeline.Audience:
-        return _audience(self.age, self.gender, self.location, self.name)
+        return _audience(self.age, self.gender, self.location, self.name, self.segment, self.segment_name)
 
 
 class CheckRequest(BaseModel):
@@ -194,7 +196,33 @@ def presets():
 def options():
     P = pipeline.scoring.P
     return {"ages": [{"value": a, "label": pipeline.AGE_LABELS[a]} for a in pipeline.AUDIENCE_AGES], "genders": ["male", "female"], "types": pipeline.TYPES, "max_audiences": MAX_AUDIENCES,
-            "location_weight": P.get("k_loc"), "location_measured": bool(P.get("loc_measured")), "calibrated": P.get("calibrated")}
+            "location_weight": P.get("k_loc"), "location_measured": bool(P.get("loc_measured")), "calibrated": P.get("calibrated"),
+            "segment_weight": P.get("k_seg", 0), "segment_measured": bool(P.get("seg_measured"))}
+
+
+_segments: dict = {}
+
+
+@app.get("/api/segments")
+def segments():
+    """Qloo audience segments for the room picker; empty (and the picker hidden) if the endpoint is unavailable."""
+    hit = _segments.get("v")
+    if hit and time.time() - hit[0] < 3600:
+        return hit[1]
+    try:
+        types = qloo.segment_types()[:12]
+        rows = [x for parts in qloo.pmap(lambda t: qloo.segments(t, take=40), types) for x in parts] if types else qloo.segments(take=100)
+    except qloo.QlooError:
+        rows = []
+    seen, out = set(), []
+    for r in rows:
+        if r["id"] not in seen:
+            seen.add(r["id"])
+            out.append(r)
+    body = {"segments": out[:300]}
+    if out:
+        _segments["v"] = (time.time(), body)
+    return body
 
 
 @app.post("/api/check")

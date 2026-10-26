@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import type { Cell, LocaliseAllResult, MatrixResult, Ref, Room, Summary, Verdict } from './types'
+import type { Cell, LocaliseAllResult, MatrixResult, Ref, Room, Segment, Summary, Verdict } from './types'
 import { AGES, AgeStrip, LandBar, ScoreChip, SourceBadge, TONE, TYPE_LABEL, Waterfall, ageLabel, headline, verdictOf } from './ui'
 import { utf16Offsets } from './api'
 
@@ -17,7 +17,7 @@ type Model = MatrixResult['model']
 
 export function roomLabel(r: Room, showPlace: boolean) {
   if (r.name) return r.name
-  const bits = [r.age ? ageLabel(r.age) : 'Any age', r.gender === 'male' ? 'men' : r.gender === 'female' ? 'women' : null, showPlace ? r.location : null]
+  const bits = [r.segment ? r.segment_name : null, r.age ? ageLabel(r.age) : (r.segment ? null : 'Any age'), r.gender === 'male' ? 'men' : r.gender === 'female' ? 'women' : null, showPlace ? r.location : null]
   const s = bits.filter(Boolean).join(', ')
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
@@ -102,8 +102,15 @@ export function MarkedText(p: { text: string; refs: Ref[]; cells: (Cell | null)[
   return <div className="max-w-[62ch] whitespace-pre-wrap text-[17px] leading-[1.8] [text-wrap:pretty]">{parts}</div>
 }
 
-export function RoomHeader(p: { room: Room; label: string; showPlace: boolean; onChange: (r: Room) => void; onRemove?: () => void; compact?: boolean }) {
+const pretty = (t: string | null) => { const s = (t ?? 'other').split(':').pop()!.replace(/_/g, ' '); return s.charAt(0).toUpperCase() + s.slice(1) }
+
+export function RoomHeader(p: { room: Room; label: string; showPlace: boolean; segments?: Segment[]; onChange: (r: Room) => void; onRemove?: () => void; compact?: boolean }) {
   const r = p.room
+  const groups = useMemo(() => {
+    const g = new Map<string, Segment[]>()
+    for (const x of p.segments ?? []) g.set(pretty(x.parent), [...(g.get(pretty(x.parent)) ?? []), x])
+    return [...g.entries()]
+  }, [p.segments])
   const pill = 'rounded-full px-2.5 py-1 text-xs transition pointer-coarse:px-3 pointer-coarse:py-2.5'
   return (
     <div className="space-y-2">
@@ -113,6 +120,14 @@ export function RoomHeader(p: { room: Room; label: string; showPlace: boolean; o
             className={`${pill} ${r.age === v ? 'bg-ink text-paper' : 'bg-white text-ink ring-1 ring-line hover:ring-ink/40'}`}>{p.compact ? s : l}</button>
         ))}
       </div>
+      {groups.length > 0 && (
+        <select value={r.segment ?? ''} aria-label={`Audience, ${p.label}`}
+          onChange={e => { const x = p.segments!.find(s => s.id === e.target.value); p.onChange({ ...r, name: null, segment: x?.id ?? null, segment_name: x?.name ?? null }) }}
+          className="w-full rounded-full bg-white px-3 py-1 text-xs ring-1 ring-line outline-none focus:ring-ink/50 pointer-coarse:py-2.5 pointer-coarse:text-base">
+          <option value="">Any audience (no Qloo audience segment)</option>
+          {groups.map(([g, xs]) => <optgroup key={g} label={g}>{xs.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}</optgroup>)}
+        </select>
+      )}
       <div className={`flex flex-wrap items-center gap-1.5 ${p.compact ? 'flex-col items-stretch' : ''}`}>
         {p.showPlace && (
           <input list="wil-cities" value={r.location ?? ''} placeholder="any place" aria-label={`City or country, ${p.label}`}
@@ -133,7 +148,7 @@ export function RoomHeader(p: { room: Room; label: string; showPlace: boolean; o
   )
 }
 
-export function TwoUp(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Scoring; showPlace: boolean; dim: boolean; demo: boolean; active: { ref: number; room: number } | null; flash: { ref: number; room: number } | null; onPick: (ref: number, room: number) => void; onRoom: (i: number, r: Room) => void; onRemove: (i: number) => void; onAiView: () => void }) {
+export function TwoUp(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Scoring; showPlace: boolean; segments?: Segment[]; dim: boolean; demo: boolean; active: { ref: number; room: number } | null; flash: { ref: number; room: number } | null; onPick: (ref: number, room: number) => void; onRoom: (i: number, r: Room) => void; onRemove: (i: number) => void; onAiView: () => void }) {
   const [tab, setTab] = useState(0)
   const t = Math.min(tab, p.rooms.length - 1)
   const two = p.rooms.length > 1
@@ -179,7 +194,7 @@ export function TwoUp(p: { text: string; m: MatrixResult; rooms: Room[]; mode: S
                 <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full px-2 py-1 text-xs text-muted ring-1 ring-line hover:text-ink pointer-coarse:py-2">
                   <span aria-hidden className="transition group-open:rotate-90">▸</span> Change this room
                 </summary>
-                <div className="mt-3"><RoomHeader room={room} label={label} showPlace={p.showPlace} onChange={r => p.onRoom(j, r)} onRemove={two ? () => p.onRemove(j) : undefined} /></div>
+                <div className="mt-3"><RoomHeader room={room} label={label} showPlace={p.showPlace} segments={p.segments} onChange={r => p.onRoom(j, r)} onRemove={two ? () => p.onRemove(j) : undefined} /></div>
               </details>
               <div className="mt-4 border-t border-line pt-4">
                 <MarkedText text={p.text} refs={p.m.references} cells={cells} mode={p.mode} model={p.m.model} room={label}
@@ -193,7 +208,7 @@ export function TwoUp(p: { text: string; m: MatrixResult; rooms: Room[]; mode: S
   )
 }
 
-export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Scoring; showPlace: boolean; dim: boolean; onPick: (ref: number, room: number) => void; onRoom: (i: number, r: Room) => void; onRemove: (i: number) => void }) {
+export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Scoring; showPlace: boolean; segments?: Segment[]; dim: boolean; onPick: (ref: number, room: number) => void; onRoom: (i: number, r: Room) => void; onRemove: (i: number) => void }) {
   const off = useMemo(() => utf16Offsets(p.text), [p.text])
   const [scrolled, setScrolled] = useState(false)
   const lineOf = (r: Ref) => {
@@ -225,7 +240,7 @@ export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Sc
                     {s && <div className="mt-1 text-[11px] text-muted">{s.misses + s.risky ? `${s.misses + s.risky} of ${s.checked} weak` : `all ${s.checked} land`}</div>}
                     <details className="mt-1">
                       <summary className="cursor-pointer text-[11px] text-muted hover:text-ink pointer-coarse:py-2">Change room</summary>
-                      <div className="mt-2"><RoomHeader room={room} label={label} compact showPlace={p.showPlace} onChange={r => p.onRoom(j, r)} onRemove={p.rooms.length > 1 ? () => p.onRemove(j) : undefined} /></div>
+                      <div className="mt-2"><RoomHeader room={room} label={label} compact showPlace={p.showPlace} segments={p.segments} onChange={r => p.onRoom(j, r)} onRemove={p.rooms.length > 1 ? () => p.onRemove(j) : undefined} /></div>
                     </details>
                   </th>
                 )
@@ -426,7 +441,7 @@ export function Evidence(p: { m: MatrixResult; ref_: number; room: number; rooms
         {c && others.length > 0 && Math.abs(Math.max(...others) - c.score) >= 25 && (
           <p className="mt-1 text-xs text-muted">Same reference, other rooms: up to {Math.round(Math.max(...others))}. The room changes the answer by {Math.round(Math.abs(Math.max(...others) - c.score))} points.</p>
         )}
-        {c && <div className="mt-4"><Waterfall parts={c.parts} showGender={!!room.gender} showPlace={p.showPlace && !!room.location} locMeasured={p.locMeasured} demo={p.demo} /></div>}
+        {c && <div className="mt-4"><Waterfall parts={c.parts} showGender={!!room.gender} showPlace={p.showPlace && !!room.location} showSegment={!!room.segment} locMeasured={p.locMeasured} demo={p.demo} /></div>}
         {r.age_skew && (
           <div className="mt-5">
             <div className="mb-1 text-xs font-medium text-muted">Which ages are keener (green) or less keen (red){p.demo ? ', demo data' : ', from Qloo age data'}</div>
@@ -456,6 +471,7 @@ function plain(c: Cell, room: Room, showPlace: boolean): string {
   const neg: string[] = [], pos: string[] = []
   if (room.age && Math.abs(c.parts.age) >= 3) (c.parts.age < 0 ? neg : pos).push(`${who} are ${c.parts.age < 0 ? 'less' : 'more'} keen`)
   if (showPlace && room.location && c.location != null && Math.abs(c.parts.location) >= 3) (c.parts.location < 0 ? neg : pos).push(c.parts.location > 0 ? `${room.location} helps` : `it is weak in ${room.location}`)
+  if (room.segment && c.segment != null && Math.abs(c.parts.segment ?? 0) >= 3) ((c.parts.segment ?? 0) < 0 ? neg : pos).push((c.parts.segment ?? 0) > 0 ? `${room.segment_name ?? 'this audience'} like it more than most` : `${room.segment_name ?? 'this audience'} are cooler on it`)
   const tail = neg.length ? `, but ${neg.join(' and ')}` : ''
   const plus = pos.length ? `${neg.length ? '. On the plus side, ' : ', and '}${pos.join(' and ')}` : ''
   const s = `${known}${tail}${plus}.`

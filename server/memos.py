@@ -74,11 +74,11 @@ ALL = (CHECKS, SWAPS, MATRICES, GUESSES, STANDINS, LOCALISED, LOCALISED_ALL)
 
 
 def aud_key(auds) -> str:
-    return json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name} for a in auds], sort_keys=True)
+    return json.dumps([{"age": a.age, "gender": a.gender, "location": a.location, "name": a.name, "segment": a.segment} for a in auds], sort_keys=True)
 
 
 def check_body(text: str, a: pipeline.Audience, swaps: bool, guard=None) -> str:
-    return CHECKS.get_or(("check", text, a.age, a.gender, a.location, swaps), lambda: pipeline.check(text, a, swaps=swaps), guard)
+    return CHECKS.get_or(("check", text, a.age, a.gender, a.location, a.segment, swaps), lambda: pipeline.check(text, a, swaps=swaps), guard)
 
 
 def swaps_body(text: str, a: pipeline.Audience, guard=None) -> str:

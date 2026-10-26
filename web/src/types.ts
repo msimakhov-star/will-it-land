@@ -1,6 +1,6 @@
 export type Verdict = 'lands' | 'risky' | 'misses' | 'unknown'
 
-export type Parts = { base: number; age: number; gender: number; location: number; score: number }
+export type Parts = { base: number; age: number; gender: number; location: number; segment?: number; score: number }
 
 export type Cell = {
   score: number
@@ -8,6 +8,7 @@ export type Cell = {
   why: string
   affinity: number | null
   location: number | null
+  segment?: number | null
   age_affinity: number | null
   parts: Parts
   llm_guess?: number | null
@@ -40,7 +41,8 @@ export type Ref = {
   swaps: Swap[]
 }
 
-export type Room = { name?: string | null; age: string | null; gender: string | null; location: string | null }
+export type Room = { name?: string | null; age: string | null; gender: string | null; location: string | null; segment?: string | null; segment_name?: string | null }
+export type Segment = { id: string; name: string; parent: string | null }
 
 export type Summary = { found: number; checked: number; not_in_qloo: number; lands: number; risky: number; misses: number }
 
@@ -72,4 +74,4 @@ export type LocaliseAllResult = {
 export type Example = { id: string; title: string; kind: string; text: string; audience: Room; matrix?: Room[] }
 
 export type Health = { ok: boolean; qloo_key: boolean; mock: boolean; llm: string; model: string }
-export type Options = { ages: { value: string; label: string }[]; max_audiences: number; location_weight: number; location_measured: boolean; calibrated: boolean }
+export type Options = { ages: { value: string; label: string }[]; max_audiences: number; location_weight: number; location_measured: boolean; calibrated: boolean; segment_weight?: number; segment_measured?: boolean }

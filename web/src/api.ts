@@ -1,4 +1,4 @@
-import type { Example, Health, LocaliseAllResult, MatrixResult, Options, Room } from './types'
+import type { Example, Health, LocaliseAllResult, MatrixResult, Options, Room, Segment } from './types'
 
 async function errText(r: Response): Promise<string> {
   const d = await r.json().catch(() => null)
@@ -27,12 +27,13 @@ async function get<T>(path: string): Promise<T> {
   return r.json() as Promise<T>
 }
 
-const clean = (rooms: Room[]) => rooms.map(r => ({ name: r.name || null, age: r.age || null, gender: r.gender || null, location: r.location?.trim() || null }))
+const clean = (rooms: Room[]) => rooms.map(r => ({ name: r.name || null, age: r.age || null, gender: r.gender || null, location: r.location?.trim() || null, segment: r.segment || null, segment_name: r.segment ? r.segment_name || null : null }))
 
 export const api = {
   health: () => get<Health>('/api/health'),
   options: () => get<Options>('/api/options'),
   examples: () => get<Example[]>('/api/examples'),
+  segments: () => get<{ segments: Segment[] }>('/api/segments'),
   matrix: (text: string, rooms: Room[], signal?: AbortSignal) => post<MatrixResult>('/api/matrix', { text, audiences: clean(rooms) }, signal),
   guesses: (text: string, rooms: Room[], signal?: AbortSignal) => post<{ guesses: (number | null)[][] }>('/api/guesses', { text, audiences: clean(rooms) }, signal),
   landEverywhere: (text: string, rooms: Room[], signal?: AbortSignal) => post<LocaliseAllResult>('/api/localise_all', { text, audiences: clean(rooms) }, signal),

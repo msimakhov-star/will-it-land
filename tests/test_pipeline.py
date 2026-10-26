@@ -336,3 +336,20 @@ def test_mock_matches_qualified_names():
     mock._respond("/search", {"query": "Domino's Pizza", "types": "urn:entity:brand"})
     row = mock._respond("/v2/insights", {"filter.type": "urn:demographics", "signal.interests.entities": mock._eid("Domino's Pizza")})["results"]["demographics"][0]
     assert row["query"]["age"]["55_and_older"] == mock.KNOWN["domino's"][2]
+
+
+def test_audience_segment_term(monkeypatch):
+    """A Qloo audience segment adds its own term (one rank call per type, normalised against anchors) and shows in the label."""
+    from server import pipeline
+
+    fake_llm(monkeypatch, REFS)
+    gamers = pipeline.Audience("35_to_44", None, None, None, "mock-aud-gamers", "Gamers")
+    plain = pipeline.Audience("35_to_44")
+    m = pipeline.matrix(TEXT, [gamers, plain])
+    assert m["audiences"][0]["label"].startswith("Gamers")
+    seg = [row[0] for row in m["cells"] if row[0]]
+    assert seg and all("segment" in c["parts"] for c in seg)
+    assert any(c["segment"] is not None for c in seg)
+    assert all(row[1] is None or row[1]["segment"] is None for row in m["cells"])
+    with pytest.raises(ValueError):
+        pipeline.Audience(segment="bad id; drop")

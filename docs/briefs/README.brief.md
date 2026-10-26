@@ -1,6 +1,6 @@
 # Will It Land
 
-Spellcheck for cultural references. Paste a stand-up bit, an ad script, a toast or a speech, pick the rooms you are playing (an age band, optionally men or women, a city or country), and Will It Land scores every reference for that audience from Qloo's taste data. Weak references get a stand-in, scored the same way, and the line is rewritten.
+Spellcheck for cultural references. Paste a stand-up bit, an ad script, a toast or a speech, pick the rooms you are playing (an age band, optionally men or women, a city or country, optionally a Qloo audience segment), and Will It Land scores every reference for that audience from Qloo's taste data. Weak references get a stand-in, scored the same way, and the line is rewritten.
 
 Live app: https://m-simakhov--will-it-land-web.us-east.modal.run (built for the Qloo Agentic Hackathon, October 2026). Status while the hackathon API key is pending: the live app runs on demo data and says so in its header.
 
@@ -30,6 +30,7 @@ Live app: https://m-simakhov--will-it-land-web.us-east.modal.run (built for the 
 | place affinity, ranked against anchors | /v2/insights with filter.results.entities and signal.location.query |
 | tags that characterise a reference | /v2/insights with filter.type=urn:tag |
 | stand-ins the room over-indexes on | /v2/insights with signal.interests.tags, signal.interests.entities, signal.demographics.age and signal.location.query |
+| audience segments, and ranking for one | /v2/audiences, then /v2/insights with signal.demographics.audiences |
 | six-month direction (display only) | /v2/trending |
 
 ## How we test it

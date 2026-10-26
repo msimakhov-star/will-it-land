@@ -18,6 +18,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import re
 import threading
 from collections import OrderedDict
 from dataclasses import asdict, dataclass, field
@@ -87,6 +88,8 @@ class Audience:
     gender: str | None = None  # male | female | None
     location: str | None = None  # free text locality, e.g. "London", "Texas", "United Kingdom"
     name: str | None = None  # optional display name, e.g. "Tour stop: Leeds"
+    segment: str | None = None  # a Qloo audience id (signal.demographics.audiences), e.g. nurses, gamers, new parents
+    segment_name: str | None = None  # its display name
 
     def __post_init__(self):
         self.age = (self.age or "").strip().lower() or None
@@ -94,6 +97,10 @@ class Audience:
         self.gender = {"men": "male", "man": "male", "women": "female", "woman": "female"}.get(g, g) or None
         self.location = (self.location or "").strip()[:80] or None
         self.name = (self.name or "").strip()[:60] or None
+        self.segment = (self.segment or "").strip()[:120] or None
+        self.segment_name = (self.segment_name or "").strip()[:60] or None if self.segment else None
+        if self.segment and not re.fullmatch(r"[\w:.\-]+", self.segment):
+            raise ValueError("segment must be a Qloo audience id")
         if self.age is not None and self.age not in AUDIENCE_AGES:
             raise ValueError(f"age must be one of {', '.join(AUDIENCE_AGES)}")
         if self.gender is not None and self.gender not in ("male", "female"):
@@ -102,12 +109,12 @@ class Audience:
     def label(self) -> str:
         if self.name:
             return self.name
-        bits = [AGE_LABELS.get(self.age, self.age) if self.age else None, {"male": "men", "female": "women"}.get(self.gender or "", None), self.location]
+        bits = [self.segment_name if self.segment else None, AGE_LABELS.get(self.age, self.age) if self.age else None, {"male": "men", "female": "women"}.get(self.gender or "", None), self.location]
         return ", ".join(b for b in bits if b) or "general audience"
 
     def describe(self) -> str:
         """Plain description for prompts, without the display name."""
-        return Audience(self.age, self.gender, self.location).label()
+        return Audience(self.age, self.gender, self.location, None, self.segment, self.segment_name).label()
 
 
 @dataclass
@@ -392,13 +399,32 @@ def score_entities(items: list[dict], audience: Audience) -> dict[str, dict]:
         for a, l in qloo.pmap(per_type, sorted({i["type"] for i in items})):
             affs.update(a)
             loc_rel.update(l)
+    seg_rel: dict[str, float] = {}
+    if audience.segment:
+        def seg_type(t):
+            ids = sorted({i["entity_id"] for i in items if i["type"] == t})
+            anc = anchors_for(t)
+            if len(anc) < MIN_ANCHORS:
+                return {}
+            try:
+                res = qloo.rank_for_audience(ids + anc, t, audiences=[audience.segment])  # segment only, like the place term
+            except qloo.QlooError:
+                return {}
+            ref_vals = sorted(res[a] for a in anc if a in res)
+            if len(ref_vals) < MIN_ANCHORS or ref_vals[0] == ref_vals[-1]:
+                return {}
+            return {k: sum(v > x for x in ref_vals) / len(ref_vals) - 0.5 for k, v in res.items() if k in ids}
+
+        for rel in qloo.pmap(seg_type, sorted({i["type"] for i in items})):
+            seg_rel.update(rel)
     out = {}
     for i in items:
         e = i["entity_id"]
         a = float((i.get("age_skew") or {}).get(audience.age, 0) or 0) if audience.age else 0.0
         g = float((i.get("gender_skew") or {}).get(audience.gender, 0) or 0) if audience.gender else 0.0
         loc = loc_rel.get(e)
-        parts = scoring.components(i.get("popularity"), a, g, loc)
+        seg = seg_rel.get(e)
+        parts = scoring.components(i.get("popularity"), a, g, loc, seg=seg)
         s = parts["score"]
         bits = [f"known at the {_ordinal(int(100 * (i.get('popularity') or 0)))} percentile"]
         if audience.age and i.get("age_skew"):
@@ -407,7 +433,9 @@ def score_entities(items: list[dict], audience: Audience) -> dict[str, dict]:
             bits.append(f"{'over' if g >= 0 else 'under'}-indexes with {'men' if audience.gender == 'male' else 'women'} ({g:+.2f})")
         if loc is not None:
             bits.append(f"{'strong' if loc > 0.1 else 'weak' if loc < -0.1 else 'average'} in {audience.location}")
-        out[e] = {"score": s, "verdict": verdict_for(s), "why": "; ".join(bits), "affinity": affs.get(e), "location": loc, "age_affinity": a if audience.age else None, "parts": parts}
+        if seg is not None:
+            bits.append(f"{'strong' if seg > 0.1 else 'weak' if seg < -0.1 else 'average'} with {audience.segment_name or 'this audience'}")
+        out[e] = {"score": s, "verdict": verdict_for(s), "why": "; ".join(bits), "affinity": affs.get(e), "location": loc, "segment": seg, "age_affinity": a if audience.age else None, "parts": parts}
     return out
 
 
@@ -454,7 +482,7 @@ def candidate_pool(text: str, ref: Reference, audiences: list[Audience], context
             return []
         seeds = [ref.entity_id] + [i for i in (context_ids or []) if i and i != ref.entity_id][:3]
         try:
-            ents = qloo.recommend(ref.type, signal_entities=seeds, signal_tags=[t["tag_id"] for t in picked], age=audience.age, gender=audience.gender, location=audience.location, min_popularity=STANDIN_MIN_POP, take=12)
+            ents = qloo.recommend(ref.type, signal_entities=seeds, signal_tags=[t["tag_id"] for t in picked], age=audience.age, gender=audience.gender, location=audience.location, min_popularity=STANDIN_MIN_POP, take=12, audiences=[audience.segment] if audience.segment else None)
         except qloo.QlooError:
             return []
         ents = [e for e in ents if qloo.eid(e) and qloo.eid(e) != ref.entity_id and e.get("name")]
@@ -595,7 +623,7 @@ def check(text: str, audience: Audience, swaps: bool = True) -> dict:
     t = time.time()
     refs = prepare(text)
     timings["prepare"] = round(time.time() - t, 1); t = time.time()
-    band_auds = [Audience(None if k == "any" else k, audience.gender, audience.location) for k in BAND_KEYS]
+    band_auds = [Audience(None if k == "any" else k, audience.gender, audience.location, None, audience.segment, audience.segment_name) for k in BAND_KEYS]
     jobs = [lambda a=a: cells_for(refs, a) for a in band_auds] + [lambda: guesses(refs, band_auds)]
     res = qloo.pmap(lambda f: f(), jobs, workers=8)
     band_cells, band_guess = res[:-1], res[-1]
@@ -620,7 +648,7 @@ def check(text: str, audience: Audience, swaps: bool = True) -> dict:
         "references": [asdict(r) for r in refs],
         "bands": bands,
         "band_summaries": {k: _summary(v, len(refs)) for k, v in bands.items()},
-        "model": {k: scoring.P[k] for k in ("a", "b", "k_age", "k_gender", "k_loc", "lands", "misses", "calibrated", "source")},
+        "model": {k: scoring.P.get(k) for k in ("a", "b", "k_age", "k_gender", "k_loc", "k_seg", "lands", "misses", "calibrated", "source")},
     }
 
 

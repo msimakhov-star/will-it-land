@@ -23,7 +23,7 @@ def _aud(d: dict | None):
     from . import pipeline
 
     d = d or {}
-    return pipeline.Audience(d.get("age"), d.get("gender"), d.get("location"), d.get("name"))
+    return pipeline.Audience(d.get("age"), d.get("gender"), d.get("location"), d.get("name"), d.get("segment"), d.get("segment_name"))
 
 
 @mcp.tool()

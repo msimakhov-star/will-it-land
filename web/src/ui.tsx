@@ -56,27 +56,28 @@ export function headline(label: string, s: Summary): string {
   return `${label}: ${s.risky} of ${s.checked} risky`
 }
 
-const PART_LABEL: Record<keyof Omit<Parts, 'score'>, [string, string]> = {
+const PART_LABEL: Record<Exclude<keyof Parts, 'score'>, [string, string]> = {
   base: ['How well known it is', 'Qloo popularity'],
   age: ['Fit with this age band', 'Qloo age data'],
   gender: ['Fit with men or women', 'Qloo gender data'],
   location: ['Strength in this place', 'Qloo place rank'],
+  segment: ['Fit with this audience', 'Qloo audience data'],
 }
 
 /** Sequential breakdown of the score in points: base, then each audience term (see server/scoring.py). */
-export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boolean; locMeasured?: boolean; demo?: boolean }) {
-  const rows = (['base', 'age', ...(p.showGender ? ['gender'] : []), ...(p.showPlace ? ['location'] : [])] as (keyof Omit<Parts, 'score'>)[])
+export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boolean; showSegment?: boolean; locMeasured?: boolean; demo?: boolean }) {
+  const rows = (['base', 'age', ...(p.showGender ? ['gender'] : []), ...(p.showPlace ? ['location'] : []), ...(p.showSegment ? ['segment'] : [])] as Exclude<keyof Parts, 'score'>[])
   let acc = 0
   return (
     <div className="space-y-1.5">
       {rows.map(k => {
-        const v = p.parts[k]
+        const v = p.parts[k] ?? 0
         const from = k === 'base' ? 0 : acc
         acc = k === 'base' ? v : acc + v
         const lo = Math.min(from, acc), hi = Math.max(from, acc)
         return (
           <div key={k} className="grid grid-cols-[9.5rem_1fr_3rem] items-center gap-2 text-xs">
-            <div className="leading-tight text-ink">{PART_LABEL[k][0]}<div className="text-[11px] text-muted">{p.demo ? 'demo data' : `from ${PART_LABEL[k][1]}`}{k === 'location' && !p.locMeasured ? ', weight set by hand' : ''}</div></div>
+            <div className="leading-tight text-ink">{PART_LABEL[k][0]}<div className="text-[11px] text-muted">{p.demo ? 'demo data' : `from ${PART_LABEL[k][1]}`}{(k === 'location' && !p.locMeasured) || k === 'segment' ? ', weight set by hand' : ''}</div></div>
             <div className="relative h-3 rounded bg-line/70" aria-hidden>
               <div className="absolute inset-y-0 left-1/2 w-px bg-ink/15" />
               <div className={`absolute top-0 h-3 rounded ${k === 'base' ? 'bg-ink/70' : v >= 0 ? 'bg-lands' : 'bg-misses'}`} style={{ left: `${lo}%`, width: `${Math.max(0.8, hi - lo)}%` }} />

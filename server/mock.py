@@ -32,6 +32,21 @@ LOCAL = {
     "mr. brightside": {"leeds": 0.9, "glasgow": 0.9, "new york": 0.8, "atlanta": 0.7, "austin": 0.75, "toronto": 0.85},
     "manhattan": {"new york": 0.95, "london": 0.4},
 }
+# demo audience segments (the real list comes from /v2/audiences once the key arrives) and what each over-indexes on
+SEGMENTS = [
+    ("mock-aud-gamers", "Gamers", "urn:audience:hobbies_and_interests"),
+    ("mock-aud-nurses", "Nurses", "urn:audience:professional_area"),
+    ("mock-aud-parents", "New parents", "urn:audience:life_stage"),
+    ("mock-aud-students", "University students", "urn:audience:life_stage"),
+    ("mock-aud-football", "Football fans", "urn:audience:hobbies_and_interests"),
+    ("mock-aud-foodies", "Food lovers", "urn:audience:hobbies_and_interests"),
+]
+SEG_LIFT = {
+    "mock-aud-gamers": {"fortnite": 0.95, "minecraft": 0.95, "myspace": 0.1, "seinfeld": 0.3, "le creuset": 0.05, "peloton": 0.2},
+    "mock-aud-parents": {"peloton": 0.8, "le creuset": 0.7, "fortnite": 0.4, "domino's": 0.8},
+    "mock-aud-students": {"fortnite": 0.8, "spotify wrapped": 0.95, "blockbuster": 0.05, "nokia": 0.1, "greggs": 0.9},
+    "mock-aud-foodies": {"le creuset": 0.95, "the great british bake off": 0.95, "greggs": 0.3, "domino's": 0.2},
+}
 _SEEN: dict[str, str] = {}  # entity id -> the name that was searched, so later calls know what the entity is
 SUGGEST = {  # what the fake "recommend" returns per type
     "brand": ["Netflix", "HMV", "TikTok", "Facebook", "iPhone"],
@@ -101,6 +116,12 @@ def respond(path: str, params: dict) -> dict:
 
 
 def _respond(path: str, params: dict) -> dict:
+    if path == "/v2/audiences/types":
+        return {"success": True, "results": {"audience_types": sorted({p for _, _, p in SEGMENTS})}}
+    if path == "/v2/audiences":
+        parent = params.get("filter.parents.types")
+        rows = [{"entity_id": i, "name": n, "parent_type": p} for i, n, p in SEGMENTS if not parent or p == parent]
+        return {"success": True, "results": {"audiences": rows}}
     if path == "/search":
         q = params["query"]
         t = (params.get("types") or "urn:entity:tv_show").split(",")[0]
@@ -131,6 +152,15 @@ def _respond(path: str, params: dict) -> dict:
         etype = ftype.split(":")[-1]
         if params.get("filter.results.entities"):
             loc = (params.get("signal.location.query") or "").lower()
+            seg = params.get("signal.demographics.audiences") or ""
+            if seg:
+                lift = SEG_LIFT.get(seg.split(",")[0], {})
+
+                def aff(i):
+                    v = next((x for k, x in lift.items() if _name(i).startswith(k)), None)
+                    return v if v is not None else round(_h(i + seg), 3)
+
+                return {"success": True, "results": {"entities": [{"entity_id": i, "name": _name(i), "query": {"affinity": aff(i)}} for i in ids]}}
 
             def aff(i):
                 local = next((v for k, v in LOCAL.items() if _name(i).startswith(k)), None)

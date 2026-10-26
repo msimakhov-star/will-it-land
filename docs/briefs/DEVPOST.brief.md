@@ -10,7 +10,7 @@ Until the hackathon Qloo key arrives, the live app runs on clearly labelled demo
 Writers never perform for the average room. A touring comic plays 25-year-olds in Leeds on Friday and in Atlanta on Monday. An ad team ships one script into six markets. A best man speaks to two tables: his friends and the grandparents. Each of them checks references by gut, or asks a language model, and language models tend to reach for the same handful of shows, artists and brands whatever the audience. What none of them has is data on which references a specific audience knows and likes, and which stand-in would play the same part for them. Qloo has that data.
 
 ## What it does
-Paste a script and pick the rooms: an age band, optionally men or women, a city or country. Will It Land marks every cultural reference like a spellchecker, separately for each room: a solid underline lands, dotted is risky, wavy will likely miss, dashed is not in Qloo. Each room gets a headline ("Under 25s in London: 3 of 7 will likely miss") and the page names the biggest split: the same reference scoring very differently in two rooms.
+Paste a script and pick the rooms: an age band, optionally men or women, a city or country, and optionally a Qloo audience segment such as gamers or new parents. Will It Land marks every cultural reference like a spellchecker, separately for each room: a solid underline lands, dotted is risky, wavy will likely miss, dashed is not in Qloo. Each room gets a headline ("Under 25s in London: 3 of 7 will likely miss") and the page names the biggest split: the same reference scoring very differently in two rooms.
 
 One click, "Make it land in both rooms", runs the agent. For each weak reference it gathers stand-ins from Qloo's taste graph and from the language model, scores every candidate in every room, picks the one whose weakest room scores best, rewrites the line and re-scores the whole script. It keeps the rewrite only if no room gets worse. The result appears as document-style suggestions inside each line, with the part each reference plays ("a dead video-rental chain") and where each stand-in came from. It says plainly that the score measures recognition, not whether the line is funny.
 
@@ -33,6 +33,7 @@ Qloo calls:
 - /v2/insights with filter.results.entities and signal.location.query ranks the references in each place against eight fixed anchor entities, so place scores compare across calls.
 - /v2/insights with urn:tag gives the tags that characterise a weak reference.
 - /v2/insights with those tags plus the room's age and place finds stand-ins the room over-indexes on.
+- /v2/audiences lists Qloo audience segments; /v2/insights with signal.demographics.audiences ranks the references for a chosen segment, against the same anchors as place.
 - /v2/trending gives a six-month direction, shown on the card and never scored.
 
 The score is a small logistic model in server/scoring.py.
@@ -51,7 +52,7 @@ The method was fixed in eval/PREREG.md before any real data arrived, and results
 
 ## Known limitations
 - The score is an estimate for a group, never a statement about one person, and it does not judge whether a joke is funny.
-- Until the tests above run, the weights are set by hand and are not calibrated.
+- Until the tests above run, the weights are set by hand and are not calibrated. The audience-segment weight is set by hand and is not covered by the tests.
 - The YouGov test covers US adults in three generations, roughly 30 and over; under-25s are covered only by the survey.
 - References Qloo has no entity for (slang, memes, very local things) are marked "not in Qloo" and not scored.
 - A stand-in can be well known in every room and still break the joke; the writer decides.
@@ -66,7 +67,7 @@ One rewrite that works in every room at once, with every stand-in scored in ever
 A taste graph can tell you which stand-in a specific room is more likely to know and like, which a model alone cannot check.
 
 ## What's next
-Rooms defined by Qloo audiences (for example "nurses in Chicago") as well as age and place, a printable localisation report for teams shipping one script to many markets, and a browser extension for documents and scripts.
+A printable localisation report for teams shipping one script to many markets, and a browser extension for documents and scripts.
 
 ## Built with
 python, fastapi, react, vite, tailwind, qloo, anthropic, gemini, modal, mcp
