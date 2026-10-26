@@ -24,6 +24,11 @@ TOUR = [
     {"name": "Toronto", "age": "25_to_29", "gender": None, "location": "Toronto"},
 ]
 
+TABLES = [
+    {"name": "Groom's friends, 25 to 29", "age": "25_to_29", "gender": None, "location": None},
+    {"name": "Grandparents' table, 55+", "age": "55_and_older", "gender": None, "location": None},
+]
+
 PRESETS = {
     "two_rooms": {"title": "Two rooms", "audiences": TWO_ROOMS},
     "markets": {"title": "Six markets", "audiences": MARKETS},
@@ -47,19 +52,6 @@ EXAMPLES = [
         ),
     },
     {
-        "id": "ad",
-        "title": "Ad script: budget airline, 30 seconds",
-        "kind": "ad",
-        "audience": {"age": "45_to_54", "gender": None, "location": "Texas"},
-        "matrix": MARKETS,
-        "text": (
-            "You remember when flying felt like a Taylor Swift tour: expensive, loud, and somehow still sold out.\n"
-            "We think flying should feel more like Minecraft. You build the trip you want, block by block.\n"
-            "No hidden fees. No drama. Just you, a window seat, and a playlist that isn't Coldplay for once.\n"
-            "Skyline Air. Less Succession, more Ted Lasso."
-        ),
-    },
-    {
         "id": "tour",
         "title": "Touring comic: one opener, six cities",
         "kind": "tour",
@@ -73,10 +65,24 @@ EXAMPLES = [
         ),
     },
     {
+        "id": "ad",
+        "title": "Ad script: budget airline, 30 seconds",
+        "kind": "ad",
+        "audience": {"age": "45_to_54", "gender": None, "location": "Texas"},
+        "matrix": MARKETS,
+        "text": (
+            "You remember when flying felt like a Taylor Swift tour: expensive, loud, and somehow still sold out.\n"
+            "We think flying should feel more like Minecraft. You build the trip you want, block by block.\n"
+            "No hidden fees. No drama. Just you, a window seat, and a playlist that isn't Coldplay for once.\n"
+            "Skyline Air. Less Succession, more Ted Lasso."
+        ),
+    },
+    {
         "id": "speech",
         "title": "Toast: best man speech",
         "kind": "speech",
         "audience": {"age": "55_and_older", "gender": None, "location": None},
+        "matrix": TABLES,
         "text": (
             "I met Dan in 2009. He was wearing a Hollister hoodie and quoting The Hangover like scripture.\n"
             "Sixteen years later he has a mortgage, a Peloton he uses as a coat rack, and a Spotify Wrapped he refuses to show anyone.\n"

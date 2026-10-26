@@ -360,4 +360,6 @@ if os.path.isdir(DIST):
         ok = bool(path) and f.startswith(DIST + os.sep) and os.path.isfile(f)  # never serve anything outside web/dist
         if ok and not f.endswith("index.html"):
             return FileResponse(f)
+        if "." in path.rsplit("/", 1)[-1]:  # a missing file (favicon.ico, a stale asset) is a 404, not the app shell
+            raise HTTPException(404, "not found")
         return FileResponse(os.path.join(DIST, "index.html"), headers={"Cache-Control": "no-cache"})

@@ -14,10 +14,17 @@ export default function Survey() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('/api/survey').then(r => r.json()).then(d => { setItems(d.items); setAges(d.ages) }).catch(() => setError('Could not load the survey.'))
+    const t = document.title
+    document.title = 'Survey: have you heard of these? | Will It Land'
+    return () => { document.title = t }
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/survey').then(r => r.json()).then(d => { setItems(d.items); setAges(d.ages.filter((a: string) => a !== 'under_18')) }).catch(() => setError('Could not load the survey.'))
   }, [])
 
   const answered = Object.keys(answers).length
+  const need = Math.max(1, Math.ceil(items.length / 2))
   async function send() {
     setState('sending'); setError(null)
     const r = await fetch('/api/survey', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ age, city, answers }) })
@@ -28,23 +35,25 @@ export default function Survey() {
   if (state === 'done') return (
     <main className="mx-auto max-w-xl px-4 py-16 text-center">
       <h1 className="font-display text-4xl font-bold">Thank you</h1>
-      <p className="mt-3 text-muted">Your answers help check whether a computer can tell which references a room of people actually knows.</p>
-      <a href="/" className="mt-6 inline-block rounded-xl bg-ink px-4 py-2 text-sm font-medium text-paper">See what it is for</a>
+      <p className="mt-3 text-muted">Your answers go into a test of whether a computer can tell which references a room of people actually knows.</p>
+      <a href="/" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-ink px-5 text-sm font-medium text-paper">See Will It Land</a>
     </main>
   )
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="font-display text-4xl font-bold tracking-tight">Have you heard of these?</h1>
-      <p className="mt-2 text-muted">Two minutes, completely anonymous: no name, no email, nothing that identifies you. Tap yes if you have heard of it, even vaguely. There are no wrong answers.</p>
+      <a href="/" className="text-sm text-muted underline underline-offset-4 hover:text-ink">Will It Land</a>
+      <h1 className="mt-3 font-display text-4xl font-bold tracking-tight">Have you heard of these?</h1>
+      <p className="mt-2 text-muted">Quick and anonymous: no name, no email, nothing that identifies you. We are testing whether a tool can predict which cultural references people your age know. Tap yes if you have heard of it, even vaguely. No wrong answers, and you can stop after {need}.</p>
+      <p className="mt-1 text-sm text-muted">For people aged 18 or over. If you are under 18, please skip this one.</p>
       <div className="mt-6 space-y-3 rounded-2xl bg-white p-4 ring-1 ring-line">
         <div>
           <div className="mb-1 text-sm font-medium">Your age</div>
-          <div className="flex flex-wrap gap-1.5">{ages.map(a => <button key={a} onClick={() => setAge(a)} aria-pressed={age === a} className={`rounded-full px-3 py-1.5 text-sm ${age === a ? 'bg-ink text-paper' : 'bg-white ring-1 ring-line'}`}>{AGE_LABEL[a] ?? a}</button>)}</div>
+          <div className="flex flex-wrap gap-1.5">{ages.map(a => <button key={a} onClick={() => setAge(a)} aria-pressed={age === a} className={`min-h-11 rounded-full px-4 text-sm ${age === a ? 'bg-ink text-paper' : 'bg-white ring-1 ring-line'}`}>{AGE_LABEL[a] ?? a}</button>)}</div>
         </div>
         <label className="block">
           <div className="mb-1 text-sm font-medium">City you live in</div>
-          <input value={city} onChange={e => setCity(e.target.value)} maxLength={40} placeholder="for example London" className="w-full rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-line outline-none focus:ring-ink/50" />
+          <input value={city} onChange={e => setCity(e.target.value)} maxLength={40} placeholder="for example London" className="w-full rounded-xl bg-white px-3 py-2.5 text-base ring-1 ring-line outline-none placeholder:text-muted focus:ring-ink/50" />
         </label>
       </div>
       <ol className="mt-4 space-y-2">
@@ -54,16 +63,19 @@ export default function Survey() {
             <div className="flex shrink-0 overflow-hidden rounded-full ring-1 ring-line" role="group" aria-label={`Heard of ${it.name}?`}>
               {([[true, 'yes'], [false, 'no']] as const).map(([v, l]) => (
                 <button key={l} onClick={() => setAnswers(a => ({ ...a, [it.id]: v }))} aria-pressed={answers[it.id] === v}
-                  className={`px-3.5 py-1.5 text-sm ${answers[it.id] === v ? (v ? 'bg-lands text-white' : 'bg-ink text-paper') : 'bg-white'}`}>{l}</button>
+                  className={`min-h-11 px-4 text-sm ${answers[it.id] === v ? (v ? 'bg-lands text-white' : 'bg-ink text-paper') : 'bg-white'}`}>{l}</button>
               ))}
             </div>
           </li>
         ))}
       </ol>
       {error && <div className="mt-4 rounded-xl bg-misses/5 p-3 text-sm text-misses ring-1 ring-misses/30">{error}</div>}
-      <div className="sticky bottom-0 mt-4 flex items-center justify-between gap-3 bg-paper/95 py-3">
-        <span className="text-sm text-muted">{answered} of {items.length} answered</span>
-        <button onClick={send} disabled={!age || answered < Math.ceil(items.length / 2) || state === 'sending'} className="rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-paper disabled:opacity-40">{state === 'sending' ? 'Sending...' : 'Send answers'}</button>
+      <div className="sticky bottom-0 mt-4 bg-paper/95 pb-3 backdrop-blur">
+        <div className="h-1 overflow-hidden rounded-full bg-line" aria-hidden><div className="h-1 bg-lands transition-all" style={{ width: `${Math.min(100, (100 * answered) / need)}%` }} /></div>
+        <div className="mt-2 flex items-center justify-between gap-3">
+        <span className="text-sm text-muted" role="status">{!age ? 'Pick your age first.' : answered < need ? `${answered} of ${need} needed` : `${answered} answered. You can send now.`}</span>
+        <button onClick={send} disabled={!age || answered < need || state === 'sending'} className="rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-paper disabled:opacity-40">{state === 'sending' ? 'Sending...' : 'Send answers'}</button>
+        </div>
       </div>
     </main>
   )

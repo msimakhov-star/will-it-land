@@ -1,3 +1,4 @@
+import { useEffect, useRef, type ReactNode } from 'react'
 import type { Cell, Parts, Summary, Verdict } from './types'
 
 export const AGES: [string, string, string][] = [
@@ -21,11 +22,15 @@ export function verdictOf(score: number | null | undefined, lands: number, misse
   return score >= lands ? 'lands' : score >= misses ? 'risky' : 'misses'
 }
 
+// weak verdicts are filled so they pop; strong ones stay tinted and recede
+const FILL: Record<Verdict, string> = { lands: 'bg-lands/10 text-lands ring-lands/40', risky: 'bg-risky text-white ring-risky', misses: 'bg-misses text-white ring-misses', unknown: 'bg-white text-unknown ring-unknown/50' }
+
 export function ScoreChip(p: { score: number | null | undefined; verdict: Verdict; big?: boolean; dim?: boolean; title?: string }) {
-  const t = TONE[p.verdict]
+  const none = p.score === null || p.score === undefined
   return (
-    <span title={p.title} className={`inline-flex items-center justify-center rounded-lg font-semibold tabular-nums ring-1 ${t.bg} ${t.text} ${t.ring} ${p.big ? 'min-w-[3.25rem] px-2 py-1 text-xl' : 'min-w-[2.5rem] px-1.5 py-0.5 text-sm'} ${p.dim ? 'opacity-60' : ''}`}>
-      {p.score === null || p.score === undefined ? '--' : Math.round(p.score)}
+    <span title={p.title} className={`inline-flex items-center justify-center rounded-lg font-semibold tabular-nums ring-1 ${FILL[p.verdict]} ${p.big ? 'min-w-[3.25rem] px-2 py-1 text-xl' : 'min-w-[2.5rem] px-1.5 py-0.5 text-sm'} ${p.dim ? 'opacity-60' : ''}`}>
+      <span aria-hidden>{none ? '--' : Math.round(p.score!)}</span>
+      <span className="sr-only">{none ? 'not in Qloo' : `${Math.round(p.score!)}, ${TONE[p.verdict].label}`}</span>
     </span>
   )
 }
@@ -52,14 +57,14 @@ export function headline(label: string, s: Summary): string {
 }
 
 const PART_LABEL: Record<keyof Omit<Parts, 'score'>, [string, string]> = {
-  base: ['How widely known', 'Qloo /search popularity'],
-  age: ['This age band', 'Qloo demographics'],
-  gender: ['Men or women', 'Qloo demographics'],
-  location: ['This place', 'Qloo rank in place'],
+  base: ['How well known it is', 'Qloo popularity'],
+  age: ['Fit with this age band', 'Qloo age data'],
+  gender: ['Fit with men or women', 'Qloo gender data'],
+  location: ['Strength in this place', 'Qloo place rank'],
 }
 
 /** Sequential breakdown of the score in points: base, then each audience term (see server/scoring.py). */
-export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boolean; locMeasured?: boolean }) {
+export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boolean; locMeasured?: boolean; demo?: boolean }) {
   const rows = (['base', 'age', ...(p.showGender ? ['gender'] : []), ...(p.showPlace ? ['location'] : [])] as (keyof Omit<Parts, 'score'>)[])
   let acc = 0
   return (
@@ -70,16 +75,17 @@ export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boo
         acc = k === 'base' ? v : acc + v
         const lo = Math.min(from, acc), hi = Math.max(from, acc)
         return (
-          <div key={k} className="grid grid-cols-[8.5rem_1fr_3rem] items-center gap-2 text-xs">
-            <div className="text-muted leading-tight">{PART_LABEL[k][0]}<div className="text-[10px] text-muted">{PART_LABEL[k][1]}{k === 'location' && !p.locMeasured ? ', weight hand-set' : ''}</div></div>
-            <div className="relative h-3 rounded bg-line/70">
+          <div key={k} className="grid grid-cols-[9.5rem_1fr_3rem] items-center gap-2 text-xs">
+            <div className="leading-tight text-ink">{PART_LABEL[k][0]}<div className="text-[11px] text-muted">{p.demo ? 'demo data' : `from ${PART_LABEL[k][1]}`}{k === 'location' && !p.locMeasured ? ', weight set by hand' : ''}</div></div>
+            <div className="relative h-3 rounded bg-line/70" aria-hidden>
+              <div className="absolute inset-y-0 left-1/2 w-px bg-ink/15" />
               <div className={`absolute top-0 h-3 rounded ${k === 'base' ? 'bg-ink/70' : v >= 0 ? 'bg-lands' : 'bg-misses'}`} style={{ left: `${lo}%`, width: `${Math.max(0.8, hi - lo)}%` }} />
             </div>
             <div className={`text-right tabular-nums ${k === 'base' ? 'text-ink' : v >= 0 ? 'text-lands' : 'text-misses'}`}>{k === 'base' ? Math.round(v) : `${v >= 0 ? '+' : ''}${Math.round(v)}`}</div>
           </div>
         )
       })}
-      <div className="grid grid-cols-[8.5rem_1fr_3rem] items-center gap-2 border-t border-line pt-1.5 text-xs font-semibold">
+      <div className="grid grid-cols-[9.5rem_1fr_3rem] items-center gap-2 border-t border-line pt-1.5 text-xs font-semibold">
         <div>Likely to land</div><div /><div className="text-right tabular-nums">{Math.round(p.parts.score)}</div>
       </div>
     </div>
@@ -89,8 +95,9 @@ export function Waterfall(p: { parts: Parts; showGender: boolean; showPlace: boo
 export function AgeStrip(p: { skew: Record<string, number>; selected: string | null }) {
   const vals = AGES.map(([k]) => p.skew[k] ?? 0)
   const max = Math.max(0.25, ...vals.map(Math.abs))
+  const said = AGES.map(([, l], i) => `${l} ${vals[i] > 0.05 ? 'keener' : vals[i] < -0.05 ? 'less keen' : 'about average'}`).join(', ')
   return (
-    <div>
+    <div role="img" aria-label={`By age: ${said}.`}>
       <div className="flex h-12 items-center gap-1">
         {vals.map((v, i) => {
           const h = Math.round((48 * Math.abs(v)) / max)
@@ -108,11 +115,11 @@ export function AgeStrip(p: { skew: Record<string, number>; selected: string | n
   )
 }
 
-export function SourceBadge(p: { source: 'qloo' | 'ai'; why?: string }) {
+export function SourceBadge(p: { source: 'qloo' | 'ai'; why?: string; demo?: boolean }) {
   const tags = p.why?.includes('via its tags ') ? p.why.split('via its tags ')[1] : ''
   return p.source === 'qloo'
-    ? <span title={p.why} className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[11px] font-medium text-paper">found in Qloo's graph{tags ? ` via ${tags}` : ''}</span>
-    : <span title={p.why} className="inline-flex items-center gap-1 rounded-full border border-line bg-white px-2 py-0.5 text-[11px] text-muted">model idea, scored by Qloo</span>
+    ? <span title={p.why} className="inline-flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[11px] font-medium text-paper">{p.demo ? 'from the demo taste graph' : `Qloo suggested this${tags ? ` (similar taste: ${tags})` : ''}`}</span>
+    : <span title={p.why} className="inline-flex items-center gap-1 rounded-full border border-line bg-white px-2 py-0.5 text-[11px] text-muted">{p.demo ? 'AI suggested this, scored on demo data' : 'AI suggested this, checked against Qloo data'}</span>
 }
 
 export function cellTitle(c: Cell | null) {
@@ -120,5 +127,29 @@ export function cellTitle(c: Cell | null) {
 }
 
 export function Spinner(p: { label: string }) {
-  return <span className="inline-flex items-center gap-2 text-sm text-muted"><span className="h-3 w-3 animate-spin rounded-full border-2 border-muted/40 border-t-ink" />{p.label}</span>
+  return <span role="status" className="inline-flex items-center gap-2 text-sm text-muted"><span aria-hidden className="h-3 w-3 animate-spin rounded-full border-2 border-muted/40 border-t-ink" />{p.label}</span>
+}
+
+/** Native modal dialog: focus moves in and is trapped, the page behind is inert, Escape closes, focus returns on close. */
+export function Modal(p: { title: string; onClose: () => void; children: ReactNode; side?: boolean; wide?: boolean }) {
+  const ref = useRef<HTMLDialogElement>(null)
+  useEffect(() => {
+    const d = ref.current
+    const back = document.activeElement as HTMLElement | null
+    d?.showModal()
+    return () => { back?.focus?.() }
+  }, [])
+  const id = `dlg-${p.title.replace(/\W+/g, '-').toLowerCase()}`
+  return (
+    <dialog ref={ref} aria-labelledby={id} onCancel={e => { e.preventDefault(); p.onClose() }} onClick={e => { if (e.target === ref.current) p.onClose() }}
+      className={p.side
+        ? 'rise m-0 ml-auto h-dvh max-h-dvh w-full max-w-xl overflow-y-auto overscroll-contain bg-white p-5 text-ink shadow-2xl'
+        : `rise max-h-[88dvh] w-[calc(100%-2rem)] ${p.wide ? 'max-w-2xl' : 'max-w-lg'} overflow-y-auto overscroll-contain rounded-2xl bg-white p-5 text-ink shadow-2xl`}>
+      <div className="flex items-start justify-between gap-3">
+        <h2 id={id} className="font-display text-2xl font-semibold leading-tight">{p.title}</h2>
+        <button onClick={p.onClose} className="-mr-2 -mt-1 grid h-11 w-11 shrink-0 place-items-center rounded-full text-muted hover:bg-paper hover:text-ink" aria-label="Close">✕</button>
+      </div>
+      {p.children}
+    </dialog>
+  )
 }

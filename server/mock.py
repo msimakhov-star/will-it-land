@@ -6,25 +6,30 @@ from __future__ import annotations
 import hashlib
 
 KNOWN = {  # name -> (popularity percentile, young skew, old skew)
-    "seinfeld": (0.93, -0.35, 0.45), "blockbuster": (0.6, -0.5, 0.4), "fortnite": (0.9, 0.6, -0.5), "myspace": (0.55, -0.4, 0.1),
-    "nokia": (0.8, -0.2, 0.3), "friends": (0.97, 0.1, 0.2), "taylor swift": (0.99, 0.5, -0.3), "minecraft": (0.95, 0.6, -0.5),
-    "coldplay": (0.9, 0.0, 0.1), "succession": (0.7, 0.2, -0.1), "ted lasso": (0.75, 0.1, 0.0), "hollister": (0.6, 0.1, -0.4),
-    "the hangover": (0.85, 0.0, -0.1), "peloton": (0.7, 0.1, -0.1), "spotify": (0.95, 0.4, -0.3), "domino's": (0.9, 0.1, 0.0),
-    "lidl": (0.7, 0.0, 0.1), "le creuset": (0.6, -0.2, 0.3), "game of thrones": (0.95, 0.2, -0.2), "manhattan": (0.9, 0.0, 0.1),
+    "seinfeld": (0.85, -0.6, 0.45), "blockbuster": (0.45, -0.75, 0.5), "fortnite": (0.9, 0.6, -0.6), "myspace": (0.4, -0.7, 0.3),
+    "nokia": (0.6, -0.7, 0.3), "friends": (0.97, 0.1, 0.2), "taylor swift": (0.99, 0.5, -0.3), "minecraft": (0.95, 0.6, -0.8),
+    "coldplay": (0.9, 0.0, 0.1), "succession": (0.38, 0.2, -0.1), "ted lasso": (0.35, 0.1, 0.0), "hollister": (0.5, 0.3, -0.8),
+    "the hangover": (0.85, 0.0, -0.1), "peloton": (0.65, 0.2, -0.5), "spotify": (0.95, 0.4, -0.3), "domino's": (0.9, 0.1, 0.0),
+    "lidl": (0.7, 0.0, 0.1), "le creuset": (0.5, -0.5, 0.4), "game of thrones": (0.95, 0.2, -0.2), "manhattan": (0.9, 0.0, 0.1),
     "hmv": (0.7, -0.1, 0.3), "netflix": (0.98, 0.3, 0.1), "the office": (0.94, 0.3, 0.0), "stranger things": (0.92, 0.5, -0.2),
     "tiktok": (0.97, 0.6, -0.4), "facebook": (0.98, -0.2, 0.4), "iphone": (0.98, 0.3, 0.0), "the simpsons": (0.96, 0.1, 0.2),
-    "tower records": (0.5, -0.6, 0.5), "stormzy": (0.7, 0.6, -0.6), "spotify wrapped": (0.75, 0.6, -0.5), "bebo": (0.35, -0.3, 0.2),
+    "tower records": (0.5, -0.6, 0.5), "stormzy": (0.7, 0.6, -0.6), "spotify wrapped": (0.6, 0.6, -0.7), "bebo": (0.35, -0.3, 0.2),
     "angry birds": (0.8, 0.0, -0.1), "friends reunited": (0.3, -0.5, 0.4), "vesta curry": (0.3, -0.6, 0.6), "wimpy": (0.45, -0.5, 0.5),
-    "greggs": (0.8, 0.3, 0.1), "nando's": (0.85, 0.5, -0.3), "fred again..": (0.6, 0.6, -0.6), "central cee": (0.65, 0.65, -0.6),
+    "greggs": (0.4, 0.0, 0.1), "wetherspoons": (0.4, 0.0, 0.2), "the great british bake off": (0.5, 0.0, 0.4),
+    "mr. brightside": (0.8, 0.3, -0.1), "google maps": (0.97, 0.1, 0.0), "nando's": (0.85, 0.5, -0.3), "fred again..": (0.6, 0.6, -0.6), "central cee": (0.65, 0.65, -0.6),
 }
 # per-place lift for the demo's market examples: name -> {place: affinity}; anything else is hashed
 LOCAL = {
-    "succession": {"united states": 0.9, "india": 0.1, "brazil": 0.2, "united kingdom": 0.7},
-    "ted lasso": {"united kingdom": 0.95, "united states": 0.8, "india": 0.15, "brazil": 0.1, "texas": 0.6},
+    "succession": {"united states": 0.9, "india": 0.0, "brazil": 0.05, "united kingdom": 0.7, "texas": 0.8},
+    "ted lasso": {"united kingdom": 0.95, "united states": 0.8, "india": 0.02, "brazil": 0.02, "texas": 0.6},
     "taylor swift": {"united states": 0.95, "texas": 0.9, "india": 0.35, "brazil": 0.5},
     "coldplay": {"india": 0.9, "brazil": 0.85, "united kingdom": 0.9},
     "minecraft": {},
-    "greggs": {"london": 0.95, "united kingdom": 0.95, "st. louis": 0.05, "texas": 0.05},
+    "greggs": {"london": 0.95, "united kingdom": 0.95, "leeds": 0.95, "glasgow": 0.9, "st. louis": 0.02, "texas": 0.02,
+               "new york": 0.02, "atlanta": 0.02, "austin": 0.02, "toronto": 0.1},
+    "wetherspoons": {"leeds": 0.95, "glasgow": 0.95, "london": 0.9, "new york": 0.02, "atlanta": 0.02, "austin": 0.02, "toronto": 0.1},
+    "the great british bake off": {"leeds": 0.9, "glasgow": 0.85, "london": 0.9, "new york": 0.25, "atlanta": 0.15, "austin": 0.15, "toronto": 0.5},
+    "mr. brightside": {"leeds": 0.9, "glasgow": 0.9, "new york": 0.8, "atlanta": 0.7, "austin": 0.75, "toronto": 0.85},
     "manhattan": {"new york": 0.95, "london": 0.4},
 }
 _SEEN: dict[str, str] = {}  # entity id -> the name that was searched, so later calls know what the entity is
@@ -114,8 +119,8 @@ def _respond(path: str, params: dict) -> dict:
             for i in ids:
                 name = _name(i)
                 k = _known(name)
-                # unknown entities get a mild deterministic skew, not a random dramatic one
-                _, young, old = k if k else (0, 0.3 * (_h(name) - 0.5), 0.3 * (0.5 - _h(name)))
+            
+                _, young, old = k if k else (0, 1.2 * (_h(name) - 0.5), 1.0 * (0.5 - _h(name)))
                 age = {"24_and_younger": young, "25_to_29": young * 0.7, "30_to_34": young * 0.3, "35_to_44": 0.0, "45_to_54": old * 0.6, "55_and_older": old}
                 rows.append({"entity_id": i, "query": {"age": age, "gender": {"male": 0.05, "female": -0.05}}})
             return {"success": True, "results": {"demographics": rows}}
