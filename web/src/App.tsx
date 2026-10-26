@@ -47,6 +47,7 @@ export default function App() {
   const [pill, setPill] = useState(false)
   const [shared, setShared] = useState<{ created: string; demo: boolean } | null>(null)
   const [shareState, setShareState] = useState<'idle' | 'saving' | 'copied' | string>('idle')
+  const [tour, setTour] = useState<number | null>(null)
   const runMatrix = useRef(latest()).current
   const runGuesses = useRef(latest()).current
   const runFix = useRef(latest()).current
@@ -87,7 +88,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setActive(null) }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { setActive(null); setTour(null) } }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
@@ -126,6 +127,25 @@ export default function App() {
     const t = setTimeout(() => setFlash(null), 2600)
     return () => clearTimeout(t)
   }, [result, stale, split, scored.text])
+
+  // the guided tour: a 30-second walk through the hero example, driven by the real UI (no canned screens)
+  function startTour() {
+    const ex = examples.find(e => e.id === 'standup') ?? examples[0]
+    if (!ex) return
+    if (exampleId !== ex.id || fix || original != null) load(ex)
+    setTour(0)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+  useEffect(() => {
+    if (tour == null) return
+    let t: ReturnType<typeof setTimeout> | undefined
+    if (tour === 0 && result && !busy && !stale) t = setTimeout(() => setTour(1), 3500)
+    if (tour === 1) { if (split) setFlash({ ref: split.ref, room: split.lo }); t = setTimeout(() => setTour(2), 3800) }
+    if (tour === 2) { if (split) setActive({ ref: split.ref, room: split.lo }); t = setTimeout(() => { setActive(null); setTour(3) }, 5000) }
+    if (tour === 3) { setTour(4); landEverywhere() }
+    if (tour === 4 && fix) t = setTimeout(() => setTour(5), 6500)
+    return () => { if (t) clearTimeout(t) }
+  }, [tour, result, busy, stale, fix])
 
   const setRoom = useCallback((i: number, r: Room) => { setFix(null); setShared(null); setRooms(rs => rs.map((x, j) => (j === i ? r : x))) }, [])
   const removeRoom = useCallback((i: number) => {
@@ -223,6 +243,11 @@ export default function App() {
             {pill && demo && <p className="mt-2 max-w-2xl rounded-xl bg-white p-3 text-sm text-muted ring-1 ring-line">The numbers on this page are sample data. The pipeline, the requests it makes and the layout are the real product; the numbers switch to live Qloo data once the hackathon API key is connected.</p>}
             <p className="mt-3 max-w-2xl text-lg font-medium leading-snug md:text-xl">Spellcheck for cultural references.</p>
             <p className="mt-1 hidden max-w-2xl text-[15px] text-muted sm:block">Tell it who is in the room. It marks which references will land, which are risky and which will sail straight past them, then swaps the weak ones for stand-ins that work in every room.</p>
+            {tour == null && examples.length > 0 && (
+              <button onClick={startTour} className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-white px-3.5 text-sm font-medium ring-1 ring-ink/20 hover:ring-ink/50 pointer-coarse:min-h-11">
+                <span aria-hidden className="grid h-5 w-5 place-items-center rounded-full bg-ink text-[9px] text-paper">▶</span> See it work in 30 seconds
+              </button>
+            )}
           </div>
           <nav aria-label="About" className="hidden shrink-0 flex-col items-end gap-1.5 pt-2 text-sm md:flex">{aboutLinks}</nav>
         </div>
@@ -338,6 +363,11 @@ export default function App() {
         </div>
         <p className="mt-4 text-xs text-muted">Built for the Qloo Agentic Hackathon, October 2026.</p>
       </footer>
+
+      {tour != null && (
+        <TourBar step={tour} split={split && result && splitRef ? { name: splitRef.name ?? splitRef.surface, lo: Math.round(result.cells[split.ref][split.lo]!.score), hi: Math.round(result.cells[split.ref][split.hi]!.score), loRoom: result.audiences[split.lo]?.label ?? '', hiRoom: result.audiences[split.hi]?.label ?? '' } : null}
+          waiting={tour === 4 && !fix} demo={demo} onStop={() => { setTour(null); setActive(null) }} onTry={() => { setTour(null); pasteOwn() }} />
+      )}
 
       {panel === 'hood' && ledger && <Hood ledger={ledger} demo={demo} onClose={() => setPanel(null)} />}
       {panel === 'mcp' && <Mcp onClose={() => setPanel(null)} />}
@@ -457,5 +487,31 @@ function Proof(p: { demo: boolean; onClose: () => void }) {
       </Section>
       <p className="mt-4 border-t border-line pt-3 text-xs text-muted">{d?.model.calibrated ? `Score weights: ${d.model.source}.` : 'Until the tests run, the score uses starting weights set by hand.'} "Likely to land" means the audience is likely to recognise it and like it. It never claims a joke is funny.</p>
     </Modal>
+  )
+}
+
+type SplitInfo = { name: string; lo: number; hi: number; loRoom: string; hiRoom: string }
+
+function TourBar(p: { step: number; split: SplitInfo | null; waiting: boolean; demo: boolean; onStop: () => void; onTry: () => void }) {
+  const s = p.split
+  const lines = [
+    'Same stand-up bit, two rooms. Every reference is scored for each audience, like a spellchecker for culture.',
+    s ? `${s.name} scores ${s.lo} for ${s.loRoom} and ${s.hi} for ${s.hiRoom}. Same line, different room.` : 'The room changes the answer.',
+    `Every mark explains itself: how well known it is, fit with the age band, strength in the place${p.demo ? ' (demo data for now)' : ', all from Qloo data'}.`,
+    'One click looks for stand-ins and scores every one in every room.',
+    p.waiting ? 'Trying stand-ins in both rooms...' : 'It keeps a rewrite only if no room gets worse, and shows each change as a suggestion you can keep or undo.',
+    'That is the whole idea. Now try it on your own script.',
+  ]
+  const n = Math.min(p.step, lines.length - 1)
+  return (
+    <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4">
+      <div className="rise flex w-full max-w-2xl items-center gap-3 rounded-2xl bg-ink p-4 text-paper shadow-2xl" role="status" aria-live="polite">
+        <div className="flex shrink-0 gap-1" aria-hidden>{lines.map((_, i) => <span key={i} className={`h-1.5 w-1.5 rounded-full ${i <= n ? 'bg-paper' : 'bg-paper/30'}`} />)}</div>
+        <p className="min-w-0 flex-1 text-[15px] leading-snug">{lines[n]}</p>
+        {n === lines.length - 1
+          ? <><button onClick={p.onTry} className="min-h-10 shrink-0 rounded-xl bg-paper px-3 text-sm font-semibold text-ink">Try your own</button><button onClick={p.onStop} className="min-h-10 shrink-0 rounded-xl px-3 text-sm ring-1 ring-paper/40">Close</button></>
+          : <button onClick={p.onStop} className="min-h-10 shrink-0 rounded-xl px-3 text-sm ring-1 ring-paper/40">Stop</button>}
+      </div>
+    </div>
   )
 }
