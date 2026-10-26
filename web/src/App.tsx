@@ -81,9 +81,15 @@ export default function App() {
     }).catch(e => setError(errMsg(e)))
   }, [])
 
+  // leaving a shared result: drop the banner and the /r/<id> address, so a reload or a copied URL never shows stale content
+  function leaveShared() {
+    setShared(null)
+    if (location.pathname.startsWith('/r/')) history.replaceState(null, '', '/')
+  }
+
   function load(ex: Example) {
     runFix.cancel()
-    setFix(null); setActive(null); setEditing(false); setMode('qloo'); setError(null); setNote(null); setOriginal(null); setShared(null); setShareState('idle')
+    setFix(null); setActive(null); setEditing(false); setMode('qloo'); setError(null); setNote(null); setOriginal(null); leaveShared(); setShareState('idle'); setTour(null)
     setExampleId(ex.id); setText(ex.text); setDraft(ex.text)
     setRooms(ex.matrix ?? [ex.audience])
   }
@@ -148,12 +154,12 @@ export default function App() {
     return () => { if (t) clearTimeout(t) }
   }, [tour, result, busy, stale, fix])
 
-  const setRoom = useCallback((i: number, r: Room) => { setFix(null); setShared(null); setRooms(rs => rs.map((x, j) => (j === i ? r : x))) }, [])
+  const setRoom = useCallback((i: number, r: Room) => { setFix(null); leaveShared(); setNote(null); setRooms(rs => rs.map((x, j) => (j === i ? r : x))) }, [])
   const removeRoom = useCallback((i: number) => {
-    setFix(null); setActive(null); setShared(null); setRooms(rs => rs.filter((_, j) => j !== i))
+    setFix(null); setActive(null); leaveShared(); setNote(null); setRooms(rs => rs.filter((_, j) => j !== i))
     requestAnimationFrame(() => document.getElementById('add-room')?.focus())
   }, [])
-  const addRoom = () => { setFix(null); setShared(null); setRooms(rs => (rs.length >= 6 ? rs : [...rs, { age: '35_to_44', gender: null, location: showPlace ? 'New York' : null }])) }
+  const addRoom = () => { setFix(null); leaveShared(); setNote(null); setRooms(rs => (rs.length >= 6 ? rs : [...rs, { age: '35_to_44', gender: null, location: showPlace ? 'New York' : null }])) }
 
   async function landEverywhere() {
     if (fixing) return
@@ -167,7 +173,7 @@ export default function App() {
   function keepFix() {
     if (!fix) return
     setOriginal(o => o ?? text)
-    setText(fix.text); setDraft(fix.text); setResult(fix.after); markScored(fix.text, roomKey(fix.text, rooms)); setFix(null)
+    setText(fix.text); setDraft(fix.text); setResult({ ...fix.after, ledger: fix.after.ledger ?? fix.ledger ?? result?.ledger }); markScored(fix.text, roomKey(fix.text, rooms)); setFix(null)
     requestAnimationFrame(() => document.getElementById('edit-script')?.focus())
   }
 
@@ -177,7 +183,7 @@ export default function App() {
   }
 
   function commitDraft() {
-    setFix(null); setActive(null); setEditing(false); setText(draft); setExampleId(null); setOriginal(null); setShared(null); setNote(null)
+    setFix(null); setActive(null); setEditing(false); setText(draft); setExampleId(null); setOriginal(null); leaveShared(); setNote(null)
     if (rooms.length === 1) {
       const young = rooms[0].age === '24_and_younger' || rooms[0].age === '25_to_29'
       setRooms(rs => [...rs, { age: young ? '55_and_older' : '24_and_younger', gender: null, location: rs[0].location }])
@@ -187,7 +193,7 @@ export default function App() {
   }
 
   function pasteOwn() {
-    runFix.cancel(); setFix(null); setActive(null); setError(null); setEditing(true); setDraft(''); setExampleId(null)
+    runFix.cancel(); setFix(null); setActive(null); setError(null); setEditing(true); setDraft(''); setExampleId(null); setTour(null)
   }
 
   async function share() {
@@ -196,10 +202,10 @@ export default function App() {
     try {
       const r = await api.report('matrix', { text: scored.text, rooms, result, demo, created: new Date().toISOString().slice(0, 10) })
       const url = `${location.origin}${r.url}`
-      await navigator.clipboard?.writeText(url).catch(() => {})
-      setShareState('copied')
       history.replaceState(null, '', r.url)
-      setTimeout(() => setShareState('idle'), 2500)
+      const ok = await (navigator.clipboard?.writeText(url).then(() => true, () => false) ?? Promise.resolve(false))
+      if (ok) { setShareState('copied'); setTimeout(() => setShareState('idle'), 2500) }
+      else setShareState(`Copy this link: ${url}`)
     } catch (e) { setShareState(errMsg(e)) }
   }
 
@@ -232,7 +238,7 @@ export default function App() {
       <datalist id="wil-cities">{CITIES.map(c => <option key={c} value={c} />)}</datalist>
       <div className="sr-only" role="status" aria-live="polite">{announce}</div>
 
-      <header className="mx-auto max-w-7xl px-4 pt-6 pb-3 md:px-6 md:pt-8">
+      <header className={`mx-auto max-w-7xl px-4 pt-6 pb-3 md:px-6 md:pt-8 ${active ? 'xl:pr-[412px]' : ''}`}>
         <div className="flex items-start justify-between gap-6">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -254,7 +260,7 @@ export default function App() {
         </div>
       </header>
 
-      <nav className="mx-auto max-w-7xl px-4 pb-3 md:px-6" aria-label="Examples">
+      <nav className={`mx-auto max-w-7xl px-4 pb-3 md:px-6 ${active ? 'xl:pr-[412px]' : ''}`} aria-label="Examples">
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
           <span className="shrink-0 self-center text-sm text-muted">Try</span>
           {examples.map(ex => (
@@ -305,8 +311,8 @@ export default function App() {
             )}
             {mode === 'qloo' && result && anyChecked && !anyWeak && !busy && !fix && <span className="text-sm font-medium text-lands">Every reference lands in {where}. Whether the joke is funny is still on you.</span>}
             {original != null && !fix && <button onClick={revert} className="min-h-11 rounded-xl bg-white px-4 text-sm ring-1 ring-line hover:ring-ink/40">Revert to original</button>}
-            <button id="edit-script" onClick={() => { setEditing(true); setDraft(text) }} className="min-h-11 rounded-xl bg-white px-4 text-sm ring-1 ring-line hover:ring-ink/40">Edit script</button>
-            {rooms.length < 6 && <button id="add-room" onClick={addRoom} className="min-h-11 rounded-xl bg-white px-4 text-sm ring-1 ring-line hover:ring-ink/40">Add a room</button>}
+            {(result || text) && <button id="edit-script" onClick={() => { setEditing(true); setDraft(text) }} className="min-h-11 rounded-xl bg-white px-4 text-sm ring-1 ring-line hover:ring-ink/40">Edit script</button>}
+            {result && rooms.length < 6 && <button id="add-room" onClick={addRoom} className="min-h-11 rounded-xl bg-white px-4 text-sm ring-1 ring-line hover:ring-ink/40">Add a room</button>}
             {result && !stale && !fix && (
               <button onClick={share} className="min-h-11 rounded-xl bg-white px-4 text-sm ring-1 ring-line hover:ring-ink/40">
                 {shareState === 'saving' ? 'Saving...' : shareState === 'copied' ? 'Link copied' : 'Share this result'}
@@ -324,11 +330,12 @@ export default function App() {
             )}
           </div>
         )}
-        {shareState !== 'idle' && shareState !== 'saving' && shareState !== 'copied' && <div role="alert" className="text-sm text-misses">{shareState}</div>}
+        {shareState !== 'idle' && shareState !== 'saving' && shareState !== 'copied' && <div role="alert" className={`text-sm [overflow-wrap:anywhere] ${shareState.startsWith('Copy this link') ? 'text-ink' : 'text-misses'}`}>{shareState}</div>}
 
         {!editing && result && <Legend model={result.model} />}
         {fixing && <Spinner label="Trying stand-ins in every room and keeping only changes that help. This can take up to 40 seconds." />}
         {busy && <Spinner label={result ? 'Re-checking the room...' : 'Reading your script for references...'} />}
+        {!result && !busy && !error && !editing && <Spinner label="Loading the examples..." />}
         {note && <div role="status" className="text-sm text-muted">{note}</div>}
         {error && <div role="alert" className="rounded-xl bg-misses/5 p-3 text-sm text-misses ring-1 ring-misses/30">{error}</div>}
         {mode === 'ai' && result && <div className="rounded-xl bg-white p-3 text-sm text-muted ring-1 ring-line">Showing what a language model guesses with no data, on the same 0 to 100 scale. ◆ marks a reference where the guess is 25 or more points from the score with Qloo data. Switch back to Qloo data to rewrite.</div>}
@@ -419,7 +426,7 @@ function Mcp(p: { onClose: () => void }) {
   const copy = (what: string, s: string) => navigator.clipboard?.writeText(s).then(() => { setCopied(what); setTimeout(() => setCopied(null), 2000) }).catch(() => {})
   const btn = 'min-h-8 rounded-full px-3 text-xs ring-1 ring-line hover:text-ink'
   return (
-    <Modal title="Give your writing agent an audience" onClose={p.onClose}>
+    <Modal title="Use it from your AI agent" onClose={p.onClose}>
       <p className="mt-2 text-sm text-muted">Will It Land is also an MCP server. Add it to Claude, ChatGPT or any MCP client and the agent can check its own references before it finishes a joke, an ad or a speech.</p>
       <div className="mt-4 text-xs font-medium text-muted">Hosted endpoint (streamable HTTP)</div>
       <code className="mt-1 block rounded-lg bg-paper p-2 font-mono text-xs break-all">{url}</code>
@@ -505,7 +512,7 @@ function TourBar(p: { step: number; split: SplitInfo | null; waiting: boolean; d
   ]
   const n = Math.min(p.step, lines.length - 1)
   return (
-    <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4">
+    <div className="fixed inset-x-0 top-2 z-50 flex justify-center px-4 md:top-auto md:bottom-4">
       <div className="rise flex w-full max-w-2xl items-center gap-3 rounded-2xl bg-ink p-4 text-paper shadow-2xl" role="status" aria-live="polite">
         <div className="flex shrink-0 gap-1" aria-hidden>{lines.map((_, i) => <span key={i} className={`h-1.5 w-1.5 rounded-full ${i <= n ? 'bg-paper' : 'bg-paper/30'}`} />)}</div>
         <p className="min-w-0 flex-1 text-[15px] leading-snug">{lines[n]}</p>

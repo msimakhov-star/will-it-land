@@ -220,7 +220,7 @@ export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Sc
   return (
     <div className="relative">
       <div onScroll={e => setScrolled((e.target as HTMLElement).scrollLeft > 8)}
-        className={`overflow-x-auto rounded-2xl bg-white shadow-[0_1px_0_rgba(23,21,15,.04),0_8px_24px_-14px_rgba(23,21,15,.18)] ring-1 ring-ink/10 transition-opacity ${p.dim ? 'opacity-50' : ''}`} aria-busy={p.dim}>
+        className={`relative overflow-x-auto rounded-2xl bg-white shadow-[0_1px_0_rgba(23,21,15,.04),0_8px_24px_-14px_rgba(23,21,15,.18)] ring-1 ring-ink/10 transition-opacity ${p.dim ? 'opacity-50' : ''}`} aria-busy={p.dim}>
         <table className="w-full border-collapse text-sm" style={{ minWidth: 104 + 72 + 112 * p.rooms.length }}>
           <caption className="sr-only">Likely to land, out of 100, for each reference in each room. The second column is the worst room.</caption>
           <thead>
@@ -336,7 +336,7 @@ export function TrackedChanges(p: { r: LocaliseAllResult; rooms: Room[]; showPla
     : `No rewrite beat your original in ${where}. Your text is untouched.`
   return (
     <section className="rise scroll-mt-4 rounded-2xl bg-white p-4 shadow-[0_1px_0_rgba(23,21,15,.04),0_8px_24px_-14px_rgba(23,21,15,.18)] ring-1 ring-ink/10 md:p-6" aria-labelledby="fix-h">
-      <h2 id="fix-h" ref={head} tabIndex={-1} className="font-display text-xl font-semibold leading-snug outline-none md:text-2xl">{title}</h2>
+      <h2 id="fix-h" ref={head} tabIndex={-1} className="scroll-mt-6 font-display text-xl font-semibold leading-snug outline-none md:text-2xl">{title}</h2>
       {!p.r.kept && (
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted">{p.r.detail ?? 'Every stand-in we tried made one of the rooms worse, so we left your script alone.'}</p>
@@ -397,7 +397,7 @@ export function Evidence(p: { m: MatrixResult; ref_: number; room: number; rooms
     back.current = document.activeElement as HTMLElement | null
     close.current?.focus({ preventScroll: true })
     // on phones, keep the tapped word visible above the sheet
-    if (window.matchMedia('(max-width: 767px)').matches) back.current?.scrollIntoView?.({ block: 'start', behavior: 'smooth' })
+    if (window.matchMedia('(max-width: 767px)').matches) (document.querySelector(`#room-${p.room} [data-ref="${p.ref_}"]`) ?? back.current)?.scrollIntoView?.({ block: 'start', behavior: 'smooth' })
     const b = back.current
     return () => { b?.focus?.({ preventScroll: true }) }
   }, [])
