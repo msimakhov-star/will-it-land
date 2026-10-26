@@ -29,7 +29,7 @@ textarea { field-sizing: content; }
 .brand-land.landed, h1:hover .brand-land { text-decoration-style: solid; text-decoration-color: var(--color-lands); }
 
 /* spellcheck-style marks: shape as well as colour, so they read without colour vision */
-.mark { border-radius: 3px; padding: 0 1px; text-underline-offset: 4px; text-decoration-thickness: 2.5px; transition: background .15s; }
+.mark { scroll-margin-top: 84px; border-radius: 3px; padding: 0 1px; text-underline-offset: 4px; text-decoration-thickness: 2.5px; transition: background .15s; }
 .mark[role=button] { cursor: pointer; }
 .mark[role=button]:hover { background: color-mix(in srgb, var(--color-ink) 7%, transparent); }
 .mark[role=button]:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 2px; border-radius: 4px; }

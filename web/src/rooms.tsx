@@ -210,8 +210,8 @@ export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Sc
           <caption className="sr-only">Likely to land, out of 100, for each reference in each room. The second column is the worst room.</caption>
           <thead>
             <tr className="align-top">
-              <th scope="col" className="sticky left-0 z-10 w-[104px] border-b border-line bg-white p-2 text-left text-xs font-medium uppercase tracking-wide text-muted md:w-[230px] md:p-3">Reference</th>
-              <th scope="col" className="sticky left-[104px] z-10 w-[72px] border-b border-l-2 border-ink/80 bg-paper p-2 text-left md:left-[230px] md:w-[120px] md:p-3">
+              <th scope="col" className="sticky left-0 z-10 w-[104px] min-w-[104px] max-w-[104px] md:max-w-none border-b border-line bg-white p-2 text-left text-xs font-medium uppercase tracking-wide text-muted md:w-[230px] md:p-3">Reference</th>
+              <th scope="col" className="sticky left-[104px] z-10 w-[72px] border-b border-l-2 border-ink/80 bg-paper p-2 text-left md:static md:w-[120px] md:p-3">
                 <div className="font-display text-sm font-semibold leading-tight md:text-base">Lands everywhere?</div>
                 <div className="mt-0.5 hidden text-[11px] font-normal text-muted md:block">score in the worst room</div>
               </th>
@@ -239,11 +239,11 @@ export function Grid(p: { text: string; m: MatrixResult; rooms: Room[]; mode: Sc
               const min = nums.length === p.rooms.length ? Math.min(...nums) : null
               return (
                 <tr key={i} className="align-top hover:bg-paper/40">
-                  <th scope="row" className="sticky left-0 z-10 border-b border-line bg-white p-2 text-left font-normal md:p-3">
+                  <th scope="row" className="sticky left-0 z-10 w-[104px] min-w-[104px] max-w-[104px] md:max-w-none border-b border-line bg-white p-2 text-left font-normal md:p-3">
                     <div className="font-medium leading-snug">{refName(r)} <span className="ml-1 hidden rounded-full border border-line px-1.5 text-[10px] text-muted md:inline">{TYPE_LABEL[r.type] ?? r.type}</span></div>
                     <div className="mt-0.5 line-clamp-2 hidden text-xs text-muted md:block">{lineOf(r)}</div>
                   </th>
-                  <td className="sticky left-[104px] z-10 border-b border-l-2 border-ink/80 bg-paper p-2 md:left-[230px] md:p-3">
+                  <td className="sticky left-[104px] z-10 border-b border-l-2 border-ink/80 bg-paper p-2 md:static md:p-3">
                     <ScoreChip big={false} score={min} verdict={verdictOf(min, p.m.model.lands, p.m.model.misses)} />
                   </td>
                   {vals.map((v, j) => (

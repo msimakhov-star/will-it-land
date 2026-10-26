@@ -229,16 +229,16 @@ export default function App() {
       </header>
 
       <nav className="mx-auto max-w-7xl px-4 pb-3 md:px-6" aria-label="Examples">
-        <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
           <span className="shrink-0 self-center text-sm text-muted">Try</span>
           {examples.map(ex => (
             <button key={ex.id} onClick={() => load(ex)} aria-pressed={exampleId === ex.id}
-              className={`min-h-9 shrink-0 snap-start rounded-full px-3.5 text-sm ring-1 transition pointer-coarse:min-h-11 ${exampleId === ex.id ? 'bg-ink text-paper ring-ink' : 'bg-white ring-line hover:ring-ink/40'}`}>
+              className={`min-h-9 shrink-0 rounded-full px-3.5 text-sm ring-1 transition pointer-coarse:min-h-11 ${exampleId === ex.id ? 'bg-ink text-paper ring-ink' : 'bg-white ring-line hover:ring-ink/40'}`}>
               {JOBS[ex.kind] ?? ex.title}{exampleId === ex.id && original != null ? ' (edited)' : ''}
             </button>
           ))}
           <button onClick={pasteOwn} aria-pressed={editing && !exampleId}
-            className={`min-h-9 shrink-0 snap-start rounded-full border border-dashed px-3.5 text-sm pointer-coarse:min-h-11 ${editing && !exampleId ? 'border-ink bg-ink text-paper' : 'border-ink/40 bg-white hover:border-ink'}`}>+ Your own script</button>
+            className={`min-h-9 shrink-0 rounded-full border border-dashed px-3.5 text-sm pointer-coarse:min-h-11 ${editing && !exampleId ? 'border-ink bg-ink text-paper' : 'border-ink/40 bg-white hover:border-ink'}`}>+ Your own script</button>
         </div>
       </nav>
 
